@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ModerateListings from "@/components/admin/ModerateListings";
+import OrdersTable from "@/components/admin/OrdersTable";
+import SiteSettingsForm from "@/components/admin/SiteSettingsForm";
 
 const fetchAdminStats = async () => {
   const [pendingListings, totalListings, totalOrders] = await Promise.all([
@@ -26,6 +29,12 @@ const fetchAdminStats = async () => {
 export default function Admin() {
   useEffect(() => {
     document.title = "Admin | tudofaz";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "Painel administrativo do tudofaz: modere anúncios, veja pedidos e configure o site.");
+    const link = document.querySelector('link[rel="canonical"]') || document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', `${window.location.origin}/admin`);
+    if (!link.parentNode) document.head.appendChild(link);
   }, []);
 
   const { data, isLoading } = useQuery({
@@ -43,7 +52,8 @@ export default function Admin() {
       <div className="flex min-h-[calc(100vh-3rem)] w-full">
         <AdminSidebar />
 
-        <main className="flex-1 p-4 md:p-6 space-y-6">
+        <main className="flex-1 p-4 md:p-6 space-y-8">
+          {/* Resumo */}
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card>
               <CardHeader>
@@ -73,12 +83,14 @@ export default function Admin() {
             </Card>
           </section>
 
-          <section className="space-y-2">
-            <h2 className="text-base font-medium">Ações rápidas</h2>
-            <div className="text-sm text-muted-foreground">
-              Use o menu lateral para moderar anúncios, ver pedidos e ajustar configurações do site.
-            </div>
-          </section>
+          {/* Moderação de anúncios */}
+          <ModerateListings />
+
+          {/* Pedidos */}
+          <OrdersTable />
+
+          {/* Configurações do site */}
+          <SiteSettingsForm />
         </main>
       </div>
     </SidebarProvider>
