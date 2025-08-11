@@ -30,7 +30,7 @@ const Header = () => {
             <MobileMenu />
           </div>
           <Link to="/" className="flex items-center gap-2">
-            <span className="font-display text-xl tracking-tight text-[hsl(var(--hero-foreground))]">tudofaz</span>
+            <span className="font-display text-xl tracking-tight text-[hsl(var(--foreground))]">tudofaz</span>
           </Link>
           <div className="hidden md:block">
             <CategoryMenu />
@@ -42,10 +42,10 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-80 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Explorar</NavLink>
-          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-80 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Mensagens</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Explorar</NavLink>
+          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Mensagens</NavLink>
           {!user ? (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-80 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Entrar</NavLink>
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
@@ -69,14 +69,14 @@ const Header = () => {
           </Link>
         </div>
       </nav>
-      <div className="container md:hidden pb-3 space-y-2 text-[hsl(var(--hero-foreground))]">
+      <div className="container md:hidden pb-3 space-y-2 text-[hsl(var(--foreground))]">
         <SearchBar />
         <div className="flex items-center gap-4 overflow-x-auto text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-90 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Explorar</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Explorar</NavLink>
           {user ? (
-            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-90 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Mensagens</NavLink>
+            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Mensagens</NavLink>
           ) : (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--hero-foreground))]" : "opacity-90 hover:opacity-100 text-[hsl(var(--hero-foreground))]"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Entrar</NavLink>
           )}
           <Link to="/publicar">
             <Button variant="hero" size="sm">Publicar</Button>

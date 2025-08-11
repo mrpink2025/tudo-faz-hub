@@ -24,7 +24,7 @@ const CategoryMenu = () => {
     <NavigationMenu className="z-50">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="min-w-[140px] text-[hsl(var(--hero-foreground))] hover:bg-white/10">Categorias</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="min-w-[140px] text-[hsl(var(--foreground))] hover:bg-white/10">Categorias</NavigationMenuTrigger>
           <NavigationMenuContent className="p-4 bg-popover text-foreground border border-border rounded-md shadow-lg">
             {isLoading && (
               <div className="px-2 py-1.5 text-sm">Carregando...</div>
