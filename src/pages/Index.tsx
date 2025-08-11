@@ -1,13 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from "react";
+import Hero from "@/components/home/Hero";
+import Categories from "@/components/home/Categories";
+import SignatureGlow from "@/components/home/SignatureGlow";
 
 const Index = () => {
+  useEffect(() => {
+    document.title = "tudofaz.com — Marketplace local completo";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "Compre, venda e contrate serviços locais no tudofaz.com.");
+  }, []);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <main>
+      <SignatureGlow />
+      <Hero />
+      <Categories />
+      <section className="py-16 bg-[var(--gradient-subtle)]">
+        <div className="container text-center space-y-3">
+          <h2 className="font-display text-2xl">Pronto para começar?</h2>
+          <p className="text-muted-foreground">Publique seu primeiro anúncio em menos de 2 minutos.</p>
+        </div>
+      </section>
+    </main>
   );
 };
 
