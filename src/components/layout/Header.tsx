@@ -6,6 +6,7 @@ import MobileMenu from "./MobileMenu";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import Logo from "@/components/branding/Logo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,8 +30,8 @@ const Header = () => {
           <div className="md:hidden">
             <MobileMenu />
           </div>
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-display text-xl tracking-tight text-[hsl(var(--foreground))]">tudofaz</span>
+          <Link to="/" aria-label="tudofaz - início" className="flex items-center gap-2">
+            <Logo className="h-8 w-8" />
           </Link>
           <div className="hidden md:block">
             <CategoryMenu />
