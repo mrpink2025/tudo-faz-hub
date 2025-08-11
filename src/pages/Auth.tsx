@@ -74,14 +74,6 @@ const Auth = () => {
     setTab("entrar");
   };
 
-  const handleOAuth = async (provider: "google" | "facebook") => {
-    const redirectTo = `${window.location.origin}/`;
-    const { error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
-    if (error) {
-      toast({ title: `Erro ao entrar com ${provider}`, description: error.message });
-    }
-  };
-
   return (
     <main className="container py-10">
       <header className="mb-6">
@@ -90,15 +82,6 @@ const Auth = () => {
       </header>
 
       <section className="max-w-md">
-        {/* Social login */}
-        <div className="grid gap-3">
-          <Button variant="outline" type="button" onClick={() => handleOAuth("google")}>Continuar com Google</Button>
-          <Button variant="outline" type="button" onClick={() => handleOAuth("facebook")}>Continuar com Facebook</Button>
-          <Button variant="outline" type="button" disabled title="Instagram não é suportado diretamente pelo Supabase.">Continuar com Instagram</Button>
-        </div>
-        <div className="my-6 text-center text-sm text-muted-foreground">ou</div>
-
-        {/* Email / senha */}
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="grid grid-cols-2 w-full">
             <TabsTrigger value="entrar">Entrar</TabsTrigger>
