@@ -1,19 +1,21 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin } from "lucide-react";
+import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Mapeamento de ícones para as categorias
 const iconMap: Record<string, any> = {
-  compras: ShoppingBag,
-  servicos: Wrench,
-  imoveis: Home,
   empregos: Briefcase,
+  imoveis: Home,
+  servicos: Wrench,
   veiculos: Car,
-  eletronicos: Smartphone,
   'vida-cotidiana': ShoppingBag,
+  'vida-domestica-e-cotidiana': ShoppingBag,
+  'servicos-financeiros': CreditCard,
+  compras: ShoppingBag,
+  eletronicos: Smartphone,
   outros: Package,
   local: MapPin,
 };
@@ -60,9 +62,28 @@ const Categories = () => {
     );
   }
 
-  // Filtrar apenas categorias principais (sem parent_id), remover duplicatas por slug e limitar a 6
+  // Filtrar apenas categorias principais (sem parent_id), normalizar e limitar às 6 principais
+  const canonical = (slug: string) => {
+    if (slug === 'vida-domestica-e-cotidiana') return 'vida-cotidiana';
+    return slug;
+  };
+  const allowed = new Set([
+    'empregos',
+    'imoveis',
+    'servicos',
+    'veiculos',
+    'vida-cotidiana',
+    'servicos-financeiros',
+  ]);
   const roots = (categories ?? []).filter((cat) => !cat.parent_id);
-  const mainCategories = Array.from(new Map(roots.map((c) => [c.slug, c])).values()).slice(0, 6);
+  const deduped = Array.from(
+    new Map(
+      roots.map((c) => [canonical(String(c.slug).trim().toLowerCase()), c])
+    ).entries()
+  )
+    .map(([slug, c]) => ({ ...c, slug }))
+    .filter((c) => allowed.has(String(c.slug)));
+  const mainCategories = deduped.slice(0, 6);
 
   return (
     <section className="py-10 lg:py-14">
