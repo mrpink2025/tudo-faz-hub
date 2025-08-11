@@ -32,7 +32,7 @@ const MobileMenu = () => {
         </Button>
       </DrawerTrigger>
       <DrawerContent className="z-[60]">
-        <div className="mx-auto w-full max-w-lg">
+        <div className="mx-auto w-full max-w-none">
           <DrawerHeader>
             <DrawerTitle>Explorar</DrawerTitle>
           </DrawerHeader>

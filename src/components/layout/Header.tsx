@@ -69,8 +69,19 @@ const Header = () => {
           </Link>
         </div>
       </nav>
-      <div className="container md:hidden pb-2">
+      <div className="container md:hidden pb-3 space-y-2">
         <SearchBar />
+        <div className="flex items-center gap-4 overflow-x-auto text-sm">
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Explorar</NavLink>
+          {user ? (
+            <NavLink to="/mensagens" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Mensagens</NavLink>
+          ) : (
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Entrar</NavLink>
+          )}
+          <Link to="/publicar">
+            <Button variant="hero" size="sm">Publicar</Button>
+          </Link>
+        </div>
       </div>
     </header>
   );
