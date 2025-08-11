@@ -14,6 +14,8 @@ import ListingDetail from "./pages/ListingDetail";
 
 const queryClient = new QueryClient();
 
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -25,8 +27,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/explorar" element={<Explore />} />
           <Route path="/anuncio/:id" element={<ListingDetail />} />
-          <Route path="/publicar" element={<CreateListing />} />
-          <Route path="/mensagens" element={<Messages />} />
+          <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
+          <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
           <Route path="/entrar" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
