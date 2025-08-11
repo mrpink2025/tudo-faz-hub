@@ -1,39 +1,92 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
 
-const items = [
-  { icon: ShoppingBag, label: "Compras", q: "compras" },
-  { icon: Wrench, label: "Serviços", q: "servicos" },
-  { icon: Home, label: "Imóveis", q: "imoveis" },
-  { icon: Briefcase, label: "Empregos", q: "empregos" },
-  { icon: Car, label: "Veículos", q: "veiculos" },
-  { icon: Smartphone, label: "Eletrônicos", q: "eletronicos" },
-];
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useCategories } from "@/hooks/useCategories";
+import { Skeleton } from "@/components/ui/skeleton";
+
+// Mapeamento de ícones para as categorias
+const iconMap: Record<string, any> = {
+  compras: ShoppingBag,
+  servicos: Wrench,
+  imoveis: Home,
+  empregos: Briefcase,
+  veiculos: Car,
+  eletronicos: Smartphone,
+  outros: Package,
+  local: MapPin,
+};
 
 const Categories = () => {
+  const { data: categories, isLoading, error } = useCategories();
+
+  if (isLoading) {
+    return (
+      <section className="py-10 lg:py-14">
+        <div className="container">
+          <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3">
+                    <Skeleton className="h-9 w-9 rounded-md" />
+                    <Skeleton className="h-4 w-20" />
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-3 w-32" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    console.error('Erro ao carregar categorias:', error);
+    return (
+      <section className="py-10 lg:py-14">
+        <div className="container">
+          <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
+          <div className="text-center text-muted-foreground">
+            Erro ao carregar categorias. Tente novamente mais tarde.
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Filtrar apenas categorias principais (sem parent_id) e limitar a 6
+  const mainCategories = categories?.filter(cat => !cat.parent_id).slice(0, 6) || [];
+
   return (
     <section className="py-10 lg:py-14">
       <div className="container">
         <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {items.map(({ icon: Icon, label, q }) => (
-            <Link key={q} to={`/explorar?categoria=${q}`} aria-label={`Explorar ${label}`}>
-              <Card className="hover:shadow-md transition-shadow group">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] group-hover:bg-[hsl(var(--muted))] transition-colors">
-                      <Icon className="" />
-                    </span>
-                    {label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-muted-foreground">
-                  Ver anúncios de {label.toLowerCase()}
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          {mainCategories.map((category) => {
+            const Icon = iconMap[category.slug] || Package;
+            return (
+              <Link key={category.id} to={`/explorar?categoria=${category.slug}`} aria-label={`Explorar ${category.name_pt}`}>
+                <Card className="hover:shadow-md transition-shadow group">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] group-hover:bg-[hsl(var(--muted))] transition-colors">
+                        <Icon className="" />
+                      </span>
+                      {category.name_pt}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-muted-foreground">
+                    Ver anúncios de {category.name_pt.toLowerCase()}
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
