@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
+import MobileMenu from "./MobileMenu";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -25,6 +26,9 @@ const Header = () => {
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
       <nav className="container flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <MobileMenu />
+          </div>
           <Link to="/" className="flex items-center gap-2">
             <span className="font-display text-xl tracking-tight">tudofaz</span>
           </Link>
@@ -65,6 +69,9 @@ const Header = () => {
           </Link>
         </div>
       </nav>
+      <div className="container md:hidden pb-2">
+        <SearchBar />
+      </div>
     </header>
   );
 };
