@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-[hsl(var(--header-red-1))] backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b bg-[hsl(var(--brand))] backdrop-blur">
       <nav className="container flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="md:hidden">
