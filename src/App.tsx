@@ -10,6 +10,7 @@ import CreateListing from "./pages/CreateListing";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ListingDetail from "./pages/ListingDetail";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/explorar" element={<Explore />} />
+          <Route path="/anuncio/:id" element={<ListingDetail />} />
           <Route path="/publicar" element={<CreateListing />} />
           <Route path="/mensagens" element={<Messages />} />
           <Route path="/entrar" element={<Auth />} />

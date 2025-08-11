@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
+import { useListings } from "@/hooks/useListings";
+import { ListingCard } from "@/components/listings/ListingCard";
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
   const selectedSlug = searchParams.get("categoria") ?? undefined;
-  const { data: categories, isLoading, error } = useCategories();
+  const { data: categories, isLoading: loadingCats, error: catsError } = useCategories();
 
   const { selectedCategory, rootCategory, subcategories } = useMemo(() => {
     const list = categories ?? [];
@@ -16,6 +18,11 @@ const Explore = () => {
     const subs = root ? list.filter((c: any) => c.parent_id === root.id) : [];
     return { selectedCategory: selected, rootCategory: root, subcategories: subs };
   }, [categories, selectedSlug]);
+
+  const { data: listings = [], isLoading: loadingListings } = useListings(
+    { categorySlug: rootCategory?.slug || selectedSlug },
+    categories
+  );
 
   useEffect(() => {
     const title = rootCategory
@@ -56,10 +63,10 @@ const Explore = () => {
         </p>
       </header>
 
-      {isLoading && (
+      {loadingCats && (
         <div className="text-muted-foreground">Carregando categorias...</div>
       )}
-      {error && (
+      {catsError && (
         <div className="text-destructive">Erro ao carregar categorias.</div>
       )}
 
@@ -81,9 +88,21 @@ const Explore = () => {
         </section>
       )}
 
-      <div className="rounded-lg border p-6 text-muted-foreground">
-        Em breve: listagem com filtros avançados.
-      </div>
+      <section aria-label="Resultados">
+        <div className="mb-3 text-sm text-muted-foreground">
+          {loadingListings ? "Carregando resultados…" : `${listings.length} resultado(s)`}
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {listings.map((l: any) => (
+            <ListingCard key={l.id} listing={l} />
+          ))}
+        </div>
+        {!loadingListings && listings.length === 0 && (
+          <div className="rounded-lg border p-6 text-muted-foreground mt-4">
+            Nenhum anúncio encontrado nesta categoria.
+          </div>
+        )}
+      </section>
     </main>
   );
 };
