@@ -118,7 +118,7 @@ const ListingDetail = () => {
               </CardContent>
             </Card>
 
-            <Link to="/mensagens">
+            <Link to={listing.user_id ? `/mensagens?to=${listing.user_id}` : "/mensagens"}>
               <Button className="w-full">Enviar mensagem</Button>
             </Link>
           </aside>
