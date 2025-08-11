@@ -4,6 +4,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useListings } from "@/hooks/useListings";
 import { ListingCard } from "@/components/listings/ListingCard";
 import PromoCTA from "@/components/PromoCTA";
+import FeaturedListingsSection from "@/components/listings/FeaturedListingsSection";
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
@@ -70,6 +71,10 @@ const Explore = () => {
       {catsError && (
         <div className="text-destructive">Erro ao carregar categorias.</div>
       )}
+
+      <section className="mb-8">
+        <FeaturedListingsSection title="Anúncios em destaque" limit={3} />
+      </section>
 
       <section className="mb-8">
         <PromoCTA />

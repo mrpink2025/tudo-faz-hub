@@ -23,6 +23,7 @@ const queryClient = new QueryClient();
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
+import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -32,6 +33,7 @@ const App = () => (
       <BrowserRouter>
         <BrandingLoader />
         <Header />
+        <FeaturedListingsBar />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/explorar" element={<Explore />} />
