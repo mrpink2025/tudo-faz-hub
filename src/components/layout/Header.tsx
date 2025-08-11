@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-[hsl(var(--header-red-1))] text-[hsl(var(--hero-foreground))] backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b bg-[hsl(var(--header-red-1))] backdrop-blur">
       <nav className="container flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="md:hidden">
@@ -53,7 +53,7 @@ const Header = () => {
                   <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-popover text-foreground">
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
