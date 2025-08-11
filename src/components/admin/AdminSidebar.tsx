@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, ListChecks, ShoppingCart, Settings } from "lucide-react";
+import { LayoutDashboard, ListChecks, ShoppingCart, Settings, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,9 +13,9 @@ import {
 
 const items = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-  { title: "Anúncios", url: "/admin#anuncios", icon: ListChecks },
-  { title: "Pedidos", url: "/admin#pedidos", icon: ShoppingCart },
-  { title: "Configurações", url: "/admin#configuracoes", icon: Settings },
+  { title: "Anúncios", url: "/admin/listings", icon: ListChecks },
+  { title: "Usuários", url: "/admin/users", icon: Users },
+  { title: "Configurações", url: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {

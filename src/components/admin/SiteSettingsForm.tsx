@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+
+function parseRgbString(val?: string | null) {
+  if (!val) return { r: 59, g: 130, b: 246 };
+  const m = val.match(/(\d{1,3})\D+(\d{1,3})\D+(\d{1,3})/);
+  if (!m) return { r: 59, g: 130, b: 246 };
+  return { r: Math.min(255, +m[1]), g: Math.min(255, +m[2]), b: Math.min(255, +m[3]) };
+}
 
 export default function SiteSettingsForm() {
   const { toast } = useToast();
@@ -25,6 +32,15 @@ export default function SiteSettingsForm() {
       return data;
     },
   });
+
+  const [primaryRgb, setPrimaryRgb] = useState({ r: 59, g: 130, b: 246 });
+  const [accentRgb, setAccentRgb] = useState({ r: 139, g: 92, b: 246 });
+
+  useEffect(() => {
+    if (!settings) return;
+    setPrimaryRgb(parseRgbString(settings.brand_primary));
+    setAccentRgb(parseRgbString(settings.brand_accent));
+  }, [settings]);
 
   const update = useMutation({
     mutationFn: async (payload: any) => {
@@ -50,15 +66,32 @@ export default function SiteSettingsForm() {
     update.mutate({ logo_url: data.publicUrl });
   };
 
+  const primaryPreview = useMemo(() => `rgb(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b})`, [primaryRgb]);
+  const accentPreview = useMemo(() => `rgb(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b})`, [accentRgb]);
+
+  const persistColors = () => {
+    update.mutate({
+      brand_primary: `rgb(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b})`,
+      brand_accent: `rgb(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b})`,
+    });
+  };
+
+  const setTheme = (theme: "light" | "dark") => {
+    const root = document.documentElement;
+    if (theme === "dark") root.classList.add("dark");
+    else root.classList.remove("dark");
+    localStorage.setItem("theme", theme);
+  };
+
   if (isLoading) return (
     <section id="configuracoes" className="space-y-4"><div className="text-sm text-muted-foreground">Carregando…</div></section>
   );
 
   return (
-    <section id="configuracoes" className="space-y-4">
+    <section id="configuracoes" className="space-y-6">
       <header>
         <h2 className="text-xl font-semibold">Configurações do site</h2>
-        <p className="text-sm text-muted-foreground">Atualize o nome do site, logo, cores e conteúdo promocional.</p>
+        <p className="text-sm text-muted-foreground">Nome, logo, paleta de cores (RGB) e tema claro/escuro.</p>
       </header>
 
       <Card>
@@ -85,17 +118,44 @@ export default function SiteSettingsForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Cores</CardTitle>
+          <CardTitle>Paleta de cores (RGB)</CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-2">
+        <CardContent className="grid gap-6 md:grid-cols-2">
           <div className="grid gap-2">
-            <label className="text-sm">Primária (hex)</label>
-            <Input defaultValue={settings?.brand_primary ?? ""} onBlur={(e) => update.mutate({ brand_primary: e.target.value })} />
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Primária</span>
+              <div className="h-6 w-16 rounded border" style={{ backgroundColor: primaryPreview }} />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <Input type="number" min={0} max={255} value={primaryRgb.r} onChange={(e) => setPrimaryRgb({ ...primaryRgb, r: +e.target.value })} />
+              <Input type="number" min={0} max={255} value={primaryRgb.g} onChange={(e) => setPrimaryRgb({ ...primaryRgb, g: +e.target.value })} />
+              <Input type="number" min={0} max={255} value={primaryRgb.b} onChange={(e) => setPrimaryRgb({ ...primaryRgb, b: +e.target.value })} />
+            </div>
           </div>
           <div className="grid gap-2">
-            <label className="text-sm">Acento (hex)</label>
-            <Input defaultValue={settings?.brand_accent ?? ""} onBlur={(e) => update.mutate({ brand_accent: e.target.value })} />
+            <div className="flex items-center justify-between">
+              <span className="text-sm">Acento</span>
+              <div className="h-6 w-16 rounded border" style={{ backgroundColor: accentPreview }} />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <Input type="number" min={0} max={255} value={accentRgb.r} onChange={(e) => setAccentRgb({ ...accentRgb, r: +e.target.value })} />
+              <Input type="number" min={0} max={255} value={accentRgb.g} onChange={(e) => setAccentRgb({ ...accentRgb, g: +e.target.value })} />
+              <Input type="number" min={0} max={255} value={accentRgb.b} onChange={(e) => setAccentRgb({ ...accentRgb, b: +e.target.value })} />
+            </div>
           </div>
+          <div className="md:col-span-2">
+            <Button onClick={persistColors}>Salvar paleta</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Tema</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-2">
+          <Button variant="secondary" onClick={() => setTheme("light")}>Modo claro</Button>
+          <Button onClick={() => setTheme("dark")}>Modo escuro</Button>
         </CardContent>
       </Card>
 
