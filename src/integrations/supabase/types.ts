@@ -14,7 +14,186 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          name_pt: string
+          name_zh: string | null
+          parent_id: string | null
+          position: number | null
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name_pt: string
+          name_zh?: string | null
+          parent_id?: string | null
+          position?: number | null
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name_pt?: string
+          name_zh?: string | null
+          parent_id?: string | null
+          position?: number | null
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          approved: boolean | null
+          category_id: string
+          created_at: string
+          currency: string | null
+          description: string | null
+          highlighted: boolean | null
+          id: string
+          lat: number | null
+          lng: number | null
+          location: string | null
+          price: number | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean | null
+          category_id: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          highlighted?: boolean | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location?: string | null
+          price?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved?: boolean | null
+          category_id?: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          highlighted?: boolean | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location?: string | null
+          price?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          amount: number | null
+          created_at: string
+          currency: string | null
+          id: string
+          listing_id: string | null
+          status: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          brand_accent: string | null
+          brand_primary: string | null
+          id: number
+          logo_url: string | null
+          promo_html: string | null
+          site_name: string | null
+          stripe_enabled: boolean | null
+          stripe_publishable_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_accent?: string | null
+          brand_primary?: string | null
+          id?: number
+          logo_url?: string | null
+          promo_html?: string | null
+          site_name?: string | null
+          stripe_enabled?: boolean | null
+          stripe_publishable_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_accent?: string | null
+          brand_primary?: string | null
+          id?: number
+          logo_url?: string | null
+          promo_html?: string | null
+          site_name?: string | null
+          stripe_enabled?: boolean | null
+          stripe_publishable_key?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
