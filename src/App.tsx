@@ -11,10 +11,12 @@ import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import ListingDetail from "./pages/ListingDetail";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminRoute from "./components/auth/AdminRoute";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -30,6 +32,7 @@ const App = () => (
           <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
           <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
           <Route path="/entrar" element={<Auth />} />
+          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
