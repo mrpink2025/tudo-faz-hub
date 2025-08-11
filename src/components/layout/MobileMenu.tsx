@@ -11,6 +11,12 @@ import {
   DrawerTitle,
   DrawerClose,
 } from "@/components/ui/drawer";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 const MobileMenu = () => {
   const { data: categories, isLoading, error } = useCategories();
@@ -25,12 +31,12 @@ const MobileMenu = () => {
           <Menu className="h-5 w-5" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="z-[60]">
         <div className="mx-auto w-full max-w-lg">
           <DrawerHeader>
             <DrawerTitle>Explorar</DrawerTitle>
           </DrawerHeader>
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
             <div>
               <SearchBar />
             </div>
@@ -44,30 +50,37 @@ const MobileMenu = () => {
                 <div className="text-sm text-destructive">Erro ao carregar categorias</div>
               )}
               {!isLoading && !error && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <Accordion type="single" collapsible className="w-full">
                   {roots.map((root: any) => (
-                    <article key={root.id} className="space-y-2">
-                      <Link
-                        to={`/explorar?categoria=${encodeURIComponent(root.slug)}`}
-                        className="font-medium hover:text-primary transition-colors"
-                      >
-                        {root.name_pt ?? root.slug}
-                      </Link>
-                      <ul className="space-y-1">
-                        {getChildren(root.id).map((child: any) => (
-                          <li key={child.id}>
-                            <Link
-                              to={`/explorar?categoria=${encodeURIComponent(child.slug)}`}
-                              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                              {child.name_pt ?? child.slug}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
+                    <AccordionItem key={root.id} value={root.slug}>
+                      <AccordionTrigger className="text-base">
+                        <span className="truncate">{root.name_pt ?? root.slug}</span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="pb-2">
+                          <Link
+                            to={`/explorar?categoria=${encodeURIComponent(root.slug)}`}
+                            className="text-sm underline hover:text-primary transition-colors"
+                          >
+                            Ver todos em {root.name_pt ?? root.slug}
+                          </Link>
+                        </div>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {getChildren(root.id).map((child: any) => (
+                            <li key={child.id}>
+                              <Link
+                                to={`/explorar?categoria=${encodeURIComponent(child.slug)}`}
+                                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                              >
+                                {child.name_pt ?? child.slug}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </div>
+                </Accordion>
               )}
             </section>
 
