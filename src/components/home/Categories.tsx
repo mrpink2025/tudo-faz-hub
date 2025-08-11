@@ -13,6 +13,7 @@ const iconMap: Record<string, any> = {
   empregos: Briefcase,
   veiculos: Car,
   eletronicos: Smartphone,
+  'vida-cotidiana': ShoppingBag,
   outros: Package,
   local: MapPin,
 };
@@ -59,8 +60,9 @@ const Categories = () => {
     );
   }
 
-  // Filtrar apenas categorias principais (sem parent_id) e limitar a 6
-  const mainCategories = categories?.filter(cat => !cat.parent_id).slice(0, 6) || [];
+  // Filtrar apenas categorias principais (sem parent_id), remover duplicatas por slug e limitar a 6
+  const roots = (categories ?? []).filter((cat) => !cat.parent_id);
+  const mainCategories = Array.from(new Map(roots.map((c) => [c.slug, c])).values()).slice(0, 6);
 
   return (
     <section className="py-10 lg:py-14">
