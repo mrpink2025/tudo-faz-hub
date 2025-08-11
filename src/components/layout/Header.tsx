@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-[var(--gradient-subtle)]/90 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b bg-[var(--gradient-header)] text-primary-foreground backdrop-blur">
       <nav className="container flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="md:hidden">
@@ -42,10 +42,10 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Explorar</NavLink>
-          <NavLink to="/mensagens" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Mensagens</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/80 hover:text-primary-foreground"}>Explorar</NavLink>
+          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/80 hover:text-primary-foreground"}>Mensagens</NavLink>
           {!user ? (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/80 hover:text-primary-foreground"}>Entrar</NavLink>
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
@@ -72,11 +72,11 @@ const Header = () => {
       <div className="container md:hidden pb-3 space-y-2">
         <SearchBar />
         <div className="flex items-center gap-4 overflow-x-auto text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Explorar</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/90 hover:text-primary-foreground"}>Explorar</NavLink>
           {user ? (
-            <NavLink to="/mensagens" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Mensagens</NavLink>
+            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/90 hover:text-primary-foreground"}>Mensagens</NavLink>
           ) : (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-primary-foreground" : "text-primary-foreground/90 hover:text-primary-foreground"}>Entrar</NavLink>
           )}
           <Link to="/publicar">
             <Button variant="hero" size="sm">Publicar</Button>
