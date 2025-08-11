@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const emailSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -22,8 +23,9 @@ const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-  const { session } = useSupabaseAuth();
-  const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
+const { session } = useSupabaseAuth();
+const { isAdmin, loading: loadingRole } = useIsAdmin();
+const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
 
   useEffect(() => {
     document.title = "Entrar ou Criar Conta - tudofaz";
@@ -36,11 +38,10 @@ const Auth = () => {
   }, []);
 
   useEffect(() => {
-    if (session) {
-      const from = (location.state as any)?.from || "/";
-      navigate(from, { replace: true });
-    }
-  }, [session, navigate, location.state]);
+    if (!session || loadingRole) return;
+    const from = (location.state as any)?.from || "/";
+    navigate(isAdmin ? "/admin" : from, { replace: true });
+  }, [session, isAdmin, loadingRole, navigate, location.state]);
 
   const loginForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema), defaultValues: { email: "", password: "" } });
   const signupForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema), defaultValues: { email: "", password: "" } });
@@ -55,8 +56,7 @@ const Auth = () => {
       return;
     }
     toast({ title: "Bem-vindo", description: "Login realizado com sucesso." });
-    const from = (location.state as any)?.from || "/";
-    navigate(from, { replace: true });
+    // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
   };
 
   const handleSignup = async (values: EmailForm) => {
