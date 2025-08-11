@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -84,6 +85,7 @@ const Header = () => {
           </Link>
         </div>
       </div>
+      <FeaturedListingsBar />
     </header>
   );
 };
