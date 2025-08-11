@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
 import { useListings } from "@/hooks/useListings";
 import { ListingCard } from "@/components/listings/ListingCard";
+import PromoCTA from "@/components/PromoCTA";
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
@@ -69,6 +70,10 @@ const Explore = () => {
       {catsError && (
         <div className="text-destructive">Erro ao carregar categorias.</div>
       )}
+
+      <section className="mb-8">
+        <PromoCTA />
+      </section>
 
       {rootCategory && subcategories.length > 0 && (
         <section aria-label="Subcategorias" className="mb-8">
