@@ -31,8 +31,8 @@ export default function Footer() {
             <li><img src="https://cdn.simpleicons.org/visa" alt="Visa" width="36" height="24" loading="lazy" decoding="async" /></li>
             <li><img src="https://cdn.simpleicons.org/mastercard" alt="Mastercard" width="36" height="24" loading="lazy" decoding="async" /></li>
             <li><img src="https://cdn.simpleicons.org/americanexpress" alt="American Express" width="36" height="24" loading="lazy" decoding="async" /></li>
-            <li><img src="https://cdn.simpleicons.org/elo" alt="Elo" width="36" height="24" loading="lazy" decoding="async" /></li>
-            <li><img src="https://cdn.simpleicons.org/hipercard" alt="Hipercard" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="/images/payments/elo.svg" alt="Elo" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="/images/payments/hipercard.svg" alt="Hipercard" width="36" height="24" loading="lazy" decoding="async" /></li>
           </ul>
         </div>
       </div>
