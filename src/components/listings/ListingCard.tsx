@@ -13,18 +13,19 @@ type Listing = {
   cover_image: string | null;
 };
 
-const formatPrice = (value: number | null | undefined, currency: string | null | undefined, fallback: string) => {
+const formatPrice = (value: number | null | undefined, currency: string | null | undefined, fallback: string, locale: string) => {
   if (value == null) return fallback;
   try {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: currency || "BRL" }).format(value);
+    return new Intl.NumberFormat(locale, { style: "currency", currency: currency || "BRL" }).format(value);
   } catch {
     return `${value}`;
   }
 };
 
 export const ListingCard = ({ listing }: { listing: Listing }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const imgSrc = listing.cover_image || "/placeholder.svg";
+  const locale = (i18n.language || "pt-BR");
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
       <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
@@ -42,9 +43,9 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
           <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-1">
-          <div className="font-medium text-foreground">{formatPrice(listing.price, listing.currency, t("price.combined"))}</div>
+          <div className="font-medium text-foreground">{formatPrice(listing.price, listing.currency, t("price.combined"), locale)}</div>
           {listing.location && <div>{listing.location}</div>}
-          <time dateTime={listing.created_at}>{new Date(listing.created_at).toLocaleDateString("pt-BR")}</time>
+          <time dateTime={listing.created_at}>{new Date(listing.created_at).toLocaleDateString(locale)}</time>
         </CardContent>
       </Card>
     </Link>

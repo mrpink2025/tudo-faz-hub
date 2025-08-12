@@ -23,8 +23,8 @@ const Index = () => {
       <Categories />
       <section className="py-16" style={{ backgroundImage: "var(--gradient-subtle)" }}>
         <div className="container text-center space-y-3">
-          <h2 className="font-display text-2xl">Pronto para começar?</h2>
-          <p className="text-muted-foreground">Publique seu primeiro anúncio em menos de 2 minutos.</p>
+          <h2 className="font-display text-2xl">{t("index.ctaTitle")}</h2>
+          <p className="text-muted-foreground">{t("index.ctaSubtitle")}</p>
         </div>
       </section>
     </main>

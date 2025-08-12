@@ -8,12 +8,20 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useCategories } from "@/hooks/useCategories";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const CategoryMenu = () => {
   const { data: categories, isLoading, error } = useCategories();
+  const { t, i18n } = useTranslation();
   const cats = (categories as any[]) ?? [];
   const roots = cats.filter((c) => !c.parent_id);
   const getChildren = (id: string) => cats.filter((c) => c.parent_id === id);
+
+  const labelFor = (cat: any) => {
+    const lang = (i18n.language || "pt").split("-")[0];
+    if (lang === "zh") return cat.name_zh || cat.name_pt || cat.slug;
+    return cat.name_pt || cat.slug;
+  };
 
   const [active, setActive] = useState<string | null>(null);
   const highlightedId = active ?? roots[0]?.id;
@@ -24,14 +32,14 @@ const CategoryMenu = () => {
     <NavigationMenu className="z-50">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="min-w-[140px] text-[hsl(var(--foreground))] hover:bg-white/10">Categorias</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="min-w-[140px] text-[hsl(var(--foreground))] hover:bg-white/10">{t("categories.menu")}</NavigationMenuTrigger>
           <NavigationMenuContent className="p-4 bg-popover text-foreground border border-border rounded-md shadow-lg">
             {isLoading && (
-              <div className="px-2 py-1.5 text-sm">Carregando...</div>
+              <div className="px-2 py-1.5 text-sm">{t("common.loading")}</div>
             )}
             {error && (
               <div className="px-2 py-1.5 text-sm text-destructive">
-                Erro ao carregar categorias
+                {t("categories.error")}
               </div>
             )}
             {!isLoading && !error && roots.length > 0 && (
@@ -50,7 +58,7 @@ const CategoryMenu = () => {
                             aria-haspopup="menu"
                             aria-expanded={isActive}
                           >
-                            <span className="truncate">{root.name_pt ?? root.slug}</span>
+                            <span className="truncate">{labelFor(root)}</span>
                           </button>
                         </li>
                       );
@@ -65,12 +73,12 @@ const CategoryMenu = () => {
                           to={`/explorar?categoria=${encodeURIComponent(currentRoot.slug)}`}
                           className="text-sm underline hover:text-primary transition-colors"
                         >
-                          Ver todos em {currentRoot.name_pt ?? currentRoot.slug}
+                          {t("categories.view_all", { name: labelFor(currentRoot) })}
                         </Link>
                       </div>
                       <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                         {getChildren(currentRoot.id).length === 0 && (
-                          <li className="text-sm text-muted-foreground">Sem subcategorias</li>
+                          <li className="text-sm text-muted-foreground">{t("categories.no_children")}</li>
                         )}
                         {getChildren(currentRoot.id).map((child: any) => (
                           <li key={child.id}>
@@ -78,14 +86,14 @@ const CategoryMenu = () => {
                               to={`/explorar?categoria=${encodeURIComponent(child.slug)}`}
                               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                             >
-                              {child.name_pt ?? child.slug}
+                              {labelFor(child)}
                             </Link>
                           </li>
                         ))}
                       </ul>
                     </>
                   ) : (
-                    <div className="text-sm text-muted-foreground">Nenhuma categoria disponível</div>
+                    <div className="text-sm text-muted-foreground">{t("categories.none")}</div>
                   )}
                 </section>
               </div>

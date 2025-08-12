@@ -17,9 +17,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
+  const { t } = useTranslation();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -32,7 +34,7 @@ const Header = () => {
           <div className="md:hidden">
             <MobileMenu />
           </div>
-          <Link to="/" aria-label="tudofaz - início" className="flex items-center gap-2">
+          <Link to="/" aria-label={t("nav.home_aria")} className="flex items-center gap-2">
             <Logo className="h-8 w-8" />
           </Link>
           <div className="hidden md:block">
@@ -45,10 +47,10 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Explorar</NavLink>
-          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Mensagens</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.explore")}</NavLink>
+          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.messages")}</NavLink>
           {!user ? (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger className="outline-none">
@@ -69,21 +71,21 @@ const Header = () => {
           )}
           <LanguageSwitcher />
           <Link to="/publicar">
-            <Button variant="hero" size="sm">Publicar anúncio</Button>
+            <Button variant="hero" size="sm">{t("nav.publish")}</Button>
           </Link>
         </div>
       </nav>
       <div className="container md:hidden pb-3 space-y-2 text-[hsl(var(--foreground))]">
         <SearchBar />
         <div className="flex items-center gap-4 overflow-x-auto text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Explorar</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.explore")}</NavLink>
           {user ? (
-            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Mensagens</NavLink>
+            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.messages")}</NavLink>
           ) : (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>Entrar</NavLink>
+            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
           )}
           <Link to="/publicar">
-            <Button variant="hero" size="sm">Publicar</Button>
+            <Button variant="hero" size="sm">{t("nav.publish_short")}</Button>
           </Link>
         </div>
       </div>

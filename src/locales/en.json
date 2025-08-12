@@ -1,4 +1,7 @@
 {
+  "site": { "name": "tudofaz.com" },
+  "nav": { "home_aria": "tudofaz - home", "explore": "Explore", "messages": "Messages", "login": "Sign in", "publish": "Post listing", "publish_short": "Post" },
+  "common": { "loading": "Loading..." },
   "home": { "tagline_small": "Your complete local marketplace" },
   "promo": {
     "badge": "Promote your listing",
@@ -8,7 +11,24 @@
   "buttons": { "publish": "Post listing", "explore": "Explore", "deposit_feature": "Deposit to highlight" },
   "featured": { "title": "Featured", "subtitle": "Handpicked for you" },
   "price": { "combined": "Negotiable" },
-  "index": { "title": "tudofaz.com — Complete local marketplace", "description": "Buy, sell and hire local services on tudofaz.com." },
+  "index": {
+    "title": "tudofaz.com — Complete local marketplace",
+    "description": "Buy, sell and hire local services on tudofaz.com.",
+    "ctaTitle": "Ready to get started?",
+    "ctaSubtitle": "Post your first listing in under 2 minutes."
+  },
   "nearby": { "title": "Near you", "enable": "See nearby listings", "denied": "Location permission denied.", "error": "Couldn't get your location." },
-  "images": { "alt_hero": "Illustration representing local shopping and services" }
+  "images": { "alt_hero": "Illustration representing local shopping and services" },
+  "footer": {
+    "description": "Local marketplace to buy, sell and hire services.",
+    "links": { "explore": "Explore", "publish": "Post", "login": "Sign in" },
+    "copyright": "All rights reserved."
+  },
+  "categories": {
+    "menu": "Categories",
+    "error": "Error loading categories",
+    "view_all": "View all in {{name}}",
+    "no_children": "No subcategories",
+    "none": "No categories available"
+  }
 }

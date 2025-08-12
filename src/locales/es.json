@@ -1,4 +1,7 @@
 {
+  "site": { "name": "tudofaz.com" },
+  "nav": { "home_aria": "tudofaz - inicio", "explore": "Explorar", "messages": "Mensajes", "login": "Entrar", "publish": "Publicar anuncio", "publish_short": "Publicar" },
+  "common": { "loading": "Cargando..." },
   "home": { "tagline_small": "Tu mercado local completo" },
   "promo": {
     "badge": "Promociona tu anuncio",
@@ -8,7 +11,24 @@
   "buttons": { "publish": "Publicar anuncio", "explore": "Explorar", "deposit_feature": "Depositar para destacar" },
   "featured": { "title": "Destacados", "subtitle": "Seleccionados para ti" },
   "price": { "combined": "A convenir" },
-  "index": { "title": "tudofaz.com — Mercado local completo", "description": "Compra, vende y contrata servicios locales en tudofaz.com." },
+  "index": {
+    "title": "tudofaz.com — Mercado local completo",
+    "description": "Compra, vende y contrata servicios locales en tudofaz.com.",
+    "ctaTitle": "¿Listo para empezar?",
+    "ctaSubtitle": "Publica tu primer anuncio en menos de 2 minutos."
+  },
   "nearby": { "title": "Cerca de ti", "enable": "Ver anuncios cercanos", "denied": "Permiso de ubicación denegado.", "error": "No se pudo obtener tu ubicación." },
-  "images": { "alt_hero": "Ilustración de compras y servicios locales" }
+  "images": { "alt_hero": "Ilustración de compras y servicios locales" },
+  "footer": {
+    "description": "Mercado local para comprar, vender y contratar servicios.",
+    "links": { "explore": "Explorar", "publish": "Publicar", "login": "Entrar" },
+    "copyright": "Todos los derechos reservados."
+  },
+  "categories": {
+    "menu": "Categorías",
+    "error": "Error al cargar categorías",
+    "view_all": "Ver todo en {{name}}",
+    "no_children": "Sin subcategorías",
+    "none": "No hay categorías disponibles"
+  }
 }

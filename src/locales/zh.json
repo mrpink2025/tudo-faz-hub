@@ -1,4 +1,7 @@
 {
+  "site": { "name": "tudofaz.com" },
+  "nav": { "home_aria": "tudofaz - 首页", "explore": "探索", "messages": "消息", "login": "登录", "publish": "发布帖子", "publish_short": "发布" },
+  "common": { "loading": "加载中..." },
   "home": { "tagline_small": "本地综合交易平台" },
   "promo": {
     "badge": "推广你的帖子",
@@ -8,7 +11,24 @@
   "buttons": { "publish": "发布帖子", "explore": "探索", "deposit_feature": "充值以精选" },
   "featured": { "title": "精选", "subtitle": "为你精选" },
   "price": { "combined": "面议" },
-  "index": { "title": "tudofaz.com — 本地综合交易平台", "description": "在 tudofaz.com 上买卖与雇佣本地服务。" },
+  "index": {
+    "title": "tudofaz.com — 本地综合交易平台",
+    "description": "在 tudofaz.com 上买卖与雇佣本地服务。",
+    "ctaTitle": "准备开始了吗？",
+    "ctaSubtitle": "两分钟内发布你的第一条帖子。"
+  },
   "nearby": { "title": "离你最近", "enable": "查看附近帖子", "denied": "已拒绝定位权限。", "error": "无法获取你的位置。" },
-  "images": { "alt_hero": "展示本地购物与服务的插图" }
+  "images": { "alt_hero": "展示本地购物与服务的插图" },
+  "footer": {
+    "description": "本地市场：买卖与雇佣服务。",
+    "links": { "explore": "探索", "publish": "发布", "login": "登录" },
+    "copyright": "保留所有权利。"
+  },
+  "categories": {
+    "menu": "分类",
+    "error": "加载分类时出错",
+    "view_all": "查看 {{name}} 的全部",
+    "no_children": "无子分类",
+    "none": "暂无分类"
+  }
 }
