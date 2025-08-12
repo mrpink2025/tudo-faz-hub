@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const emailSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -19,6 +20,13 @@ const emailSchema = z.object({
 
 type EmailForm = z.infer<typeof emailSchema>;
 
+const signupSchema = emailSchema.extend({
+  acceptTerms: z.boolean().refine((v) => v === true, {
+    message: "Você deve aceitar os Termos de Uso e a Política de Privacidade para continuar",
+  }),
+});
+
+type SignupForm = z.infer<typeof signupSchema>;
 const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -44,7 +52,7 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
   }, [session, isAdmin, loadingRole, navigate, location.state]);
 
   const loginForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema), defaultValues: { email: "", password: "" } });
-  const signupForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema), defaultValues: { email: "", password: "" } });
+  const signupForm = useForm<SignupForm>({ resolver: zodResolver(signupSchema), defaultValues: { email: "", password: "", acceptTerms: false } });
 
   const handleLogin = async (values: EmailForm) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -59,7 +67,7 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
     // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
   };
 
-  const handleSignup = async (values: EmailForm) => {
+  const handleSignup = async (values: SignupForm) => {
     const redirectUrl = `${window.location.origin}/`;
     const { error } = await supabase.auth.signUp({
       email: values.email,
@@ -135,6 +143,36 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
                     <FormMessage />
                   </FormItem>
                 )} />
+                <FormField
+                  name="acceptTerms"
+                  control={signupForm.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-start space-x-3">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            aria-label="Aceitar Termos de Uso e Política de Privacidade"
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="font-normal">
+                            Li e aceito os{" "}
+                            <a href="/termos" target="_blank" rel="noopener noreferrer" className="underline">
+                              Termos de Uso
+                            </a>{" "}
+                            e a{" "}
+                            <a href="/privacidade" target="_blank" rel="noopener noreferrer" className="underline">
+                              Política de Privacidade
+                            </a>
+                          </FormLabel>
+                        </div>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button type="submit">Criar conta</Button>
               </form>
             </Form>
