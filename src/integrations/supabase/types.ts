@@ -52,10 +52,43 @@ export type Database = {
           },
         ]
       }
+      listing_images: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          position: number
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          position?: number
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          position?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           approved: boolean | null
           category_id: string
+          cover_image: string | null
           created_at: string
           currency: string | null
           description: string | null
@@ -73,6 +106,7 @@ export type Database = {
         Insert: {
           approved?: boolean | null
           category_id: string
+          cover_image?: string | null
           created_at?: string
           currency?: string | null
           description?: string | null
@@ -90,6 +124,7 @@ export type Database = {
         Update: {
           approved?: boolean | null
           category_id?: string
+          cover_image?: string | null
           created_at?: string
           currency?: string | null
           description?: string | null
