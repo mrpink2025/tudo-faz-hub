@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/</loc>
+    <loc>https://tudofaz.com/</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>/explorar</loc>
+    <loc>https://tudofaz.com/explorar</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>/entrar</loc>
+    <loc>https://tudofaz.com/entrar</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>/publicar</loc>
+    <loc>https://tudofaz.com/publicar</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>/mensagens</loc>
+    <loc>https://tudofaz.com/mensagens</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>/creditos</loc>
+    <loc>https://tudofaz.com/creditos</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>/pagamento-sucesso</loc>
+    <loc>https://tudofaz.com/pagamento-sucesso</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>/pagamento-cancelado</loc>
+    <loc>https://tudofaz.com/pagamento-cancelado</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>/termos</loc>
+    <loc>https://tudofaz.com/termos</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>/privacidade</loc>
+    <loc>https://tudofaz.com/privacidade</loc>
     <lastmod>2025-08-12</lastmod>
     <priority>0.5</priority>
   </url>
