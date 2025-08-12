@@ -37,8 +37,12 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t">
-        <div className="container py-4 text-xs text-muted-foreground">
-          © {year} tudofaz.com — {t("footer.copyright")}
+        <div className="container py-4 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-2">
+          <span>© {year} tudofaz.com — {t("footer.copyright")}</span>
+          <nav className="flex items-center gap-4">
+            <Link to="/termos" className="hover:text-foreground transition">Termos de Uso</Link>
+            <Link to="/privacidade" className="hover:text-foreground transition">Política de Privacidade</Link>
+          </nav>
         </div>
       </div>
     </footer>
