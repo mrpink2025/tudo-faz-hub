@@ -84,6 +84,50 @@ export type Database = {
           },
         ]
       }
+      listing_locations: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          city: string
+          created_at: string
+          id: string
+          listing_id: string
+          neighborhood: string | null
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city: string
+          created_at?: string
+          id?: string
+          listing_id: string
+          neighborhood?: string | null
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string
+          created_at?: string
+          id?: string
+          listing_id?: string
+          neighborhood?: string | null
+          state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_locations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           approved: boolean | null
@@ -273,7 +317,35 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      listing_locations_public: {
+        Row: {
+          city: string | null
+          listing_id: string | null
+          neighborhood: string | null
+          state: string | null
+        }
+        Insert: {
+          city?: string | null
+          listing_id?: string | null
+          neighborhood?: string | null
+          state?: string | null
+        }
+        Update: {
+          city?: string | null
+          listing_id?: string | null
+          neighborhood?: string | null
+          state?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_locations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {
