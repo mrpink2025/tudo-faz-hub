@@ -5,7 +5,7 @@
 # - Configura HTTPS (Let's Encrypt) e cache básico
 #
 # Uso (como root ou com sudo):
-#   sudo bash -c "DOMAIN=tudofaz.com EMAIL=admin@tudofaz.com ./scripts/bootstrap-and-deploy.sh"
+#   sudo bash -c "DOMAIN=tudofaz.com EMAIL=admin@tudofaz.com CLEAN_FIRST=true ./scripts/bootstrap-and-deploy.sh"
 # Variáveis aceitas (com defaults):
 #   DOMAIN=tudofaz.com
 #   WWW_DOMAIN=www.tudofaz.com
@@ -14,9 +14,10 @@
 #   BRANCH=main
 #   APP_DIR=/opt/tudofaz-app
 #   DEPLOY_PATH=/var/www/tudofaz
+#   CLEAN_FIRST=true   # Se true, remove configs/diretórios/certificados anteriores antes de configurar
 #
 # Requisitos:
-# - Ubuntu 20.04/22.04/24.04 LTS
+# - Ubuntu 20.04/22.04/24.04 LTS (testado no 24.04)
 # - DNS A de tudofaz.com e www.tudofaz.com apontando para este servidor
 # - Portas 80/443 liberadas
 
@@ -34,6 +35,9 @@ APP_DIR="${APP_DIR:-/opt/tudofaz-app}"
 DEPLOY_PATH="${DEPLOY_PATH:-/var/www/tudofaz}"
 SITE_CONF="/etc/nginx/sites-available/${DOMAIN}"
 SITE_LINK="/etc/nginx/sites-enabled/${DOMAIN}"
+CLEAN_FIRST="${CLEAN_FIRST:-true}"
+
+is_true() { case "${1:-}" in [Tt][Rr][Uu][Ee]|1|[Yy][Ee][Ss]) return 0;; *) return 1;; esac; }
 
 if [ "${EUID}" -ne 0 ]; then
   echo "[ERRO] Execute como root (sudo)."; exit 1
@@ -49,6 +53,22 @@ else
 fi
 if [ "${UBUNTU_VER_MAJOR}" -lt 18 ]; then
   echo "[ERRO] Ubuntu muito antigo. Use 20.04/22.04/24.04 LTS."; exit 1
+fi
+
+# ============================
+# Limpeza prévia (CLEAN_FIRST)
+# ============================
+if is_true "${CLEAN_FIRST}"; then
+  echo "[INFO] Limpando configuração anterior para ${DOMAIN}..."
+  systemctl stop nginx || true
+  rm -f "${SITE_LINK}" "${SITE_CONF}" || true
+  rm -rf "${DEPLOY_PATH}" || true
+  rm -rf "${APP_DIR}" || true
+  # Remover certificados existentes (não falha se não houver)
+  certbot delete --cert-name "${DOMAIN}" -n || true
+  rm -rf "/etc/letsencrypt/live/${DOMAIN}" \
+         "/etc/letsencrypt/archive/${DOMAIN}" \
+         "/etc/letsencrypt/renewal/${DOMAIN}.conf" || true
 fi
 
 # ============================
