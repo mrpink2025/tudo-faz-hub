@@ -109,5 +109,23 @@
       "removeError": "Error removing",
       "none": "No roles found."
     }
+  },
+  "credits": {
+    "nav": "Credits",
+    "title": "Buy Credits",
+    "description": "Get credits to feature listings and unlock features.",
+    "balance": "Your balance",
+    "packUnit": "credits",
+    "packsTitle": "Choose a credit pack",
+    "buy": "Buy",
+    "packLabel": "{{credits}} credits",
+    "successTitle": "Payment completed",
+    "successDescription": "We're verifying your payment and crediting your wallet.",
+    "verifyButton": "Verify and credit",
+    "backToCredits": "Back to credits",
+    "cancelTitle": "Payment canceled",
+    "cancelDescription": "No charge was made. You can try again anytime.",
+    "verified": "Credits added"
   }
 }
+

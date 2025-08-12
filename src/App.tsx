@@ -17,6 +17,9 @@ import AdminOverview from "./pages/admin/Overview";
 import AdminListings from "./pages/admin/Listings";
 import AdminUsers from "./pages/admin/Users";
 import AdminSettings from "./pages/admin/Settings";
+import Credits from "./pages/Credits";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCanceled from "./pages/PaymentCanceled";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +42,9 @@ const App = () => (
           <Route path="/anuncio/:id" element={<ListingDetail />} />
           <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
           <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+          <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
+          <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />
+          <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />
           <Route path="/entrar" element={<Auth />} />
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route index element={<AdminOverview />} />

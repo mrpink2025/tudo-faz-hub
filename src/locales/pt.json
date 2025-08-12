@@ -109,5 +109,23 @@
       "removeError": "Erro ao remover",
       "none": "Nenhum papel encontrado."
     }
+  },
+  "credits": {
+    "nav": "Créditos",
+    "title": "Comprar Créditos",
+    "description": "Adquira créditos para destacar anúncios e desbloquear recursos.",
+    "balance": "Seu saldo",
+    "packUnit": "créditos",
+    "packsTitle": "Escolha um pacote de créditos",
+    "buy": "Comprar",
+    "packLabel": "{{credits}} créditos",
+    "successTitle": "Pagamento concluído",
+    "successDescription": "Estamos verificando seu pagamento e creditando sua carteira.",
+    "verifyButton": "Verificar e creditar",
+    "backToCredits": "Voltar aos créditos",
+    "cancelTitle": "Pagamento cancelado",
+    "cancelDescription": "Nenhuma cobrança foi realizada. Você pode tentar novamente quando quiser.",
+    "verified": "Créditos adicionados"
   }
 }
+
