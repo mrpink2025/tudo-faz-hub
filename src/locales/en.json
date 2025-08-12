@@ -30,5 +30,84 @@
     "view_all": "View all in {{name}}",
     "no_children": "No subcategories",
     "none": "No categories available"
+  },
+  "explore": {
+    "titleBase": "Explore listings",
+    "titleCat": "Explore {{name}}",
+    "descBase": "Explore listings and find what you need on tudofaz.com",
+    "descCat": "Explore {{name}} listings on tudofaz.com",
+    "headerBase": "Explore listings",
+    "headerCat": "Explore {{name}}",
+    "useSearch": "Use search and filters to find what you need.",
+    "loadingCats": "Loading categories...",
+    "errorCats": "Error loading categories.",
+    "subcategories": "Subcategories",
+    "ariaExplore": "Explore",
+    "loadingResults": "Loading results…",
+    "resultsCount": "{{count}} result(s)",
+    "noneFound": "No listings found in this category."
+  },
+  "listing": {
+    "pageTitle": "Listing",
+    "metaDesc": "Listing details on tudofaz.com",
+    "notFound": "Listing not found.",
+    "breadcrumbExplore": "Explore",
+    "imageAltMain": "Main image of",
+    "description": "Description",
+    "noDescription": "No description.",
+    "price": "Price",
+    "messageButton": "Send message"
+  },
+  "create": {
+    "pageTitle": "Post listing",
+    "pageSubtitle": "Create your listing with title, description, price, category and photos.",
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "priceBRL": "Price (BRL)",
+      "optional": "Optional",
+      "category": "Category",
+      "subcategory": "Subcategory",
+      "select": "Select",
+      "noSubcategories": "This category has no subcategories. Choose another.",
+      "photosLabel": "Listing photos (up to {{max}})",
+      "photosCount": "{{count}} of {{max}} selected"
+    },
+    "buttons": { "publish": "Post", "cancel": "Cancel", "publishing": "Posting…" },
+    "loginRequiredTitle": "Sign in",
+    "loginRequiredDesc": "You must be authenticated to post.",
+    "chooseCategory": "Choose a category",
+    "chooseSubcategory": "Choose a subcategory",
+    "success": "Posted",
+    "error": "Couldn't post the listing."
+  },
+  "messages": {
+    "pageTitle": "Messages",
+    "meta": "Chat with buyers and sellers on tudofaz.",
+    "subtitle": "Chat safely with other users.",
+    "none": "No conversations yet.",
+    "user": "User",
+    "selectToStart": "Select a conversation to start.",
+    "chattingWith": "Chatting with User",
+    "writePlaceholder": "Write a message",
+    "send": "Send"
+  },
+  "admin": {
+    "layoutTitle": "Admin Panel",
+    "sidebar": { "dashboard": "Dashboard", "listings": "Listings", "users": "Users", "settings": "Settings" },
+    "overview": { "pending": "Pending listings", "totalListings": "Total listings", "orders": "Orders", "useMenu": "Use the side menu to navigate." },
+    "users": {
+      "manage": "Manage users",
+      "manageDesc": "Add or remove roles by user_id.",
+      "assignRole": "Assign role",
+      "userIdPlaceholder": "User UUID",
+      "assign": "Assign",
+      "remove": "Remove",
+      "added": "Role added",
+      "addError": "Error adding",
+      "removed": "Role removed",
+      "removeError": "Error removing",
+      "none": "No roles found."
+    }
   }
 }

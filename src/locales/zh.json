@@ -30,5 +30,84 @@
     "view_all": "查看 {{name}} 的全部",
     "no_children": "无子分类",
     "none": "暂无分类"
+  },
+  "explore": {
+    "titleBase": "浏览帖子",
+    "titleCat": "浏览 {{name}}",
+    "descBase": "在 tudofaz.com 浏览帖子，找到你需要的东西",
+    "descCat": "在 tudofaz.com 浏览 {{name}} 帖子",
+    "headerBase": "浏览帖子",
+    "headerCat": "浏览 {{name}}",
+    "useSearch": "使用搜索和筛选来查找。",
+    "loadingCats": "正在加载分类...",
+    "errorCats": "加载分类时出错。",
+    "subcategories": "子分类",
+    "ariaExplore": "浏览",
+    "loadingResults": "正在加载结果…",
+    "resultsCount": "{{count}} 条结果",
+    "noneFound": "该分类下暂无帖子。"
+  },
+  "listing": {
+    "pageTitle": "帖子",
+    "metaDesc": "tudofaz.com 帖子详情",
+    "notFound": "未找到帖子。",
+    "breadcrumbExplore": "探索",
+    "imageAltMain": "主要图片：",
+    "description": "描述",
+    "noDescription": "暂无描述。",
+    "price": "价格",
+    "messageButton": "发送消息"
+  },
+  "create": {
+    "pageTitle": "发布帖子",
+    "pageSubtitle": "填写标题、描述、价格、分类和照片。",
+    "fields": {
+      "title": "标题",
+      "description": "描述",
+      "priceBRL": "价格 (BRL)",
+      "optional": "可选",
+      "category": "分类",
+      "subcategory": "子分类",
+      "select": "选择",
+      "noSubcategories": "该分类没有子分类，请选择其他。",
+      "photosLabel": "帖子图片（最多 {{max}} 张）",
+      "photosCount": "已选择 {{count}} / {{max}} 张"
+    },
+    "buttons": { "publish": "发布", "cancel": "取消", "publishing": "正在发布…" },
+    "loginRequiredTitle": "请登录",
+    "loginRequiredDesc": "发布前需要先登录。",
+    "chooseCategory": "请选择一个分类",
+    "chooseSubcategory": "请选择一个子分类",
+    "success": "已发布",
+    "error": "无法发布该帖子。"
+  },
+  "messages": {
+    "pageTitle": "消息",
+    "meta": "在 tudofaz 与买家和卖家聊天。",
+    "subtitle": "与其他用户安全聊天。",
+    "none": "暂无会话。",
+    "user": "用户",
+    "selectToStart": "选择一个会话以开始。",
+    "chattingWith": "正在与用户对话",
+    "writePlaceholder": "输入消息",
+    "send": "发送"
+  },
+  "admin": {
+    "layoutTitle": "管理后台",
+    "sidebar": { "dashboard": "控制台", "listings": "帖子", "users": "用户", "settings": "设置" },
+    "overview": { "pending": "待审核帖子", "totalListings": "帖子总数", "orders": "订单", "useMenu": "使用侧边菜单进行导航。" },
+    "users": {
+      "manage": "管理用户",
+      "manageDesc": "根据 user_id 添加或移除角色。",
+      "assignRole": "分配角色",
+      "userIdPlaceholder": "用户 UUID",
+      "assign": "分配",
+      "remove": "移除",
+      "added": "已添加角色",
+      "addError": "添加出错",
+      "removed": "已移除角色",
+      "removeError": "移除出错",
+      "none": "没有找到角色。"
+    }
   }
 }

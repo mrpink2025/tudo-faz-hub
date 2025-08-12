@@ -5,6 +5,7 @@ import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 
 interface MessageRow {
   id: string;
@@ -17,6 +18,7 @@ interface MessageRow {
 const Messages = () => {
   const { user } = useSupabaseAuth();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
   const params = new URLSearchParams(location.search);
   const initialTo = params.get("to") || "";
 
@@ -26,14 +28,14 @@ const Messages = () => {
   const [newMsg, setNewMsg] = useState("");
 
   useEffect(() => {
-    document.title = "Mensagens - tudofaz";
+    document.title = `${t("messages.pageTitle")} - tudofaz`;
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Converse com compradores e vendedores no tudofaz.");
+    if (meta) meta.setAttribute("content", t("messages.meta"));
     const link = document.querySelector('link[rel="canonical"]') || document.createElement('link');
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', window.location.href);
     if (!link.parentNode) document.head.appendChild(link);
-  }, []);
+  }, [t]);
 
   const myId = user?.id ?? "";
 
@@ -127,23 +129,23 @@ const Messages = () => {
   return (
     <main className="container py-10">
       <header className="mb-6">
-        <h1 className="font-display text-3xl">Mensagens</h1>
-        <p className="text-muted-foreground">Converse com outros usuários com segurança.</p>
+        <h1 className="font-display text-3xl">{t("messages.pageTitle")}</h1>
+        <p className="text-muted-foreground">{t("messages.subtitle")}</p>
       </header>
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="p-4 md:h-[70vh] overflow-y-auto">
           <div className="space-y-2">
-            {sortedConversations.length === 0 && (
-              <p className="text-sm text-muted-foreground">Nenhuma conversa ainda.</p>
-            )}
+        {sortedConversations.length === 0 && (
+          <p className="text-sm text-muted-foreground">{t("messages.none")}</p>
+        )}
             {sortedConversations.map(([otherId, last]) => (
               <button
                 key={otherId}
                 onClick={() => setSelectedUserId(otherId)}
                 className={`w-full text-left rounded-md px-3 py-2 transition ${selectedUserId === otherId ? "bg-accent" : "hover:bg-accent/50"}`}
               >
-                <div className="text-sm font-medium">Usuário {otherId.slice(0, 8)}</div>
+                <div className="text-sm font-medium">{t("messages.user")} {otherId.slice(0, 8)}</div>
                 <div className="text-xs text-muted-foreground truncate">{last.content}</div>
               </button>
             ))}
@@ -152,17 +154,17 @@ const Messages = () => {
 
         <Card className="p-4 md:col-span-2 md:h-[70vh] flex flex-col">
           {!selectedUserId ? (
-            <div className="m-auto text-muted-foreground">Selecione uma conversa para começar.</div>
+            <div className="m-auto text-muted-foreground">{t("messages.selectToStart")}</div>
           ) : (
             <>
               <div className="border-b pb-2 mb-4">
-                <h2 className="font-medium">Conversando com Usuário {selectedUserId.slice(0,8)}</h2>
+              <h2 className="font-medium">{t("messages.chattingWith")} {selectedUserId.slice(0,8)}</h2>
               </div>
               <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                 {thread.map((m) => (
                   <div key={m.id} className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${m.sender_id === myId ? "ml-auto bg-primary text-primary-foreground" : "bg-muted"}`}>
                     {m.content}
-                    <div className="mt-1 text-[10px] opacity-70">{new Date(m.created_at).toLocaleString()}</div>
+                    <div className="mt-1 text-[10px] opacity-70">{new Date(m.created_at).toLocaleString(i18n.language || "pt-BR")}</div>
                   </div>
                 ))}
                 {thread.length === 0 && (
@@ -171,7 +173,7 @@ const Messages = () => {
               </div>
               <div className="mt-4 flex gap-2">
                 <Input
-                  placeholder="Escreva uma mensagem"
+                  placeholder={t("messages.writePlaceholder") as string}
                   value={newMsg}
                   onChange={(e) => setNewMsg(e.target.value)}
                   onKeyDown={(e) => {
@@ -181,7 +183,7 @@ const Messages = () => {
                     }
                   }}
                 />
-                <Button onClick={handleSend}>Enviar</Button>
+                <Button onClick={handleSend}>{t("messages.send")}</Button>
               </div>
             </>
           )}

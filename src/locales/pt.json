@@ -30,5 +30,84 @@
     "view_all": "Ver todos em {{name}}",
     "no_children": "Sem subcategorias",
     "none": "Nenhuma categoria disponível"
+  },
+  "explore": {
+    "titleBase": "Explorar anúncios",
+    "titleCat": "Explorar {{name}}",
+    "descBase": "Explore anúncios e encontre o que precisa na tudofaz.com",
+    "descCat": "Explore anúncios de {{name}} na tudofaz.com",
+    "headerBase": "Explorar anúncios",
+    "headerCat": "Explorar {{name}}",
+    "useSearch": "Use a busca e filtros para encontrar o que precisa.",
+    "loadingCats": "Carregando categorias...",
+    "errorCats": "Erro ao carregar categorias.",
+    "subcategories": "Subcategorias",
+    "ariaExplore": "Explorar",
+    "loadingResults": "Carregando resultados…",
+    "resultsCount": "{{count}} resultado(s)",
+    "noneFound": "Nenhum anúncio encontrado nesta categoria."
+  },
+  "listing": {
+    "pageTitle": "Anúncio",
+    "metaDesc": "Detalhes do anúncio no tudofaz.com",
+    "notFound": "Anúncio não encontrado.",
+    "breadcrumbExplore": "Explorar",
+    "imageAltMain": "Imagem principal de",
+    "description": "Descrição",
+    "noDescription": "Sem descrição.",
+    "price": "Preço",
+    "messageButton": "Enviar mensagem"
+  },
+  "create": {
+    "pageTitle": "Publicar anúncio",
+    "pageSubtitle": "Crie seu anúncio com título, descrição, preço, categoria e fotos.",
+    "fields": {
+      "title": "Título",
+      "description": "Descrição",
+      "priceBRL": "Preço (BRL)",
+      "optional": "Opcional",
+      "category": "Categoria",
+      "subcategory": "Subcategoria",
+      "select": "Selecione",
+      "noSubcategories": "Esta categoria não possui subcategorias. Selecione outra.",
+      "photosLabel": "Fotos do anúncio (até {{max}})",
+      "photosCount": "{{count}} de {{max}} selecionadas"
+    },
+    "buttons": { "publish": "Publicar", "cancel": "Cancelar", "publishing": "Publicando…" },
+    "loginRequiredTitle": "Faça login",
+    "loginRequiredDesc": "Você precisa estar autenticado para publicar.",
+    "chooseCategory": "Escolha uma categoria",
+    "chooseSubcategory": "Escolha uma subcategoria",
+    "success": "Publicado",
+    "error": "Não foi possível publicar o anúncio."
+  },
+  "messages": {
+    "pageTitle": "Mensagens",
+    "meta": "Converse com compradores e vendedores no tudofaz.",
+    "subtitle": "Converse com outros usuários com segurança.",
+    "none": "Nenhuma conversa ainda.",
+    "user": "Usuário",
+    "selectToStart": "Selecione uma conversa para começar.",
+    "chattingWith": "Conversando com Usuário",
+    "writePlaceholder": "Escreva uma mensagem",
+    "send": "Enviar"
+  },
+  "admin": {
+    "layoutTitle": "Painel Administrativo",
+    "sidebar": { "dashboard": "Dashboard", "listings": "Anúncios", "users": "Usuários", "settings": "Configurações" },
+    "overview": { "pending": "Anúncios pendentes", "totalListings": "Total de anúncios", "orders": "Pedidos", "useMenu": "Use o menu lateral para navegar." },
+    "users": {
+      "manage": "Gerenciar usuários",
+      "manageDesc": "Adicionar ou remover papéis (roles) por user_id.",
+      "assignRole": "Atribuir papel",
+      "userIdPlaceholder": "UUID do usuário",
+      "assign": "Atribuir",
+      "remove": "Remover",
+      "added": "Papel adicionado",
+      "addError": "Erro ao adicionar",
+      "removed": "Papel removido",
+      "removeError": "Erro ao remover",
+      "none": "Nenhum papel encontrado."
+    }
   }
 }

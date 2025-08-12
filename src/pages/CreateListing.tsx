@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 const MAX_PHOTOS = 10;
 
@@ -14,6 +15,7 @@ const CreateListing = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { data: categories } = useCategories();
+  const { t, i18n } = useTranslation();
   const roots = useMemo(() => (categories ?? []).filter((c: any) => !c.parent_id), [categories]);
 
   const [title, setTitle] = useState("");
@@ -30,8 +32,8 @@ const CreateListing = () => {
   );
 
   useEffect(() => {
-    document.title = "Publicar anúncio - tudofaz.com";
-  }, []);
+    document.title = `${t("create.pageTitle")} - tudofaz.com`;
+  }, [t]);
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = Array.from(e.target.files ?? []).slice(0, MAX_PHOTOS);
@@ -45,17 +47,17 @@ const CreateListing = () => {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user?.id;
       if (!userId) {
-        toast({ title: "Faça login", description: "Você precisa estar autenticado para publicar." });
+        toast({ title: t("create.loginRequiredTitle"), description: t("create.loginRequiredDesc") });
         navigate("/entrar");
         return;
       }
 
       if (!rootId) {
-        toast({ title: "Escolha uma categoria" });
+        toast({ title: t("create.chooseCategory") });
         return;
       }
       if (!subId) {
-        toast({ title: "Escolha uma subcategoria" });
+        toast({ title: t("create.chooseSubcategory") });
         return;
       }
 
@@ -106,11 +108,11 @@ const CreateListing = () => {
         }
       }
 
-      toast({ title: "Publicado", description: "Seu anúncio foi criado com sucesso." });
+      toast({ title: t("create.success") });
       if (listingId) navigate(`/anuncio/${listingId}`);
     } catch (err: any) {
       console.error(err);
-      toast({ title: "Erro", description: "Não foi possível publicar o anúncio." });
+      toast({ title: t("create.error") });
     } finally {
       setLoading(false);
     }
@@ -119,28 +121,28 @@ const CreateListing = () => {
   return (
     <main className="container py-10">
       <header className="mb-6">
-        <h1 className="font-display text-3xl">Publicar anúncio</h1>
-        <p className="text-muted-foreground">Crie seu anúncio com título, descrição, preço, categoria e fotos.</p>
+        <h1 className="font-display text-3xl">{t("create.pageTitle")}</h1>
+        <p className="text-muted-foreground">{t("create.pageSubtitle")}</p>
       </header>
 
       <form onSubmit={handleSubmit} className="grid gap-6 max-w-2xl">
         <div className="grid gap-2">
-          <Label htmlFor="title">Título</Label>
+          <Label htmlFor="title">{t("create.fields.title")}</Label>
           <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="description">Descrição</Label>
+          <Label htmlFor="description">{t("create.fields.description")}</Label>
           <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={6} />
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="price">Preço (BRL)</Label>
-          <Input id="price" type="number" min="0" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Opcional" />
+          <Label htmlFor="price">{t("create.fields.priceBRL")}</Label>
+          <Input id="price" type="number" min="0" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={t("create.fields.optional") as string} />
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="category-root">Categoria</Label>
+          <Label htmlFor="category-root">{t("create.fields.category")}</Label>
           <select
             id="category-root"
             className="h-10 rounded-md border bg-background px-3 text-sm"
@@ -148,7 +150,7 @@ const CreateListing = () => {
             onChange={(e) => { setRootId(e.target.value); setSubId(""); }}
             required
           >
-            <option value="" disabled>Selecione</option>
+            <option value="" disabled>{t("create.fields.select")}</option>
             {roots.map((c: any) => (
               <option key={c.id} value={c.id}>{c.name_pt}</option>
             ))}
@@ -156,7 +158,7 @@ const CreateListing = () => {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="subcategory">Subcategoria</Label>
+          <Label htmlFor="subcategory">{t("create.fields.subcategory")}</Label>
           <select
             id="subcategory"
             className="h-10 rounded-md border bg-background px-3 text-sm"
@@ -164,26 +166,26 @@ const CreateListing = () => {
             onChange={(e) => setSubId(e.target.value)}
             required
           >
-            <option value="" disabled>Selecione</option>
+            <option value="" disabled>{t("create.fields.select")}</option>
             {subcategories.map((c: any) => (
               <option key={c.id} value={c.id}>{c.name_pt}</option>
             ))}
           </select>
           {rootId && subcategories.length === 0 && (
-            <p className="text-xs text-muted-foreground">Esta categoria não possui subcategorias. Selecione outra.</p>
+            <p className="text-xs text-muted-foreground">{t("create.fields.noSubcategories")}</p>
           )}
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="photos">Fotos do anúncio (até {MAX_PHOTOS})</Label>
+          <Label htmlFor="photos">{t("create.fields.photosLabel", { max: MAX_PHOTOS })}</Label>
           <Input id="photos" type="file" accept="image/*" multiple onChange={handleFiles} />
-          <p className="text-xs text-muted-foreground">{files.length} de {MAX_PHOTOS} selecionadas</p>
+          <p className="text-xs text-muted-foreground">{t("create.fields.photosCount", { count: files.length, max: MAX_PHOTOS })}</p>
         </div>
 
         <div className="flex gap-3">
-          <Button type="submit" disabled={loading}>{loading ? "Publicando…" : "Publicar"}</Button>
+          <Button type="submit" disabled={loading}>{loading ? t("create.buttons.publishing") : t("create.buttons.publish")}</Button>
           <Link to="/">
-            <Button type="button" variant="outline">Cancelar</Button>
+            <Button type="button" variant="outline">{t("create.buttons.cancel")}</Button>
           </Link>
         </div>
       </form>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const PromoCTA = () => {
   return (

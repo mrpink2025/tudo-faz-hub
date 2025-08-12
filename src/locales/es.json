@@ -30,5 +30,84 @@
     "view_all": "Ver todo en {{name}}",
     "no_children": "Sin subcategorías",
     "none": "No hay categorías disponibles"
+  },
+  "explore": {
+    "titleBase": "Explorar anuncios",
+    "titleCat": "Explorar {{name}}",
+    "descBase": "Explora anuncios y encuentra lo que necesitas en tudofaz.com",
+    "descCat": "Explora anuncios de {{name}} en tudofaz.com",
+    "headerBase": "Explorar anuncios",
+    "headerCat": "Explorar {{name}}",
+    "useSearch": "Usa la búsqueda y filtros para encontrar lo que necesitas.",
+    "loadingCats": "Cargando categorías...",
+    "errorCats": "Error al cargar categorías.",
+    "subcategories": "Subcategorías",
+    "ariaExplore": "Explorar",
+    "loadingResults": "Cargando resultados…",
+    "resultsCount": "{{count}} resultado(s)",
+    "noneFound": "No se encontraron anuncios en esta categoría."
+  },
+  "listing": {
+    "pageTitle": "Anuncio",
+    "metaDesc": "Detalles del anuncio en tudofaz.com",
+    "notFound": "Anuncio no encontrado.",
+    "breadcrumbExplore": "Explorar",
+    "imageAltMain": "Imagen principal de",
+    "description": "Descripción",
+    "noDescription": "Sin descripción.",
+    "price": "Precio",
+    "messageButton": "Enviar mensaje"
+  },
+  "create": {
+    "pageTitle": "Publicar anuncio",
+    "pageSubtitle": "Crea tu anuncio con título, descripción, precio, categoría y fotos.",
+    "fields": {
+      "title": "Título",
+      "description": "Descripción",
+      "priceBRL": "Precio (BRL)",
+      "optional": "Opcional",
+      "category": "Categoría",
+      "subcategory": "Subcategoría",
+      "select": "Seleccionar",
+      "noSubcategories": "Esta categoría no tiene subcategorías. Elige otra.",
+      "photosLabel": "Fotos del anuncio (hasta {{max}})",
+      "photosCount": "{{count}} de {{max}} seleccionadas"
+    },
+    "buttons": { "publish": "Publicar", "cancel": "Cancelar", "publishing": "Publicando…" },
+    "loginRequiredTitle": "Inicia sesión",
+    "loginRequiredDesc": "Debes estar autenticado para publicar.",
+    "chooseCategory": "Elige una categoría",
+    "chooseSubcategory": "Elige una subcategoría",
+    "success": "Publicado",
+    "error": "No se pudo publicar el anuncio."
+  },
+  "messages": {
+    "pageTitle": "Mensajes",
+    "meta": "Chatea con compradores y vendedores en tudofaz.",
+    "subtitle": "Chatea de forma segura con otros usuarios.",
+    "none": "Aún no hay conversaciones.",
+    "user": "Usuario",
+    "selectToStart": "Selecciona una conversación para empezar.",
+    "chattingWith": "Conversando con Usuario",
+    "writePlaceholder": "Escribe un mensaje",
+    "send": "Enviar"
+  },
+  "admin": {
+    "layoutTitle": "Panel de administración",
+    "sidebar": { "dashboard": "Dashboard", "listings": "Anuncios", "users": "Usuarios", "settings": "Configuraciones" },
+    "overview": { "pending": "Anuncios pendientes", "totalListings": "Total de anuncios", "orders": "Pedidos", "useMenu": "Usa el menú lateral para navegar." },
+    "users": {
+      "manage": "Gestionar usuarios",
+      "manageDesc": "Agregar o quitar roles por user_id.",
+      "assignRole": "Asignar rol",
+      "userIdPlaceholder": "UUID del usuario",
+      "assign": "Asignar",
+      "remove": "Eliminar",
+      "added": "Rol agregado",
+      "addError": "Error al agregar",
+      "removed": "Rol eliminado",
+      "removeError": "Error al eliminar",
+      "none": "No se encontraron roles."
+    }
   }
 }

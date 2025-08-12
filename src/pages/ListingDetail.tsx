@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { t, i18n } = useTranslation();
 
   const { data: listing, isLoading, error } = useQuery({
     queryKey: ["listing", id],
@@ -39,7 +41,7 @@ const ListingDetail = () => {
   const heroUrl = listing?.cover_image || images?.[0]?.url || "/placeholder.svg";
 
   useEffect(() => {
-    const title = listing?.title ? `${listing.title} - tudofaz.com` : "Anúncio - tudofaz.com";
+    const title = listing?.title ? `${listing.title} - tudofaz.com` : `${t("listing.pageTitle")} - tudofaz.com`;
     document.title = title;
 
     let meta = document.querySelector('meta[name="description"]');
@@ -48,7 +50,7 @@ const ListingDetail = () => {
       meta.setAttribute("name", "description");
       document.head.appendChild(meta);
     }
-    meta.setAttribute("content", listing?.description ?? "Detalhes do anúncio no tudofaz.com");
+    meta.setAttribute("content", listing?.description ?? t("listing.metaDesc"));
 
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
@@ -85,16 +87,16 @@ const ListingDetail = () => {
   }, [listing, heroUrl]);
 
   if (isLoading) {
-    return <main className="container py-10">Carregando…</main>;
+    return <main className="container py-10">{t("common.loading")}</main>;
   }
   if (error || !listing) {
-    return <main className="container py-10">Anúncio não encontrado.</main>;
+    return <main className="container py-10">{t("listing.notFound")}</main>;
   }
 
   return (
     <main className="container py-8">
       <nav className="mb-4 text-sm text-muted-foreground">
-        <Link to="/explorar">Explorar</Link>
+        <Link to="/explorar">{t("listing.breadcrumbExplore")}</Link>
         {listing.categories?.slug && (
           <>
             <span className="mx-2">/</span>
@@ -115,7 +117,7 @@ const ListingDetail = () => {
               <div className="aspect-[16/9] bg-muted">
                 <img
                   src={heroUrl}
-                  alt={`Imagem principal de ${listing.title}`}
+                  alt={`${t("listing.imageAltMain")} ${listing.title}`}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -137,32 +139,32 @@ const ListingDetail = () => {
               )}
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Descrição</CardTitle>
-              </CardHeader>
-              <CardContent className="prose prose-neutral max-w-none">
-                {listing.description || "Sem descrição."}
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("listing.description")}</CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-neutral max-w-none">
+                  {listing.description || t("listing.noDescription")}
+                </CardContent>
+              </Card>
           </div>
 
           <aside className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Preço</CardTitle>
+                <CardTitle>{t("listing.price")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-semibold">
                   {listing.price != null
-                    ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: listing.currency || "BRL" }).format(listing.price)
-                    : "A combinar"}
+                    ? new Intl.NumberFormat(i18n.language || "pt-BR", { style: "currency", currency: listing.currency || "BRL" }).format(listing.price)
+                    : t("price.combined")}
                 </div>
               </CardContent>
             </Card>
 
             <Link to={listing.user_id ? `/mensagens?to=${listing.user_id}` : "/mensagens"}>
-              <Button className="w-full">Enviar mensagem</Button>
+              <Button className="w-full">{t("listing.messageButton")}</Button>
             </Link>
           </aside>
         </div>

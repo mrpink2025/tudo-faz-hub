@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import type { TablesInsert, Enums } from "@/integrations/supabase/types";
+import { useTranslation } from "react-i18next";
 
 export default function AdminUsers() {
   const { toast } = useToast();
@@ -31,11 +32,11 @@ export default function AdminUsers() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Papel adicionado" });
+      toast({ title: t("admin.users.added") });
       setUserId("");
       qc.invalidateQueries({ queryKey: ["user-roles"] });
     },
-    onError: (e: any) => toast({ title: "Erro ao adicionar", description: e.message }),
+    onError: (e: any) => toast({ title: t("admin.users.addError"), description: e.message }),
   });
 
   const removeRole = useMutation({
@@ -44,49 +45,49 @@ export default function AdminUsers() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Papel removido" });
+      toast({ title: t("admin.users.removed") });
       qc.invalidateQueries({ queryKey: ["user-roles"] });
     },
-    onError: (e: any) => toast({ title: "Erro ao remover", description: e.message }),
+    onError: (e: any) => toast({ title: t("admin.users.removeError"), description: e.message }),
   });
 
   return (
     <section className="space-y-4">
       <header>
-        <h2 className="text-xl font-semibold">Gerenciar usuários</h2>
-        <p className="text-sm text-muted-foreground">Adicionar ou remover papéis (roles) por user_id.</p>
+        <h2 className="text-xl font-semibold">{t("admin.users.manage")}</h2>
+        <p className="text-sm text-muted-foreground">{t("admin.users.manageDesc")}</p>
       </header>
 
       <Card>
         <CardHeader>
-          <CardTitle>Atribuir papel</CardTitle>
+          <CardTitle>{t("admin.users.assignRole")}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col md:flex-row gap-2">
-          <Input placeholder="UUID do usuário" value={userId} onChange={(e) => setUserId(e.target.value)} className="md:w-[360px]" />
+          <Input placeholder={t("admin.users.userIdPlaceholder") as string} value={userId} onChange={(e) => setUserId(e.target.value)} className="md:w-[360px]" />
           <Select value={role} onValueChange={(v) => setRole(v as (typeof roles)[number])}>
-            <SelectTrigger className="w-40"><SelectValue placeholder="Papel" /></SelectTrigger>
+            <SelectTrigger className="w-40"><SelectValue placeholder="role" /></SelectTrigger>
             <SelectContent>
               {roles.map((r) => (<SelectItem key={r} value={r}>{r}</SelectItem>))}
             </SelectContent>
           </Select>
-          <Button onClick={() => addRole.mutate()} disabled={!userId}>Atribuir</Button>
+          <Button onClick={() => addRole.mutate()} disabled={!userId}>{t("admin.users.assign")}</Button>
         </CardContent>
       </Card>
 
       <div className="grid gap-3">
         {isLoading ? (
-          <div className="text-sm text-muted-foreground">Carregando…</div>
+          <div className="text-sm text-muted-foreground">{t("common.loading")}</div>
         ) : data && data.length ? (
           data.map((ur: any) => (
             <Card key={ur.id}>
               <CardContent className="flex items-center justify-between py-4">
                 <div className="text-sm">{ur.role} • {ur.user_id}</div>
-                <Button variant="destructive" size="sm" onClick={() => removeRole.mutate(ur.id)}>Remover</Button>
+                <Button variant="destructive" size="sm" onClick={() => removeRole.mutate(ur.id)}>{t("admin.users.remove")}</Button>
               </CardContent>
             </Card>
           ))
         ) : (
-          <div className="text-sm text-muted-foreground">Nenhum papel encontrado.</div>
+          <div className="text-sm text-muted-foreground">{t("admin.users.none")}</div>
         )}
       </div>
     </section>

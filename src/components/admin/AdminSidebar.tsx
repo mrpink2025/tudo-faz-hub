@@ -10,17 +10,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useTranslation } from "react-i18next";
 
 const items = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-  { title: "Anúncios", url: "/admin/listings", icon: ListChecks },
-  { title: "Usuários", url: "/admin/users", icon: Users },
-  { title: "Configurações", url: "/admin/settings", icon: Settings },
+  { titleKey: "admin.sidebar.dashboard", url: "/admin", icon: LayoutDashboard },
+  { titleKey: "admin.sidebar.listings", url: "/admin/listings", icon: ListChecks },
+  { titleKey: "admin.sidebar.users", url: "/admin/users", icon: Users },
+  { titleKey: "admin.sidebar.settings", url: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
   const location = useLocation();
   const currentPath = location.pathname + location.hash;
+  const { t } = useTranslation();
 
   const isActive = (url: string) => currentPath === url || (url === "/admin" && location.pathname === "/admin");
 
@@ -31,16 +33,16 @@ export default function AdminSidebar() {
           <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                    <NavLink to={item.url} end>
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.titleKey}>
+                    <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                      <NavLink to={item.url} end>
+                        <item.icon className="mr-2 h-4 w-4" />
+                        <span>{t(item.titleKey)}</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
