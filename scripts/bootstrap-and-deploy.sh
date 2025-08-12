@@ -99,7 +99,7 @@ fi
 # ============================
 mkdir -p "${DEPLOY_PATH}"
 
-cat >"${SITE_CONF}" <<'NGINX'
+cat >"${SITE_CONF}" <<NGINX
 server {
     listen 80;
     listen [::]:80;
@@ -118,12 +118,12 @@ server {
         expires 7d;
         access_log off;
         add_header Cache-Control "public, max-age=604800, immutable";
-        try_files $uri =404;
+        try_files \$uri =404;
     }
 
     # SPA fallback
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files \$uri \$uri/ /index.html;
     }
 
     # Headers básicos de segurança
