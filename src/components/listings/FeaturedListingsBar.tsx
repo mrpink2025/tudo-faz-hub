@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useFeaturedListings } from "@/hooks/useFeaturedListings";
+import { useTranslation } from "react-i18next";
 
-const formatPrice = (value: number | null | undefined, currency: string | null | undefined) => {
-  if (value == null) return "A combinar";
+const formatPrice = (value: number | null | undefined, currency: string | null | undefined, fallback: string) => {
+  if (value == null) return fallback;
   try {
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: currency || "BRL" }).format(value);
   } catch {
@@ -11,6 +12,7 @@ const formatPrice = (value: number | null | undefined, currency: string | null |
 };
 
 const FeaturedListingsBar = () => {
+  const { t } = useTranslation();
   const { data: listings = [] } = useFeaturedListings(12);
   if (!listings.length) return null;
 
@@ -26,7 +28,7 @@ const FeaturedListingsBar = () => {
               aria-label={`Ver anúncio em destaque: ${l.title}`}
             >
               <span className="line-clamp-1 max-w-[18ch]">{l.title}</span>
-              <span className="text-muted-foreground">{formatPrice(l.price, l.currency)}</span>
+              <span className="text-muted-foreground">{formatPrice(l.price, l.currency, t("price.combined"))}</span>
             </Link>
           ))}
         </div>

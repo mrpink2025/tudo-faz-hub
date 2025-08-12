@@ -1,0 +1,14 @@
+{
+  "home": { "tagline_small": "Your complete local marketplace" },
+  "promo": {
+    "badge": "Promote your listing",
+    "title": "Highlight your listing and reach many more people",
+    "desc": "Featured listings get priority. Post now and enable highlight for faster results."
+  },
+  "buttons": { "publish": "Post listing", "explore": "Explore", "deposit_feature": "Deposit to highlight" },
+  "featured": { "title": "Featured", "subtitle": "Handpicked for you" },
+  "price": { "combined": "Negotiable" },
+  "index": { "title": "tudofaz.com — Complete local marketplace", "description": "Buy, sell and hire local services on tudofaz.com." },
+  "nearby": { "title": "Near you", "enable": "See nearby listings", "denied": "Location permission denied.", "error": "Couldn't get your location." },
+  "images": { "alt_hero": "Illustration representing local shopping and services" }
+}

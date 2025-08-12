@@ -1,0 +1,14 @@
+{
+  "home": { "tagline_small": "Tu mercado local completo" },
+  "promo": {
+    "badge": "Promociona tu anuncio",
+    "title": "Destaca tu anuncio y llega a mucha más gente",
+    "desc": "Los anuncios destacados tienen prioridad. Publica ahora y activa el destacado para obtener resultados más rápidos."
+  },
+  "buttons": { "publish": "Publicar anuncio", "explore": "Explorar", "deposit_feature": "Depositar para destacar" },
+  "featured": { "title": "Destacados", "subtitle": "Seleccionados para ti" },
+  "price": { "combined": "A convenir" },
+  "index": { "title": "tudofaz.com — Mercado local completo", "description": "Compra, vende y contrata servicios locales en tudofaz.com." },
+  "nearby": { "title": "Cerca de ti", "enable": "Ver anuncios cercanos", "denied": "Permiso de ubicación denegado.", "error": "No se pudo obtener tu ubicación." },
+  "images": { "alt_hero": "Ilustración de compras y servicios locales" }
+}

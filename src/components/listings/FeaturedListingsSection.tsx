@@ -1,15 +1,17 @@
 import { ListingCard } from "@/components/listings/ListingCard";
 import { useFeaturedListings } from "@/hooks/useFeaturedListings";
+import { useTranslation } from "react-i18next";
 
-const FeaturedListingsSection = ({ title = "Anúncios em destaque", limit = 6 }: { title?: string; limit?: number }) => {
+const FeaturedListingsSection = ({ title, limit = 6 }: { title?: string; limit?: number }) => {
+  const { t } = useTranslation();
   const { data: listings = [], isLoading } = useFeaturedListings(limit);
   if (isLoading || !listings.length) return null;
 
   return (
     <section aria-label="Anúncios em destaque" className="container py-10">
       <header className="mb-4">
-        <h2 className="font-display text-2xl">{title}</h2>
-        <p className="text-muted-foreground text-sm">Selecionados para você</p>
+        <h2 className="font-display text-2xl">{title ?? t("featured.title")}</h2>
+        <p className="text-muted-foreground text-sm">{t("featured.subtitle")}</p>
       </header>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {listings.map((l) => (

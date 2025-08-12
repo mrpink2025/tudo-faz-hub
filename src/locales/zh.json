@@ -1,0 +1,14 @@
+{
+  "home": { "tagline_small": "本地综合交易平台" },
+  "promo": {
+    "badge": "推广你的帖子",
+    "title": "突出你的帖子，获得更多曝光",
+    "desc": "精选帖子将优先展示。现在发布并开启精选以更快获得结果。"
+  },
+  "buttons": { "publish": "发布帖子", "explore": "探索", "deposit_feature": "充值以精选" },
+  "featured": { "title": "精选", "subtitle": "为你精选" },
+  "price": { "combined": "面议" },
+  "index": { "title": "tudofaz.com — 本地综合交易平台", "description": "在 tudofaz.com 上买卖与雇佣本地服务。" },
+  "nearby": { "title": "离你最近", "enable": "查看附近帖子", "denied": "已拒绝定位权限。", "error": "无法获取你的位置。" },
+  "images": { "alt_hero": "展示本地购物与服务的插图" }
+}

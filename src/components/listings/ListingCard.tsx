@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type Listing = {
   id: string;
@@ -12,8 +13,8 @@ type Listing = {
   cover_image: string | null;
 };
 
-const formatPrice = (value: number | null | undefined, currency: string | null | undefined) => {
-  if (value == null) return "A combinar";
+const formatPrice = (value: number | null | undefined, currency: string | null | undefined, fallback: string) => {
+  if (value == null) return fallback;
   try {
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: currency || "BRL" }).format(value);
   } catch {
@@ -22,6 +23,7 @@ const formatPrice = (value: number | null | undefined, currency: string | null |
 };
 
 export const ListingCard = ({ listing }: { listing: Listing }) => {
+  const { t } = useTranslation();
   const imgSrc = listing.cover_image || "/placeholder.svg";
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
@@ -40,7 +42,7 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
           <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-1">
-          <div className="font-medium text-foreground">{formatPrice(listing.price, listing.currency)}</div>
+          <div className="font-medium text-foreground">{formatPrice(listing.price, listing.currency, t("price.combined"))}</div>
           {listing.location && <div>{listing.location}</div>}
           <time dateTime={listing.created_at}>{new Date(listing.created_at).toLocaleDateString("pt-BR")}</time>
         </CardContent>

@@ -3,8 +3,9 @@ import SearchBar from "@/components/SearchBar";
 import hero from "@/assets/hero-tudofaz.jpg";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 const Hero = () => {
+  const { t } = useTranslation();
   return (
     <section className="relative overflow-hidden bg-[var(--gradient-subtle)]">
       {/* Subtle brand glow background */}
@@ -16,7 +17,7 @@ const Hero = () => {
       <div className="container py-16 lg:py-24 grid gap-10 lg:grid-cols-2 items-center">
         <div className="space-y-6 relative z-10">
           <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs text-muted-foreground">
-            Seu marketplace local completo
+            {t("home.tagline_small")}
           </span>
           <h1
             className="container max-w-4xl rounded-2xl border shadow"
@@ -26,13 +27,13 @@ const Hero = () => {
               <div className="space-y-3">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
-                  <span>Promova seu anúncio</span>
+                  <span>{t("promo.badge")}</span>
                 </div>
                 <div className="font-display text-lg md:text-xl leading-snug">
-                  Destaque seu anúncio e alcance muito mais pessoas
+                  {t("promo.title")}
                 </div>
                 <p className="text-sm/6 md:text-base opacity-90">
-                  Anúncios destacados ganham prioridade de exibição. Publique agora e ative o destaque para resultados mais rápidos.
+                  {t("promo.desc")}
                 </p>
               </div>
 
@@ -41,15 +42,14 @@ const Hero = () => {
                   to="/publicar"
                   className="inline-flex items-center gap-2 rounded-md bg-[hsl(var(--primary-foreground))] px-4 py-2 text-[hsl(var(--primary))] hover:opacity-90 transition"
                 >
-                  Publicar anúncio
-                  <ArrowRight className="h-4 w-4" />
+                  {t("buttons.publish")}<ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/entrar"
                   className="inline-flex items-center gap-2 rounded-md border border-white/40 px-4 py-2 hover:bg-white/10 transition"
                   title="Faça login para gerenciar créditos e destaque"
                 >
-                  Depositar para destacar
+                  {t("buttons.deposit_feature")}
                 </Link>
               </div>
             </div>
@@ -70,7 +70,7 @@ const Hero = () => {
         <div className="relative">
           <img
             src={hero}
-            alt="Ilustração representando compras e serviços locais"
+            alt={t("images.alt_hero")}
             className="w-full rounded-xl shadow-xl animate-float"
             loading="lazy"
           />
