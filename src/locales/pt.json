@@ -22,6 +22,8 @@
   "footer": {
     "description": "Marketplace local para comprar, vender e contratar serviços.",
     "links": { "explore": "Explorar", "publish": "Publicar", "login": "Entrar" },
+    "poweredBy": "Powered by Stripe",
+    "acceptedBrands": "Bandeiras aceitas",
     "copyright": "Todos os direitos reservados."
   },
   "categories": {

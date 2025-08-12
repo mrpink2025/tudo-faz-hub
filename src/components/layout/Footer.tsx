@@ -20,6 +20,23 @@ export default function Footer() {
         </nav>
       </div>
       <div className="border-t">
+        <div className="container py-6 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>{t("footer.poweredBy")}</span>
+            <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" aria-label="Stripe payments">
+              <img src="https://cdn.simpleicons.org/stripe" alt="Stripe logo" width="64" height="24" loading="lazy" decoding="async" />
+            </a>
+          </div>
+          <ul className="flex items-center gap-4" aria-label={t("footer.acceptedBrands")}>
+            <li><img src="https://cdn.simpleicons.org/visa" alt="Visa" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="https://cdn.simpleicons.org/mastercard" alt="Mastercard" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="https://cdn.simpleicons.org/americanexpress" alt="American Express" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="https://cdn.simpleicons.org/elo" alt="Elo" width="36" height="24" loading="lazy" decoding="async" /></li>
+            <li><img src="https://cdn.simpleicons.org/hipercard" alt="Hipercard" width="36" height="24" loading="lazy" decoding="async" /></li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t">
         <div className="container py-4 text-xs text-muted-foreground">
           © {year} tudofaz.com — {t("footer.copyright")}
         </div>

@@ -22,6 +22,8 @@
   "footer": {
     "description": "Mercado local para comprar, vender y contratar servicios.",
     "links": { "explore": "Explorar", "publish": "Publicar", "login": "Entrar" },
+    "poweredBy": "Impulsado por Stripe",
+    "acceptedBrands": "Marcas aceptadas",
     "copyright": "Todos los derechos reservados."
   },
   "categories": {

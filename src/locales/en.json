@@ -22,6 +22,8 @@
   "footer": {
     "description": "Local marketplace to buy, sell and hire services.",
     "links": { "explore": "Explore", "publish": "Post", "login": "Sign in" },
+    "poweredBy": "Powered by Stripe",
+    "acceptedBrands": "Accepted brands",
     "copyright": "All rights reserved."
   },
   "categories": {

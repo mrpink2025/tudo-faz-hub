@@ -22,6 +22,8 @@
   "footer": {
     "description": "本地市场：买卖与雇佣服务。",
     "links": { "explore": "探索", "publish": "发布", "login": "登录" },
+    "poweredBy": "由 Stripe 提供支持",
+    "acceptedBrands": "支持的卡组织",
     "copyright": "保留所有权利。"
   },
   "categories": {
