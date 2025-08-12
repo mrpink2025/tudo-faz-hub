@@ -25,7 +25,7 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
   const imgSrc = listing.cover_image || "/placeholder.svg";
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
-      <Card className="hover:shadow-md transition-shadow h-full overflow-hidden">
+      <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
         <div className="bg-muted">
           <AspectRatio ratio={16 / 9}>
             <img

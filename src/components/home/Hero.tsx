@@ -19,16 +19,16 @@ const Hero = () => {
             Seu marketplace local completo
           </span>
           <h1
-            className="container max-w-5xl rounded-2xl border shadow"
+            className="container max-w-4xl rounded-2xl border shadow"
             style={{ backgroundImage: "var(--gradient-primary)" }}
           >
-            <div className="grid gap-5 p-6 md:grid-cols-2 md:p-8 text-[hsl(var(--hero-foreground))]">
+            <div className="grid gap-4 p-5 md:grid-cols-2 md:p-6 text-[hsl(var(--hero-foreground))]">
               <div className="space-y-3">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
                   <span>Promova seu anúncio</span>
                 </div>
-                <div className="font-display text-xl md:text-2xl leading-snug">
+                <div className="font-display text-lg md:text-xl leading-snug">
                   Destaque seu anúncio e alcance muito mais pessoas
                 </div>
                 <p className="text-sm/6 md:text-base opacity-90">
