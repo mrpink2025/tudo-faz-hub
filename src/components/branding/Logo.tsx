@@ -11,7 +11,7 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
     <img
       src="/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png"
       alt={title}
-      className={cn("block h-8 w-auto", className)}
+      className={cn("block h-10 w-auto", className)}
       loading="eager"
       width={192}
       height={192}

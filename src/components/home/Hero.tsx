@@ -17,9 +17,9 @@ const Hero = () => {
           <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs text-muted-foreground">
             Seu marketplace local completo
           </span>
-          <h1 className="font-display text-4xl lg:text-5xl tracking-tight bg-[var(--gradient-primary)] bg-clip-text text-transparent">
+          <h2 className="font-display text-4xl lg:text-5xl tracking-tight bg-[var(--gradient-primary)] bg-clip-text text-transparent">
             Destaque seu anúncio
-          </h1>
+          </h2>
           <p className="text-muted-foreground text-base lg:text-lg max-w-prose">
             Produtos, serviços, empregos, imóveis e muito mais próximos de você. Publique anúncios em minutos e alcance sua comunidade.
           </p>

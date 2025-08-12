@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 const PromoCTA = () => {
   return (
     <section aria-label="Promoção de anúncios" className="py-10">
-      <div
+      <h1
         className="container rounded-2xl border shadow"
         style={{
           backgroundImage: "var(--gradient-primary)",
@@ -16,9 +16,9 @@ const PromoCTA = () => {
               <Sparkles className="h-3.5 w-3.5" />
               <span>Promova seu anúncio</span>
             </div>
-            <h2 className="font-display text-2xl md:text-3xl leading-tight">
+            <div className="font-display text-2xl md:text-3xl leading-tight">
               Destaque seu anúncio e alcance muito mais pessoas
-            </h2>
+            </div>
             <p className="text-sm/6 md:text-base opacity-90">
               Anúncios destacados ganham prioridade de exibição. Publique agora e ative o destaque para resultados mais rápidos.
             </p>
@@ -41,7 +41,7 @@ const PromoCTA = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </h1>
     </section>
   );
 };
