@@ -15,6 +15,7 @@ export default function AdminUsers() {
   const [userId, setUserId] = useState("");
   const roles = ["admin", "moderator", "user"] as const;
   const [role, setRole] = useState<(typeof roles)[number]>("admin");
+  const { t } = useTranslation();
 
   const { data, isLoading } = useQuery({
     queryKey: ["user-roles"],
