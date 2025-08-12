@@ -22,6 +22,22 @@ const ListingDetail = () => {
     enabled: Boolean(id),
   });
 
+  const { data: images = [] } = useQuery({
+    queryKey: ["listing-images", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("listing_images")
+        .select("url, position")
+        .eq("listing_id", id)
+        .order("position", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: Boolean(id),
+  });
+
+  const heroUrl = listing?.cover_image || images?.[0]?.url || "/placeholder.svg";
+
   useEffect(() => {
     const title = listing?.title ? `${listing.title} - tudofaz.com` : "Anúncio - tudofaz.com";
     document.title = title;
@@ -55,6 +71,7 @@ const ListingDetail = () => {
       "@type": "Product",
       name: listing?.title,
       description: listing?.description,
+      image: heroUrl,
       offers: price
         ? {
             "@type": "Offer",
@@ -65,7 +82,7 @@ const ListingDetail = () => {
         : undefined,
     });
     document.head.appendChild(script);
-  }, [listing]);
+  }, [listing, heroUrl]);
 
   if (isLoading) {
     return <main className="container py-10">Carregando…</main>;
@@ -93,7 +110,33 @@ const ListingDetail = () => {
         </header>
 
         <div className="grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 space-y-4">
+            <Card className="overflow-hidden">
+              <div className="aspect-[16/9] bg-muted">
+                <img
+                  src={heroUrl}
+                  alt={`Imagem principal de ${listing.title}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {images && images.length > 1 && (
+                <CardContent className="pt-4">
+                  <div className="grid grid-cols-4 gap-2">
+                    {images.slice(0, 8).map((img: any, idx: number) => (
+                      <div className="aspect-[4/3] bg-muted overflow-hidden rounded" key={`${img.url}-${idx}`}>
+                        <img
+                          src={img.url}
+                          alt={`Foto ${idx + 1} de ${listing.title}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>Descrição</CardTitle>

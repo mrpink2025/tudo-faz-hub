@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Link } from "react-router-dom";
 
 type Listing = {
@@ -8,6 +9,7 @@ type Listing = {
   currency: string | null;
   location: string | null;
   created_at: string;
+  cover_image: string | null;
 };
 
 const formatPrice = (value: number | null | undefined, currency: string | null | undefined) => {
@@ -20,9 +22,20 @@ const formatPrice = (value: number | null | undefined, currency: string | null |
 };
 
 export const ListingCard = ({ listing }: { listing: Listing }) => {
+  const imgSrc = listing.cover_image || "/placeholder.svg";
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
-      <Card className="hover:shadow-md transition-shadow h-full">
+      <Card className="hover:shadow-md transition-shadow h-full overflow-hidden">
+        <div className="bg-muted">
+          <AspectRatio ratio={16 / 9}>
+            <img
+              src={imgSrc}
+              alt={`Imagem do anúncio: ${listing.title}`}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+          </AspectRatio>
+        </div>
         <CardHeader>
           <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
         </CardHeader>

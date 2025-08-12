@@ -29,7 +29,7 @@ export const useListings = (filters: ListingsFilter, passedCategories?: any[]) =
 
       let query = supabase
         .from("listings")
-        .select("id,title,price,currency,location,created_at,category_id")
+        .select("id,title,price,currency,location,created_at,category_id,cover_image")
         .eq("approved", true)
         .eq("status", "published")
         .order("created_at", { ascending: false });
