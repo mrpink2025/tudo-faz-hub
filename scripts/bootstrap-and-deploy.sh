@@ -99,7 +99,7 @@ fi
 # ============================
 mkdir -p "${DEPLOY_PATH}"
 
-cat >"${SITE_CONF}" <<NGINX
+cat >"${SITE_CONF}" <<'NGINX'
 server {
     listen 80;
     listen [::]:80;

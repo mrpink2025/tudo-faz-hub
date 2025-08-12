@@ -118,12 +118,12 @@ NGINX_CONF_CONTENT="server {
         expires 7d;
         access_log off;
         add_header Cache-Control \"public, max-age=604800, immutable\";
-        try_files $uri =404;
+        try_files \$uri =404;
     }
 
     # SPA fallback
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files \$uri \$uri/ /index.html;
     }
 
     # Segurança básica
