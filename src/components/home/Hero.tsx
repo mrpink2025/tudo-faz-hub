@@ -18,7 +18,7 @@ const Hero = () => {
             Seu marketplace local completo
           </span>
           <h1 className="font-display text-4xl lg:text-5xl tracking-tight bg-[var(--gradient-primary)] bg-clip-text text-transparent">
-            Encontre, compre e contrate em um só lugar
+            Destaque seu anúncio
           </h1>
           <p className="text-muted-foreground text-base lg:text-lg max-w-prose">
             Produtos, serviços, empregos, imóveis e muito mais próximos de você. Publique anúncios em minutos e alcance sua comunidade.
