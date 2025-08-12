@@ -25,6 +25,12 @@ const CreateListing = () => {
   const [subId, setSubId] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  // Address fields
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [neighborhood, setNeighborhood] = useState("");
+  const [city, setCity] = useState("");
+  const [stateUf, setStateUf] = useState("");
 
   const subcategories = useMemo(
     () => (categories ?? []).filter((c: any) => c.parent_id === rootId),
@@ -61,7 +67,17 @@ const CreateListing = () => {
         return;
       }
 
+      if (!city) {
+        toast({ title: "Informe a cidade" });
+        return;
+      }
+      if (!stateUf) {
+        toast({ title: "Informe o estado (UF)" });
+        return;
+      }
+
       const parsedPrice = price ? parseInt(price, 10) : null;
+      const locationPublic = city ? (neighborhood ? `${city} - ${neighborhood}` : city) : null;
       const { data, error } = await supabase
         .from("listings")
         .insert({
@@ -73,12 +89,28 @@ const CreateListing = () => {
           currency: "BRL",
           status: "published",
           approved: true,
+          location: locationPublic,
         })
         .select("id")
         .maybeSingle();
 
       if (error) throw error;
       const listingId = data?.id;
+
+      // Save private location details
+      if (listingId) {
+        const { error: locErr } = await supabase.from("listing_locations").insert({
+          listing_id: listingId,
+          address_line1: address1 || null,
+          address_line2: address2 || null,
+          neighborhood: neighborhood || null,
+          city,
+          state: stateUf,
+        });
+        if (locErr) {
+          console.error(locErr);
+        }
+      }
 
       // Upload photos (up to 10)
       let uploadedUrls: string[] = [];
@@ -174,6 +206,30 @@ const CreateListing = () => {
           {rootId && subcategories.length === 0 && (
             <p className="text-xs text-muted-foreground">{t("create.fields.noSubcategories")}</p>
           )}
+        </div>
+
+        {/* Endereço (somente cidade/bairro públicos) */}
+        <div className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="city">Cidade</Label>
+            <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="state">Estado (UF)</Label>
+            <Input id="state" value={stateUf} onChange={(e) => setStateUf(e.target.value.toUpperCase())} required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="neighborhood">Bairro (opcional)</Label>
+            <Input id="neighborhood" value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="address1">Endereço (opcional, não público)</Label>
+            <Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="address2">Complemento (opcional)</Label>
+            <Input id="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
+          </div>
         </div>
 
         <div className="grid gap-2">
