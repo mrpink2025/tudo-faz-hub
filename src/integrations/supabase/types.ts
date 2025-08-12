@@ -283,6 +283,26 @@ export type Database = {
         }
         Returns: boolean
       }
+      listings_nearby: {
+        Args: {
+          p_lat: number
+          p_lng: number
+          p_radius_km?: number
+          p_limit?: number
+        }
+        Returns: {
+          id: string
+          title: string
+          price: number
+          currency: string
+          location: string
+          created_at: string
+          cover_image: string
+          lat: number
+          lng: number
+          distance_km: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
