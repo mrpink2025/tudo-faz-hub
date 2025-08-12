@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -66,6 +67,7 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          <LanguageSwitcher />
           <Link to="/publicar">
             <Button variant="hero" size="sm">Publicar anúncio</Button>
           </Link>
