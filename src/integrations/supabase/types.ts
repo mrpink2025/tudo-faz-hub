@@ -396,18 +396,6 @@ export type Database = {
           neighborhood: string | null
           state: string | null
         }
-        Insert: {
-          city?: string | null
-          listing_id?: string | null
-          neighborhood?: string | null
-          state?: string | null
-        }
-        Update: {
-          city?: string | null
-          listing_id?: string | null
-          neighborhood?: string | null
-          state?: string | null
-        }
         Relationships: [
           {
             foreignKeyName: "listing_locations_listing_id_fkey"
