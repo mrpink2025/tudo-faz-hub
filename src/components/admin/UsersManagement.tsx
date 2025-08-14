@@ -33,8 +33,7 @@ export default function UsersManagement() {
           created_at,
           updated_at,
           last_sign_in_at,
-          email_confirmed_at,
-          user_roles(role)
+          email_confirmed_at
         `)
         .order("created_at", { ascending: false });
 
@@ -42,9 +41,25 @@ export default function UsersManagement() {
         query = query.or(`email.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data ?? [];
+      const { data: profilesData, error: profilesError } = await query;
+      if (profilesError) throw profilesError;
+
+      // Buscar roles separadamente para cada usuário
+      const usersWithRoles = await Promise.all(
+        (profilesData || []).map(async (profile) => {
+          const { data: rolesData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", profile.id);
+          
+          return {
+            ...profile,
+            user_roles: rolesData || []
+          };
+        })
+      );
+
+      return usersWithRoles;
     },
     ...queryConfigs.admin
   });
