@@ -29,10 +29,9 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
     <img
       src={logoUrl}
       alt={title}
-      className={cn("block h-10 w-auto", className)}
+      className={cn("block h-10 w-auto object-contain", className)}
       loading="eager"
-      width={192}
-      height={192}
+      style={{ maxWidth: '100%' }}
     />
   );
 };
