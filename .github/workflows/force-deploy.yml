@@ -1,11 +1,16 @@
-name: Build and Deploy to VPS
+name: Force Deploy (Manual Trigger)
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      clear_cache:
+        description: 'Clear cache before build'
+        required: false
+        default: 'true'
+        type: boolean
 
 jobs:
-  build-deploy:
+  force-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,15 +20,30 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: 'npm'
+
+      - name: Clear cache if requested
+        if: ${{ inputs.clear_cache }}
+        run: |
+          npm cache clean --force
+          rm -rf node_modules
+          rm -rf dist
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build with cache busting
+      - name: Build with timestamp
         run: |
           echo "Build started at: $(date)"
           npm run build
           echo "Build completed at: $(date)"
+
+      - name: Verify build output
+        run: |
+          echo "Build directory contents:"
+          ls -la dist/
+          echo "Build size:"
+          du -sh dist/
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
@@ -35,13 +55,13 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy dist to VPS via rsync
+      - name: Deploy to VPS with verbose output
         run: |
           echo "Starting deployment at: $(date)"
           rsync -avz --delete --progress dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/
           echo "Deployment completed at: $(date)"
 
-      - name: Reload service and clear cache
+      - name: Reload service and clear server cache
         if: ${{ always() }}
         env:
           RELOAD_CMD: ${{ secrets.VPS_RELOAD_CMD }}
