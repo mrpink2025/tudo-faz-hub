@@ -28,13 +28,13 @@ export default function AdminSidebar() {
   const isActive = (url: string) => currentPath === url || url === "/admin" && location.pathname === "/admin";
   return <Sidebar collapsible="icon" className="w-64">
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="py-[100px]">
           <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
                 {items.map(item => <SidebarMenuItem key={item.titleKey}>
                     <SidebarMenuButton asChild isActive={isActive(item.url)}>
-                      <NavLink to={item.url} end>
+                      <NavLink to={item.url} end className="my-[10px] py-[100px]">
                         <item.icon className="mr-2 h-4 w-4" />
                         <span>{t(item.titleKey)}</span>
                       </NavLink>
