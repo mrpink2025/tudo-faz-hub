@@ -333,6 +333,39 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          email_confirmed_at: string | null
+          full_name: string | null
+          id: string
+          last_sign_in_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          email_confirmed_at?: string | null
+          full_name?: string | null
+          id: string
+          last_sign_in_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          email_confirmed_at?: string | null
+          full_name?: string | null
+          id?: string
+          last_sign_in_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           brand_accent: string | null
