@@ -411,6 +411,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_message_reads: {
+        Row: {
+          conversation_user_id: string
+          created_at: string
+          id: string
+          last_read_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          conversation_user_id: string
+          created_at?: string
+          id?: string
+          last_read_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          conversation_user_id?: string
+          created_at?: string
+          id?: string
+          last_read_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -510,6 +537,25 @@ export type Database = {
       }
     }
     Functions: {
+      get_conversation_participants: {
+        Args: { recipient: string; sender: string }
+        Returns: {
+          email: string
+          full_name: string
+          user_id: string
+        }[]
+      }
+      get_conversations_with_last_message: {
+        Args: { user_uuid: string }
+        Returns: {
+          last_message: string
+          last_message_time: string
+          other_user_email: string
+          other_user_id: string
+          other_user_name: string
+          unread_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -536,6 +582,10 @@ export type Database = {
           price: number
           title: string
         }[]
+      }
+      mark_messages_as_read: {
+        Args: { conversation_user: string }
+        Returns: undefined
       }
       send_notification_email: {
         Args: { message: string; subject: string; user_email: string }
