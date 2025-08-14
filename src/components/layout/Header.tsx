@@ -30,13 +30,13 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-[hsl(var(--brand))] backdrop-blur">
-      <nav className="container flex h-16 items-center justify-between gap-3">
+      <nav className="container flex h-24 items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="md:hidden">
             <MobileMenu />
           </div>
           <Link to="/" aria-label={t("nav.home_aria")} className="flex items-center gap-2">
-            <Logo className="h-8 w-8" />
+            <Logo />
           </Link>
           <div className="hidden md:block">
             <CategoryMenu />
