@@ -8,14 +8,14 @@ import { queryConfigs, createQueryKey } from "@/utils/query-config";
 
 const fetchDashboardData = async () => {
   const [
-    { data: totalUsers, error: usersError },
-    { data: totalListings, error: listingsError },
-    { data: totalOrders, error: ordersError },
+    { count: totalUsers, error: usersError },
+    { count: totalListings, error: listingsError },
+    { count: totalOrders, error: ordersError },
     { data: monthlyStats, error: monthlyError }
   ] = await Promise.all([
-    supabase.from("profiles").select("id", { count: "exact", head: true }),
-    supabase.from("listings").select("id", { count: "exact", head: true }),
-    supabase.from("orders").select("id", { count: "exact", head: true }),
+    supabase.from("profiles").select("*", { count: "exact", head: true }),
+    supabase.from("listings").select("*", { count: "exact", head: true }),
+    supabase.from("orders").select("*", { count: "exact", head: true }),
     supabase.from("listings").select("created_at").order("created_at", { ascending: false }).limit(100)
   ]);
 
@@ -37,9 +37,9 @@ const fetchDashboardData = async () => {
   }));
 
   return {
-    users: (totalUsers as any)?.count || 0,
-    listings: (totalListings as any)?.count || 0,
-    orders: (totalOrders as any)?.count || 0,
+    users: totalUsers || 0,
+    listings: totalListings || 0,
+    orders: totalOrders || 0,
     monthlyData: chartData
   };
 };
