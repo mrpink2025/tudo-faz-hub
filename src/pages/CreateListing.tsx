@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useCategories } from "@/hooks/useCategories";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ const MAX_PHOTOS = 10;
 const CreateListing = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const editId = searchParams.get('edit');
   const { data: categories } = useCategories();
   const { t, i18n } = useTranslation();
   const roots = useMemo(() => (categories ?? []).filter((c: any) => !c.parent_id), [categories]);
@@ -38,8 +40,54 @@ const CreateListing = () => {
   );
 
   useEffect(() => {
-    document.title = `${t("create.pageTitle")} - tudofaz.com`;
-  }, [t]);
+    document.title = `${editId ? t("edit.pageTitle") : t("create.pageTitle")} - tudofaz.com`;
+  }, [t, editId]);
+
+  // Load listing data for editing
+  useEffect(() => {
+    if (editId) {
+      const loadListing = async () => {
+        const { data: listing, error } = await supabase
+          .from("listings")
+          .select("*")
+          .eq("id", editId)
+          .single();
+
+        if (error) {
+          toast({
+            title: "Erro ao carregar anúncio",
+            description: error.message,
+            variant: "destructive"
+          });
+          return;
+        }
+
+        if (listing) {
+          setTitle(listing.title || "");
+          setDescription(listing.description || "");
+          setPrice(listing.price?.toString() || "");
+          setRootId(listing.category_id || "");
+          
+          // Load location data
+          const { data: location } = await supabase
+            .from("listing_locations")
+            .select("*")
+            .eq("listing_id", editId)
+            .single();
+
+          if (location) {
+            setAddress1(location.address_line1 || "");
+            setAddress2(location.address_line2 || "");
+            setNeighborhood(location.neighborhood || "");
+            setCity(location.city || "");
+            setStateUf(location.state || "");
+          }
+        }
+      };
+
+      loadListing();
+    }
+  }, [editId, toast]);
 
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = Array.from(e.target.files ?? []).slice(0, MAX_PHOTOS);
@@ -78,37 +126,76 @@ const CreateListing = () => {
 
       const parsedPrice = price ? parseInt(price, 10) : null;
       const locationPublic = city ? (neighborhood ? `${city} - ${neighborhood}` : city) : null;
-      const { data, error } = await supabase
-        .from("listings")
-        .insert({
-          user_id: userId,
-          category_id: subId,
-          title,
-          description,
-          price: parsedPrice,
-          currency: "BRL",
-          status: "published",
-          approved: true,
-          location: locationPublic,
-        })
-        .select("id")
-        .maybeSingle();
+      
+      let listingId = editId;
+      
+      if (editId) {
+        // Update existing listing
+        const { error } = await supabase
+          .from("listings")
+          .update({
+            category_id: subId,
+            title,
+            description,
+            price: parsedPrice,
+            currency: "BRL",
+            location: locationPublic,
+          })
+          .eq("id", editId);
 
-      if (error) throw error;
-      const listingId = data?.id;
+        if (error) throw error;
+      } else {
+        // Create new listing
+        const { data, error } = await supabase
+          .from("listings")
+          .insert({
+            user_id: userId,
+            category_id: subId,
+            title,
+            description,
+            price: parsedPrice,
+            currency: "BRL",
+            status: "published",
+            approved: true,
+            location: locationPublic,
+          })
+          .select("id")
+          .maybeSingle();
+
+        if (error) throw error;
+        listingId = data?.id;
+      }
 
       // Save private location details
       if (listingId) {
-        const { error: locErr } = await supabase.from("listing_locations").insert({
-          listing_id: listingId,
-          address_line1: address1 || null,
-          address_line2: address2 || null,
-          neighborhood: neighborhood || null,
-          city,
-          state: stateUf,
-        });
-        if (locErr) {
-          console.error(locErr);
+        if (editId) {
+          // Update existing location
+          const { error: locErr } = await supabase
+            .from("listing_locations")
+            .upsert({
+              listing_id: listingId,
+              address_line1: address1 || null,
+              address_line2: address2 || null,
+              neighborhood: neighborhood || null,
+              city,
+              state: stateUf,
+            });
+          if (locErr) {
+            console.error(locErr);
+          }
+        } else {
+          // Insert new location
+          const { error: locErr } = await supabase.from("listing_locations").insert({
+            listing_id: listingId,
+            address_line1: address1 || null,
+            address_line2: address2 || null,
+            neighborhood: neighborhood || null,
+            city,
+            state: stateUf,
+          });
+          if (locErr) {
+            console.error(locErr);
+          }
         }
       }
 
@@ -140,7 +227,7 @@ const CreateListing = () => {
         }
       }
 
-      toast({ title: t("create.success") });
+      toast({ title: editId ? "Anúncio atualizado com sucesso!" : t("create.success") });
       if (listingId) navigate(`/anuncio/${listingId}`);
     } catch (err: any) {
       console.error(err);
@@ -153,8 +240,8 @@ const CreateListing = () => {
   return (
     <main className="container py-10">
       <header className="mb-6">
-        <h1 className="font-display text-3xl">{t("create.pageTitle")}</h1>
-        <p className="text-muted-foreground">{t("create.pageSubtitle")}</p>
+        <h1 className="font-display text-3xl">{editId ? "Editar Anúncio" : t("create.pageTitle")}</h1>
+        <p className="text-muted-foreground">{editId ? "Atualize as informações do seu anúncio" : t("create.pageSubtitle")}</p>
       </header>
 
       <form onSubmit={handleSubmit} className="grid gap-6 max-w-2xl">
@@ -239,7 +326,9 @@ const CreateListing = () => {
         </div>
 
         <div className="flex gap-3">
-          <Button type="submit" disabled={loading}>{loading ? t("create.buttons.publishing") : t("create.buttons.publish")}</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? (editId ? "Atualizando..." : t("create.buttons.publishing")) : (editId ? "Atualizar Anúncio" : t("create.buttons.publish"))}
+          </Button>
           <Link to="/">
             <Button type="button" variant="outline">{t("create.buttons.cancel")}</Button>
           </Link>

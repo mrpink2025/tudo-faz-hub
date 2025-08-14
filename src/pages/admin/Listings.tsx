@@ -1,4 +1,5 @@
-import ModerateListings from "@/components/admin/ModerateListings";
+import ListingsManagement from "@/components/admin/ListingsManagement";
+
 export default function AdminListings() {
-  return <ModerateListings />;
+  return <ListingsManagement />;
 }
