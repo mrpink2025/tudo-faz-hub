@@ -221,6 +221,49 @@
       "removed": "Papel removido",
       "removeError": "Erro ao remover",
       "none": "Nenhum papel encontrado."
+    },
+    "moderate": {
+      "approved": "Anúncio aprovado com sucesso",
+      "approve_error": "Erro ao aprovar anúncio",
+      "highlight_error": "Erro ao atualizar destaque",
+      "moderation": "Moderação de anúncios",
+      "approve_pending": "Aprove os anúncios pendentes e gerencie o destaque",
+      "loading": "Carregando…",
+      "created_on": "Criado em",
+      "no_price": "sem preço",
+      "highlight": "Destaque",
+      "normal": "Normal",
+      "remove_highlight": "Remover destaque",
+      "add_highlight": "Destacar",
+      "approve": "Aprovar",
+      "no_pending": "Não há anúncios pendentes.",
+      "highlight_updated": "Destaque atualizado"
+    },
+    "stats": {
+      "total_users": "Total de Usuários",
+      "total_listings": "Total de Anúncios",
+      "total_orders": "Total de Pedidos",
+      "growth_rate": "Taxa de Crescimento",
+      "registered_users": "Usuários registrados",
+      "published_listings": "Anúncios publicados",
+      "completed_orders": "Pedidos realizados",
+      "last_30_days": "Últimos 30 dias",
+      "listings_by_month": "Anúncios por Mês",
+      "general_distribution": "Distribuição Geral",
+      "no_data": "Nenhum dado disponível",
+      "users": "Usuários",
+      "listings": "Anúncios",
+      "orders": "Pedidos"
+    },
+    "orders": {
+      "orders": "Pedidos",
+      "track_orders": "Acompanhe os últimos pedidos e atualize o status",
+      "order": "Pedido",
+      "user": "usuário",
+      "listing": "anúncio",
+      "status_updated": "Status atualizado",
+      "status_error": "Erro ao atualizar status",
+      "no_orders": "Nenhum pedido encontrado"
     }
   }
 }

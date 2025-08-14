@@ -43,7 +43,7 @@ export default function ModerateListings() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Destaque atualizado" });
+      toast({ title: t('admin.moderate.highlight_updated') });
       qc.invalidateQueries({ queryKey: ["pending-listings"] });
     },
     onError: (e: any) => toast({ title: t("admin.moderate.highlight_error"), description: e.message }),
@@ -52,12 +52,12 @@ export default function ModerateListings() {
   return (
     <section id="anuncios" className="space-y-4">
       <header>
-        <h2 className="text-xl font-semibold">Moderação de anúncios</h2>
-        <p className="text-sm text-muted-foreground">Aprove os anúncios pendentes e gerencie o destaque.</p>
+        <h2 className="text-xl font-semibold">{t('admin.moderate.moderation')}</h2>
+        <p className="text-sm text-muted-foreground">{t('admin.moderate.approve_pending')}</p>
       </header>
 
       {isLoading ? (
-        <div className="text-sm text-muted-foreground">Carregando…</div>
+        <div className="text-sm text-muted-foreground">{t('admin.moderate.loading')}</div>
       ) : data && data.length ? (
         <div className="grid gap-3">
           {data.map((l: any) => (
@@ -65,19 +65,19 @@ export default function ModerateListings() {
               <CardHeader className="flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-base">{l.title}</CardTitle>
                 <Badge variant={l.highlighted ? "default" : "secondary"}>
-                  {l.highlighted ? "Destaque" : "Normal"}
+                  {l.highlighted ? t('admin.moderate.highlight') : t('admin.moderate.normal')}
                 </Badge>
               </CardHeader>
               <CardContent className="flex items-center justify-between gap-4">
                 <div className="text-sm text-muted-foreground">
-                  Criado em {new Date(l.created_at).toLocaleDateString()} • {l.price ? `${l.currency ?? "BRL"} ${l.price}` : "sem preço"}
+                  {t('admin.moderate.created_on')} {new Date(l.created_at).toLocaleDateString()} • {l.price ? `${l.currency ?? "BRL"} ${l.price}` : t('admin.moderate.no_price')}
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="secondary" onClick={() => toggleHighlight.mutate({ id: l.id, value: !l.highlighted })}>
-                    {l.highlighted ? "Remover destaque" : "Destacar"}
+                    {l.highlighted ? t('admin.moderate.remove_highlight') : t('admin.moderate.add_highlight')}
                   </Button>
                   <Button size="sm" onClick={() => approve.mutate(l.id)}>
-                    Aprovar
+                    {t('admin.moderate.approve')}
                   </Button>
                 </div>
               </CardContent>
@@ -85,7 +85,7 @@ export default function ModerateListings() {
           ))}
         </div>
       ) : (
-        <div className="text-sm text-muted-foreground">Não há anúncios pendentes.</div>
+        <div className="text-sm text-muted-foreground">{t('admin.moderate.no_pending')}</div>
       )}
     </section>
   );

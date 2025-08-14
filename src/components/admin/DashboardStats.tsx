@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, FileText, ShoppingCart, TrendingUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const fetchDashboardData = async () => {
   const [
@@ -42,15 +43,16 @@ const fetchDashboardData = async () => {
 };
 
 export const DashboardStats = () => {
+  const { t } = useTranslation();
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: fetchDashboardData
   });
 
   const pieData = [
-    { name: 'Usuários', value: data?.users || 0, color: 'hsl(var(--primary))' },
-    { name: 'Anúncios', value: data?.listings || 0, color: 'hsl(var(--brand-2))' },
-    { name: 'Pedidos', value: data?.orders || 0, color: 'hsl(var(--brand-glow))' }
+    { name: t('admin.stats.users'), value: data?.users || 0, color: 'hsl(var(--primary))' },
+    { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(var(--brand-2))' },
+    { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(var(--brand-glow))' }
   ];
 
   return (
@@ -59,45 +61,45 @@ export const DashboardStats = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.stats.total_users')}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{isLoading ? "—" : data?.users}</div>
-            <p className="text-xs text-muted-foreground">Usuários registrados</p>
+            <p className="text-xs text-muted-foreground">{t('admin.stats.registered_users')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Anúncios</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.stats.total_listings')}</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{isLoading ? "—" : data?.listings}</div>
-            <p className="text-xs text-muted-foreground">Anúncios publicados</p>
+            <p className="text-xs text-muted-foreground">{t('admin.stats.published_listings')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Pedidos</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.stats.total_orders')}</CardTitle>
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{isLoading ? "—" : data?.orders}</div>
-            <p className="text-xs text-muted-foreground">Pedidos realizados</p>
+            <p className="text-xs text-muted-foreground">{t('admin.stats.completed_orders')}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Taxa de Crescimento</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.stats.growth_rate')}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+12%</div>
-            <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
+            <p className="text-xs text-muted-foreground">{t('admin.stats.last_30_days')}</p>
           </CardContent>
         </Card>
       </div>
@@ -106,7 +108,7 @@ export const DashboardStats = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Anúncios por Mês</CardTitle>
+            <CardTitle>{t('admin.stats.listings_by_month')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -124,7 +126,7 @@ export const DashboardStats = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-muted-foreground text-sm">Nenhum dado disponível</p>
+                <p className="text-muted-foreground text-sm">{t('admin.stats.no_data')}</p>
               )}
             </div>
           </CardContent>
@@ -132,7 +134,7 @@ export const DashboardStats = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Distribuição Geral</CardTitle>
+            <CardTitle>{t('admin.stats.general_distribution')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
