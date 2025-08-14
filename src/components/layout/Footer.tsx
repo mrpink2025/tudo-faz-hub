@@ -5,36 +5,19 @@ export default function Footer() {
   const year = new Date().getFullYear();
   const { t } = useTranslation();
   return (
-    <footer className="border-t mt-16 bg-gradient-to-br from-background to-muted/30">
-      <div className="container py-12 grid gap-8 md:grid-cols-4">
-        <div className="md:col-span-2 space-y-4">
-          <div className="flex items-center gap-2">
-            <img src="/lovable-uploads/tudofaz-logo-new.png" alt="TudoFaz" className="h-8 w-auto" />
-          </div>
-          <p className="text-sm text-muted-foreground max-w-md">
+    <footer className="border-t mt-10">
+      <div className="container py-8 grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <h2 className="font-semibold">tudofaz.com</h2>
+          <p className="text-sm text-muted-foreground">
             {t("footer.description")}
           </p>
-          <p className="text-xs text-muted-foreground">
-            Conectando pessoas e negócios em todo o Brasil
-          </p>
         </div>
-        <div className="space-y-3">
-          <h3 className="font-semibold text-sm">Navegação</h3>
-          <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <Link to="/explorar" className="hover:text-foreground transition-colors">{t("footer.links.explore")}</Link>
-            <Link to="/publicar" className="hover:text-foreground transition-colors">{t("footer.links.publish")}</Link>
-            <Link to="/entrar" className="hover:text-foreground transition-colors">{t("footer.links.login")}</Link>
-            <Link to="/creditos" className="hover:text-foreground transition-colors">Créditos</Link>
-          </nav>
-        </div>
-        <div className="space-y-3">
-          <h3 className="font-semibold text-sm">Suporte</h3>
-          <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-            <Link to="/termos" className="hover:text-foreground transition-colors">Termos de Uso</Link>
-            <Link to="/privacidade" className="hover:text-foreground transition-colors">Privacidade</Link>
-            <a href="mailto:contato@tudofaz.com" className="hover:text-foreground transition-colors">Contato</a>
-          </nav>
-        </div>
+        <nav className="flex items-center gap-4 md:justify-end text-sm text-muted-foreground">
+          <Link to="/explorar" className="hover:text-foreground transition">{t("footer.links.explore")}</Link>
+          <Link to="/publicar" className="hover:text-foreground transition">{t("footer.links.publish")}</Link>
+          <Link to="/entrar" className="hover:text-foreground transition">{t("footer.links.login")}</Link>
+        </nav>
       </div>
       <div className="border-t">
         <div className="container py-6 flex flex-wrap items-center justify-between gap-4">
