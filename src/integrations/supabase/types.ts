@@ -406,6 +406,39 @@ export type Database = {
           },
         ]
       }
+      site_settings_public: {
+        Row: {
+          brand_accent: string | null
+          brand_primary: string | null
+          favicon_url: string | null
+          hero_image_url: string | null
+          logo_url: string | null
+          og_image_url: string | null
+          promo_html: string | null
+          site_name: string | null
+        }
+        Insert: {
+          brand_accent?: string | null
+          brand_primary?: string | null
+          favicon_url?: string | null
+          hero_image_url?: string | null
+          logo_url?: string | null
+          og_image_url?: string | null
+          promo_html?: string | null
+          site_name?: string | null
+        }
+        Update: {
+          brand_accent?: string | null
+          brand_primary?: string | null
+          favicon_url?: string | null
+          hero_image_url?: string | null
+          logo_url?: string | null
+          og_image_url?: string | null
+          promo_html?: string | null
+          site_name?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
