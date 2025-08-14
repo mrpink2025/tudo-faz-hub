@@ -5,3 +5,9 @@ verify_jwt = true
 
 [functions.verify-payment-credits]
 verify_jwt = true
+
+[functions.get-mapbox-token]
+verify_jwt = false
+
+[functions.notification-handler]
+verify_jwt = false

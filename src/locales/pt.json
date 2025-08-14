@@ -44,6 +44,41 @@
     "no_categories": "Nenhuma categoria encontrada",
     "error_loading": "Erro ao carregar categorias"
   },
+  "map": {
+    "find_location": "Minha localização",
+    "search_radius": "Raio de busca",
+    "listing_count": "{count} anúncio(s) encontrado(s)",
+    "no_location": "Localização não disponível"
+  },
+  "search": {
+    "advanced_filters": "Filtros Avançados",
+    "search_term": "Termo de busca",
+    "search_placeholder": "Buscar anúncios...",
+    "category": "Categoria", 
+    "select_category": "Selecione uma categoria",
+    "all_categories": "Todas as categorias",
+    "price_range": "Faixa de preço",
+    "location": "Localização",
+    "location_placeholder": "Cidade ou região...",
+    "search_radius": "Raio de busca",
+    "date_from": "Data inicial",
+    "date_to": "Data final",
+    "sort_by": "Ordenar por",
+    "sort_recent": "Mais recentes",
+    "sort_price_low": "Menor preço",
+    "sort_price_high": "Maior preço", 
+    "sort_distance": "Distância",
+    "only_with_images": "Apenas com imagens",
+    "only_highlighted": "Apenas em destaque",
+    "saved_filters": "Filtros salvos",
+    "save_filter": "Salvar filtro",
+    "save_filter_name": "Nome do filtro:",
+    "clear_filters": "Limpar filtros"
+  },
+  "notifications": {
+    "permission_granted": "Notificações ativadas",
+    "permission_denied": "Permissão de notificação negada"
+  },
   "nearby": { "title": "Perto de você", "enable": "Ver anúncios próximos", "denied": "Permissão de localização negada.", "error": "Não foi possível obter sua localização." },
   "images": { "alt_hero": "Ilustração representando compras e serviços locais" },
   "footer": {
