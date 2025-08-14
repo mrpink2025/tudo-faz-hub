@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      auth_audit_log: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          success: boolean
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -590,6 +623,17 @@ export type Database = {
           price: number
           title: string
         }[]
+      }
+      log_auth_event: {
+        Args: {
+          p_error_message?: string
+          p_event_type: string
+          p_ip_address?: unknown
+          p_success?: boolean
+          p_user_agent?: string
+          p_user_id: string
+        }
+        Returns: undefined
       }
       mark_messages_as_read: {
         Args: { conversation_user: string }
