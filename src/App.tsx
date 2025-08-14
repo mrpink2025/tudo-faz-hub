@@ -36,11 +36,11 @@ import "./i18n";
 const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TelemetryProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <TelemetryProvider>
           <BrandingLoader />
           <DynamicFavicon />
           <Header />
@@ -70,9 +70,9 @@ const App = () => (
           </Routes>
           <MessageNotifications />
           <Footer />
-        </BrowserRouter>
-      </TooltipProvider>
-    </TelemetryProvider>
+        </TelemetryProvider>
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 
