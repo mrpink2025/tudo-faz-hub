@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { Users, FileText, ShoppingCart, TrendingUp } from "lucide-react";
 
 const fetchDashboardData = async () => {
@@ -103,50 +102,51 @@ export const DashboardStats = () => {
         </Card>
       </div>
 
-      {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-full overflow-hidden">
-        <Card className="overflow-hidden">
+      {/* Resumo de Dados */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
           <CardHeader>
             <CardTitle>Anúncios por Mês</CardTitle>
           </CardHeader>
-          <CardContent className="p-4">
-            <div className="w-full h-[300px] overflow-hidden">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data?.monthlyData || []} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="listings" fill="hsl(var(--primary))" />
-                </BarChart>
-              </ResponsiveContainer>
+          <CardContent>
+            <div className="space-y-3">
+              {data?.monthlyData && data.monthlyData.length > 0 ? (
+                data.monthlyData.map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-muted/20 rounded">
+                    <span className="font-medium">{item.month}</span>
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="h-2 bg-primary rounded-full" 
+                        style={{ width: `${Math.max(item.listings * 8, 20)}px` }}
+                      />
+                      <span className="font-semibold">{item.listings}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-sm">Nenhum dado disponível</p>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden">
+        <Card>
           <CardHeader>
             <CardTitle>Distribuição Geral</CardTitle>
           </CardHeader>
-          <CardContent className="p-4">
-            <div className="w-full h-[300px] overflow-hidden">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    dataKey="value"
-                    label={({ name, value }) => `${name}: ${value}`}
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+          <CardContent>
+            <div className="space-y-3">
+              {pieData.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 rounded" style={{ backgroundColor: `${item.color}20` }}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded" style={{ backgroundColor: item.color }}></div>
+                    <span className="font-medium">{item.name}</span>
+                  </div>
+                  <span className="font-semibold" style={{ color: item.color }}>
+                    {item.value}
+                  </span>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
