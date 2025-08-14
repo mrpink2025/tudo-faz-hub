@@ -128,18 +128,31 @@ export const DashboardStats = () => {
           <CardContent>
             <div className="space-y-3">
               {data?.monthlyData && data.monthlyData.length > 0 ? (
-                data.monthlyData.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-muted/20 rounded">
-                    <span className="font-medium">{item.month}</span>
-                    <div className="flex items-center gap-2">
-                      <div 
-                        className="h-2 bg-primary rounded-full" 
-                        style={{ width: `${Math.max(item.listings * 8, 20)}px` }}
-                      />
-                      <span className="font-semibold">{item.listings}</span>
-                    </div>
-                  </div>
-                ))
+                (() => {
+                  // Calcular o valor máximo para proporcionalidade
+                  const maxListings = Math.max(...data.monthlyData.map(item => item.listings));
+                  const maxBarWidth = 160; // largura máxima da barra em pixels
+                  
+                  return data.monthlyData.map((item, index) => {
+                    // Calcular largura proporcional
+                    const proportionalWidth = maxListings > 0 
+                      ? Math.max((item.listings / maxListings) * maxBarWidth, 20)
+                      : 20;
+                    
+                    return (
+                      <div key={index} className="flex items-center justify-between p-3 bg-muted/20 rounded">
+                        <span className="font-medium">{item.month}</span>
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="h-2 bg-primary rounded-full transition-all duration-300" 
+                            style={{ width: `${proportionalWidth}px` }}
+                          />
+                          <span className="font-semibold min-w-[2rem] text-right">{item.listings}</span>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()
               ) : (
                 <p className="text-muted-foreground text-sm">{t('admin.stats.no_data')}</p>
               )}
