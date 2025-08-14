@@ -16,7 +16,8 @@ const langs = [
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
-  const current = (i18n.language || "pt").split("-")[0];
+  const currentLang = (i18n.language || "pt").split("-")[0];
+  const current = currentLang === "pt" ? "BR" : currentLang.toUpperCase();
 
   const changeLang = (code: string) => {
     i18n.changeLanguage(code);
@@ -27,7 +28,7 @@ const LanguageSwitcher = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" aria-label="Selecionar idioma" className="font-medium">
-          {current.toUpperCase()}
+          {current}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover text-foreground">
