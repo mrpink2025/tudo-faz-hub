@@ -68,7 +68,7 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
   };
 
   const handleSignup = async (values: SignupForm) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/confirmar-email`;
     const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
@@ -78,7 +78,10 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
       toast({ title: "Erro ao cadastrar", description: error.message });
       return;
     }
-    toast({ title: "Verifique seu e-mail", description: "Enviamos um link de confirmação." });
+    toast({ 
+      title: "Verifique seu e-mail", 
+      description: "Enviamos um link de confirmação para ativar sua conta." 
+    });
     setTab("entrar");
   };
 

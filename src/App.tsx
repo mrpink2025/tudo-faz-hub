@@ -23,6 +23,7 @@ import PaymentCanceled from "./pages/PaymentCanceled";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import NearbySearch from "./pages/NearbySearch";
+import EmailConfirmation from "./pages/EmailConfirmation";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />
           <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />
           <Route path="/entrar" element={<Auth />} />
+          <Route path="/confirmar-email" element={<EmailConfirmation />} />
           <Route path="/termos" element={<Terms />} />
           <Route path="/privacidade" element={<Privacy />} />
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
