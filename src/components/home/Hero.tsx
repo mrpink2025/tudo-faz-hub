@@ -10,12 +10,11 @@ const Hero = () => {
   const { t } = useTranslation();
   
   const { data: settings } = useQuery({
-    queryKey: ["site-settings"],
+    queryKey: ["site-settings-public"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("site_settings")
+        .from("site_settings_public")
         .select("hero_image_url")
-        .eq("id", 1)
         .maybeSingle();
       if (error) throw error;
       return data;

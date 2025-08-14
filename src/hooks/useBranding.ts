@@ -21,9 +21,9 @@ function rgbToHsl(r: number, g: number, b: number) {
 
 export function useBranding() {
   const { data } = useQuery({
-    queryKey: ["site-settings"],
+    queryKey: ["site-settings-public"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_settings").select("brand_primary, brand_accent").eq("id", 1).maybeSingle();
+      const { data, error } = await supabase.from("site_settings_public").select("brand_primary, brand_accent").maybeSingle();
       if (error) throw error;
       return data;
     },
