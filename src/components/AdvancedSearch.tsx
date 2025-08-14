@@ -44,29 +44,29 @@ export const AdvancedSearch = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <SlidersHorizontal className="w-5 h-5" />
-          Busca Avançada
+          {t("search.advanced")}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="search-term">Termo de busca</Label>
+            <Label htmlFor="search-term">{t("search.term")}</Label>
             <Input
               id="search-term"
-              placeholder="Digite o que procura..."
+              placeholder={t("search.term_placeholder")}
               value={filters.q}
               onChange={(e) => setFilters(prev => ({ ...prev, q: e.target.value }))}
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="category">Categoria</Label>
+            <Label htmlFor="category">{t("search.category")}</Label>
             <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
               <SelectTrigger>
-                <SelectValue placeholder="Todas as categorias" />
+                <SelectValue placeholder={t("search.all_categories")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as categorias</SelectItem>
+                <SelectItem value="">{t("search.all_categories")}</SelectItem>
                 {parentCategories.map((category) => (
                   <SelectItem key={category.id} value={category.slug}>
                     {category.name_pt}
@@ -77,7 +77,7 @@ export const AdvancedSearch = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="min-price">Preço mínimo</Label>
+            <Label htmlFor="min-price">{t("search.min_price")}</Label>
             <Input
               id="min-price"
               type="number"
@@ -88,7 +88,7 @@ export const AdvancedSearch = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="max-price">Preço máximo</Label>
+            <Label htmlFor="max-price">{t("search.max_price")}</Label>
             <Input
               id="max-price"
               type="number"
@@ -99,25 +99,25 @@ export const AdvancedSearch = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="location">Localização</Label>
+            <Label htmlFor="location">{t("search.location")}</Label>
             <Input
               id="location"
-              placeholder="Cidade, estado..."
+              placeholder={t("search.location_placeholder")}
               value={filters.location}
               onChange={(e) => setFilters(prev => ({ ...prev, location: e.target.value }))}
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="currency">Moeda</Label>
+            <Label htmlFor="currency">{t("search.currency")}</Label>
             <Select value={filters.currency} onValueChange={(value) => setFilters(prev => ({ ...prev, currency: value }))}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="BRL">Real (R$)</SelectItem>
-                <SelectItem value="USD">Dólar ($)</SelectItem>
-                <SelectItem value="EUR">Euro (€)</SelectItem>
+                <SelectItem value="BRL">{t("currency.brl")}</SelectItem>
+                <SelectItem value="USD">{t("currency.usd")}</SelectItem>
+                <SelectItem value="EUR">{t("currency.eur")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -125,7 +125,7 @@ export const AdvancedSearch = () => {
         
         <Button onClick={handleSearch} className="w-full" variant="hero">
           <Search className="w-4 h-4 mr-2" />
-          Buscar
+          {t("search.search_button")}
         </Button>
       </CardContent>
     </Card>

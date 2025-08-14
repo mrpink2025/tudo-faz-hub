@@ -3,8 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const SearchBar = () => {
+  const { t } = useTranslation();
   const [q, setQ] = useState("");
   const navigate = useNavigate();
   const onSubmit = (e: React.FormEvent) => {
@@ -19,11 +21,11 @@ const SearchBar = () => {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           className="pl-10"
-          placeholder="Busque por produtos, serviços, imóveis, empregos..."
-          aria-label="Buscar no tudofaz"
+          placeholder={t("search.search_placeholder")}
+          aria-label={t("search.search_aria")}
         />
       </div>
-      <Button type="submit" variant="hero">Buscar</Button>
+      <Button type="submit" variant="hero">{t("search.search_button")}</Button>
     </form>
   );
 };

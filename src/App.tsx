@@ -28,8 +28,8 @@ const queryClient = new QueryClient();
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
-
-
+import { MessageNotifications } from "./components/notifications/MessageNotifications";
+import "./i18n";
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -59,6 +59,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <MessageNotifications />
         <Footer />
       </BrowserRouter>
     </TooltipProvider>

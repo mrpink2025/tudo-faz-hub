@@ -25,6 +25,18 @@
     "ctaTitle": "Pronto para começar?",
     "ctaSubtitle": "Publique seu primeiro anúncio em menos de 2 minutos."
   },
+  "notifications": {
+    "new_message": "Nova mensagem",
+    "view": "Ver",
+    "loading": "Carregando notificações...",
+    "no_notifications": "Nenhuma notificação"
+  },
+  "errors": {
+    "something_wrong": "Algo deu errado",
+    "try_reload": "Tente recarregar a página ou entre em contato conosco se o problema persistir.",
+    "technical_details": "Detalhes técnicos",
+    "reload_page": "Recarregar página"
+  },
   "nearby": { "title": "Perto de você", "enable": "Ver anúncios próximos", "denied": "Permissão de localização negada.", "error": "Não foi possível obter sua localização." },
   "images": { "alt_hero": "Ilustração representando compras e serviços locais" },
   "footer": {
@@ -87,6 +99,26 @@
     "view_all": "Ver todos em {{name}}",
     "no_children": "Sem subcategorias",
     "none": "Nenhuma categoria disponível"
+  },
+  "search": {
+    "advanced": "Busca Avançada",
+    "term": "Termo de busca",
+    "term_placeholder": "Digite o que procura...",
+    "category": "Categoria",
+    "all_categories": "Todas as categorias",
+    "min_price": "Preço mínimo",
+    "max_price": "Preço máximo",
+    "location": "Localização",
+    "location_placeholder": "Cidade, estado...",
+    "currency": "Moeda",
+    "search_button": "Buscar",
+    "search_placeholder": "Busque por produtos, serviços, imóveis, empregos...",
+    "search_aria": "Buscar no tudofaz"
+  },
+  "currency": {
+    "brl": "Real (R$)",
+    "usd": "Dólar ($)",
+    "eur": "Euro (€)"
   },
   "explore": {
     "titleBase": "Explorar anúncios",
