@@ -210,14 +210,14 @@ export function AdvancedSearchFilters({
             <div className="space-y-2">
               <Label>{t('search.category')}</Label>
               <Select 
-                value={filters.category} 
-                onValueChange={(value) => updateFilters({ category: value })}
+                value={filters.category || "all"} 
+                onValueChange={(value) => updateFilters({ category: value === "all" ? "" : value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={t('search.select_category')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">{t('search.all_categories')}</SelectItem>
+                  <SelectItem value="all">{t('search.all_categories')}</SelectItem>
                   {categories.map((cat: any) => (
                     <SelectItem key={cat.id} value={cat.slug}>
                       {cat.name_pt}
@@ -309,7 +309,7 @@ export function AdvancedSearchFilters({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover">
                   <SelectItem value="recent">{t('search.sort_recent')}</SelectItem>
                   <SelectItem value="price_low">{t('search.sort_price_low')}</SelectItem>
                   <SelectItem value="price_high">{t('search.sort_price_high')}</SelectItem>
