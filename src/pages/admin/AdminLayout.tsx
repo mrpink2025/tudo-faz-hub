@@ -16,10 +16,12 @@ export default function AdminLayout() {
         <SidebarTrigger className="mr-2" />
         <h1 className="text-lg font-semibold">{t("admin.layoutTitle")}</h1>
       </header>
-      <div className="flex min-h-[calc(100vh-3rem)] w-full">
+      <div className="flex min-h-[calc(100vh-3rem)] w-full overflow-hidden">
         <AdminSidebar />
-        <main className="flex-1 p-4 md:p-6">
-          <Outlet />
+        <main className="flex-1 p-4 md:p-6 overflow-x-hidden max-w-0">
+          <div className="max-w-full overflow-hidden">
+            <Outlet />
+          </div>
         </main>
       </div>
     </SidebarProvider>

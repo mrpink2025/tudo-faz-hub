@@ -104,46 +104,50 @@ export const DashboardStats = () => {
       </div>
 
       {/* Gráficos */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-full overflow-hidden">
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle>Anúncios por Mês</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data?.monthlyData || []}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="listings" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
+          <CardContent className="p-4">
+            <div className="w-full h-[300px] overflow-hidden">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data?.monthlyData || []} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="listings" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle>Distribuição Geral</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  dataKey="value"
-                  label={({ name, value }) => `${name}: ${value}`}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          <CardContent className="p-4">
+            <div className="w-full h-[300px] overflow-hidden">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    dataKey="value"
+                    label={({ name, value }) => `${name}: ${value}`}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>
