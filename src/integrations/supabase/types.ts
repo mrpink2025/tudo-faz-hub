@@ -537,6 +537,14 @@ export type Database = {
       }
     }
     Functions: {
+      get_basic_profile_info: {
+        Args: { profile_user_id: string }
+        Returns: {
+          avatar_url: string
+          full_name: string
+          user_id: string
+        }[]
+      }
       get_conversation_participants: {
         Args: { recipient: string; sender: string }
         Returns: {
