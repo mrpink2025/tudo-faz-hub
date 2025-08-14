@@ -182,7 +182,11 @@ export default function SiteSettingsForm() {
           </div>
           <div className="grid gap-2 md:col-span-2">
             <label className="text-sm">Stripe Publishable Key</label>
-            <Input defaultValue={settings?.stripe_publishable_key ?? ""} onBlur={(e) => update.mutate({ stripe_publishable_key: e.target.value })} />
+            <Input 
+              placeholder="pk_live_..."
+              defaultValue={settings?.stripe_publishable_key ?? "pk_live_51RvgiIRx02bCc2sPkyWKK6gnESAtpKxJNEpuw8qYNp4uzjQiD806GIIi93vArDSHGPXcJNE7XAtTPrUe0dmqPGp2001O10cOcc"} 
+              onBlur={(e) => update.mutate({ stripe_publishable_key: e.target.value })} 
+            />
           </div>
         </CardContent>
       </Card>

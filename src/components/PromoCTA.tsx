@@ -34,9 +34,9 @@ const PromoCTA = () => {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/entrar"
+              to="/creditos"
               className="inline-flex items-center gap-2 rounded-md border border-white/40 px-4 py-2 hover:bg-white/10 transition"
-              title="Faça login para gerenciar créditos e destaque"
+              title="Depositar créditos para destacar anúncios"
             >
               Depositar para destacar
             </Link>
