@@ -37,6 +37,13 @@
     "technical_details": "Detalhes técnicos",
     "reload_page": "Recarregar página"
   },
+  "categories": {
+    "title": "Categorias em destaque",
+    "subtitle": "Encontre o que procura por categoria",
+    "view_all": "Ver todas",
+    "no_categories": "Nenhuma categoria encontrada",
+    "error_loading": "Erro ao carregar categorias"
+  },
   "nearby": { "title": "Perto de você", "enable": "Ver anúncios próximos", "denied": "Permissão de localização negada.", "error": "Não foi possível obter sua localização." },
   "images": { "alt_hero": "Ilustração representando compras e serviços locais" },
   "footer": {

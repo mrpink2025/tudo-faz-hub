@@ -5,14 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { AdminTableSkeleton } from "@/components/ui/loading-skeletons";
+import { queryConfigs, createQueryKey } from "@/utils/query-config";
 
 export default function ModerateListings() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const qc = useQueryClient();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["pending-listings"],
+  const { data, isLoading, error } = useQuery({
+    queryKey: createQueryKey("pending-listings"),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("listings")
@@ -22,6 +24,7 @@ export default function ModerateListings() {
       if (error) throw error;
       return data ?? [];
     },
+    ...queryConfigs.admin
   });
 
   const approve = useMutation({
@@ -57,7 +60,11 @@ export default function ModerateListings() {
       </header>
 
       {isLoading ? (
-        <div className="text-sm text-muted-foreground">{t('admin.moderate.loading')}</div>
+        <AdminTableSkeleton />
+      ) : error ? (
+        <div className="text-center p-4">
+          <p className="text-muted-foreground">{t('common.error')}: {error.message}</p>
+        </div>
       ) : data && data.length ? (
         <div className="grid gap-3">
           {data.map((l: any) => (

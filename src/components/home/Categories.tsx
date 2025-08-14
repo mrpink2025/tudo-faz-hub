@@ -4,6 +4,8 @@ import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin,
 import { Link } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
+import { logger } from "@/utils/logger";
 
 // Mapeamento de ícones para as categorias
 const iconMap: Record<string, any> = {
@@ -21,13 +23,14 @@ const iconMap: Record<string, any> = {
 };
 
 const Categories = () => {
+  const { t } = useTranslation();
   const { data: categories, isLoading, error } = useCategories();
 
   if (isLoading) {
     return (
       <section className="py-10 lg:py-14">
         <div className="container">
-          <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
+          <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <Card key={index}>
@@ -49,11 +52,11 @@ const Categories = () => {
   }
 
   if (error) {
-    console.error('Erro ao carregar categorias:', error);
+    logger.error("Erro ao carregar categorias", { error: error.message });
     return (
       <section className="py-10 lg:py-14">
         <div className="container">
-          <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
+          <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
           <div className="text-center text-muted-foreground">
             Erro ao carregar categorias. Tente novamente mais tarde.
           </div>
@@ -88,7 +91,7 @@ const Categories = () => {
   return (
     <section className="py-10 lg:py-14">
       <div className="container">
-        <h2 className="font-display text-2xl mb-6">Categorias em destaque</h2>
+        <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {mainCategories.map((category) => {
             const Icon = iconMap[category.slug] || Package;

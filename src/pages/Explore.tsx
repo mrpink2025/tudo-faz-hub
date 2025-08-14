@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
+import { ListingGridSkeleton } from "@/components/ui/loading-skeletons";
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
@@ -126,11 +127,15 @@ const Explore = () => {
         <div className="mb-3 text-sm text-muted-foreground">
           {loadingListings ? t("explore.loadingResults") : t("explore.resultsCount", { count: listings.length })}
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((l: any) => (
-            <ListingCard key={l.id} listing={l} />
-          ))}
-        </div>
+        {loadingListings ? (
+          <ListingGridSkeleton count={6} />
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {listings.map((l: any) => (
+              <ListingCard key={l.id} listing={l} />
+            ))}
+          </div>
+        )}
         {!loadingListings && listings.length === 0 && (
           <div className="rounded-lg border p-6 text-muted-foreground mt-4">
             {t("explore.noneFound")}

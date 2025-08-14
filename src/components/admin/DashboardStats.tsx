@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, FileText, ShoppingCart, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { DashboardStatsSkeleton } from "@/components/ui/loading-skeletons";
+import { queryConfigs, createQueryKey } from "@/utils/query-config";
 
 const fetchDashboardData = async () => {
   const [
@@ -44,9 +46,10 @@ const fetchDashboardData = async () => {
 
 export const DashboardStats = () => {
   const { t } = useTranslation();
-  const { data, isLoading } = useQuery({
-    queryKey: ["dashboard-stats"],
-    queryFn: fetchDashboardData
+  const { data, isLoading, error } = useQuery({
+    queryKey: createQueryKey("dashboard-stats"),
+    queryFn: fetchDashboardData,
+    ...queryConfigs.admin
   });
 
   const pieData = [
@@ -54,6 +57,18 @@ export const DashboardStats = () => {
     { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(var(--brand-2))' },
     { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(var(--brand-glow))' }
   ];
+
+  if (isLoading) {
+    return <DashboardStatsSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center p-8">
+        <p className="text-muted-foreground">{t('common.error')}: {error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

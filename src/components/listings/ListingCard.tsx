@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Heart } from "lucide-react";
 import { useFavorites } from "@/hooks/useFavorites";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 type Listing = {
   id: string;
@@ -35,11 +36,11 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
       <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
         <div className="bg-muted relative">
           <AspectRatio ratio={16 / 9}>
-            <img
+            <LazyImage
               src={imgSrc}
               alt={`Imagem do anúncio: ${listing.title}`}
-              loading="lazy"
-              className="h-full w-full object-cover"
+              className="h-full w-full"
+              fallback="/placeholder.svg"
             />
           </AspectRatio>
           <Button
