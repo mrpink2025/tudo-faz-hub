@@ -161,7 +161,7 @@ export default function ListingsManagement() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-popover z-50">
                 <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="published">Publicados</SelectItem>
                 <SelectItem value="draft">Rascunhos</SelectItem>
@@ -175,7 +175,7 @@ export default function ListingsManagement() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-popover z-50">
                 <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="approved">Aprovados</SelectItem>
                 <SelectItem value="pending">Pendentes</SelectItem>

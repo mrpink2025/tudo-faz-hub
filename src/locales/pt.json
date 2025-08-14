@@ -306,6 +306,34 @@
       "status_updated": "Status atualizado",
       "status_error": "Erro ao atualizar status",
       "no_orders": "Nenhum pedido encontrado"
+    },
+    "settings": {
+      "title": "Configurações",
+      "subtitle": "Gerencie as configurações do site",
+      "identity": "Identidade",
+      "site_name": "Nome do Site",
+      "logo": "Logo",
+      "color_palette": "Paleta de Cores",
+      "primary": "Cor Primária",
+      "accent": "Cor de Destaque",
+      "save_palette": "Salvar Paleta",
+      "theme": "Tema",
+      "light_mode": "Modo Claro",
+      "dark_mode": "Modo Escuro",
+      "site_images": "Imagens do Site",
+      "hero_image": "Imagem Hero",
+      "favicon": "Favicon",
+      "favicon_note": "Recomendado: 32x32 ou 64x64 pixels, formato PNG",
+      "promo": "Promoções",
+      "promo_html": "HTML Promocional",
+      "payments": "Pagamentos",
+      "stripe_enabled": "Habilitar Stripe",
+      "stripe_key": "Chave Pública Stripe",
+      "saved": "Configurações salvas",
+      "save_error": "Erro ao salvar",
+      "upload_error_logo": "Erro ao fazer upload do logo",
+      "upload_error_hero": "Erro ao fazer upload da imagem hero",
+      "upload_error_favicon": "Erro ao fazer upload do favicon"
     }
   }
 }

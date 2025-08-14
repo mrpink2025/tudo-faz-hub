@@ -28,7 +28,7 @@ export default function AdminSidebar() {
   const isActive = (url: string) => currentPath === url || url === "/admin" && location.pathname === "/admin";
   return <Sidebar collapsible="icon" className="w-64">
       <SidebarContent>
-        <SidebarGroup className="py-[100px]">
+        <SidebarGroup>
           <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

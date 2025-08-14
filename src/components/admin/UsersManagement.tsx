@@ -167,7 +167,7 @@ export default function UsersManagement() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-popover z-50">
                 <SelectItem value="all">Todas as funções</SelectItem>
                 <SelectItem value="admin">Administradores</SelectItem>
                 <SelectItem value="moderator">Moderadores</SelectItem>

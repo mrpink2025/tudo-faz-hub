@@ -13,7 +13,7 @@ const fetchDashboardData = async () => {
     { data: totalOrders, error: ordersError },
     { data: monthlyStats, error: monthlyError }
   ] = await Promise.all([
-    supabase.from("user_roles").select("user_id", { count: "exact", head: true }),
+    supabase.from("profiles").select("id", { count: "exact", head: true }),
     supabase.from("listings").select("id", { count: "exact", head: true }),
     supabase.from("orders").select("id", { count: "exact", head: true }),
     supabase.from("listings").select("created_at").order("created_at", { ascending: false }).limit(100)
@@ -37,9 +37,9 @@ const fetchDashboardData = async () => {
   }));
 
   return {
-    users: totalUsers?.length || 0,
-    listings: totalListings?.length || 0,
-    orders: totalOrders?.length || 0,
+    users: (totalUsers as any)?.count || 0,
+    listings: (totalListings as any)?.count || 0,
+    orders: (totalOrders as any)?.count || 0,
     monthlyData: chartData
   };
 };
@@ -53,9 +53,9 @@ export const DashboardStats = () => {
   });
 
   const pieData = [
-    { name: t('admin.stats.users'), value: data?.users || 0, color: 'hsl(var(--primary))' },
-    { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(var(--brand-2))' },
-    { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(var(--brand-glow))' }
+    { name: t('admin.stats.users'), value: data?.users || 0, color: 'hsl(221 83% 53%)' },
+    { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(262 83% 58%)' },
+    { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(142 76% 36%)' }
   ];
 
   if (isLoading) {
