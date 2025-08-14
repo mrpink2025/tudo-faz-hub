@@ -61,12 +61,12 @@ export const AdvancedSearch = () => {
           
           <div className="space-y-2">
             <Label htmlFor="category">{t("search.category")}</Label>
-            <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
+            <Select value={filters.category || "all"} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value === "all" ? "" : value }))}>
               <SelectTrigger>
                 <SelectValue placeholder={t("search.all_categories")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">{t("search.all_categories")}</SelectItem>
+                <SelectItem value="all">{t("search.all_categories")}</SelectItem>
                 {parentCategories.map((category) => (
                   <SelectItem key={category.id} value={category.slug}>
                     {category.name_pt}
