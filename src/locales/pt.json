@@ -93,6 +93,30 @@
       "listing": "anúncio"
     }
   },
+  "credits": {
+    "title": "Gerenciar Créditos",
+    "description": "Compre créditos para destacar seus anúncios e aumentar sua visibilidade.",
+    "balance": "Saldo atual",
+    "history": "Histórico de Transações",
+    "buy": "Comprar",
+    "pack_100": "100 créditos",
+    "pack_300": "300 créditos", 
+    "pack_1200": "1200 créditos",
+    "transaction_type": {
+      "purchase": "Compra",
+      "usage": "Uso",
+      "refund": "Reembolso",
+      "bonus": "Bônus"
+    },
+    "filter_by": "Filtrar por",
+    "all_types": "Todos os tipos",
+    "no_transactions": "Nenhuma transação encontrada",
+    "transaction_date": "Data",
+    "transaction_amount": "Valor",
+    "transaction_credits": "Créditos",
+    "view_history": "Ver Histórico",
+    "usage_chart": "Gráfico de Uso"
+  },
   "categories": {
     "menu": "Categorias",
     "error": "Erro ao carregar categorias",
@@ -198,23 +222,6 @@
       "removeError": "Erro ao remover",
       "none": "Nenhum papel encontrado."
     }
-  },
-  "credits": {
-    "nav": "Créditos",
-    "title": "Comprar Créditos",
-    "description": "Adquira créditos para destacar anúncios e desbloquear recursos.",
-    "balance": "Seu saldo",
-    "packUnit": "créditos",
-    "packsTitle": "Escolha um pacote de créditos",
-    "buy": "Comprar",
-    "packLabel": "{{credits}} créditos",
-    "successTitle": "Pagamento concluído",
-    "successDescription": "Estamos verificando seu pagamento e creditando sua carteira.",
-    "verifyButton": "Verificar e creditar",
-    "backToCredits": "Voltar aos créditos",
-    "cancelTitle": "Pagamento cancelado",
-    "cancelDescription": "Nenhuma cobrança foi realizada. Você pode tentar novamente quando quiser.",
-    "verified": "Créditos adicionados"
   }
 }
 
