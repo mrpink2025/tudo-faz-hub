@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 function parseRgbString(val?: string | null) {
   if (!val) return { r: 59, g: 130, b: 246 };
@@ -16,6 +17,7 @@ function parseRgbString(val?: string | null) {
 }
 
 export default function SiteSettingsForm() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const qc = useQueryClient();
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -50,10 +52,10 @@ export default function SiteSettingsForm() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Configurações salvas" });
+      toast({ title: t("admin.settings.saved") });
       qc.invalidateQueries({ queryKey: ["site-settings"] });
     },
-    onError: (e: any) => toast({ title: "Erro ao salvar", description: e.message }),
+    onError: (e: any) => toast({ title: t("admin.settings.save_error"), description: e.message }),
   });
 
   const handleUploadLogo = async () => {
@@ -61,7 +63,7 @@ export default function SiteSettingsForm() {
     const path = `logos/site-logo.png`;
     const { error } = await supabase.storage.from("assets").upload(path, logoFile, { upsert: true, contentType: logoFile.type });
     if (error) {
-      toast({ title: "Erro ao enviar logo", description: error.message });
+      toast({ title: t("admin.settings.upload_error_logo"), description: error.message });
       return;
     }
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
@@ -73,7 +75,7 @@ export default function SiteSettingsForm() {
     const path = `hero/hero-image.jpg`;
     const { error } = await supabase.storage.from("assets").upload(path, heroFile, { upsert: true, contentType: heroFile.type });
     if (error) {
-      toast({ title: "Erro ao enviar imagem hero", description: error.message });
+      toast({ title: t("admin.settings.upload_error_hero"), description: error.message });
       return;
     }
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
@@ -85,7 +87,7 @@ export default function SiteSettingsForm() {
     const path = `favicon/favicon.png`;
     const { error } = await supabase.storage.from("assets").upload(path, faviconFile, { upsert: true, contentType: faviconFile.type });
     if (error) {
-      toast({ title: "Erro ao enviar favicon", description: error.message });
+      toast({ title: t("admin.settings.upload_error_favicon"), description: error.message });
       return;
     }
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
@@ -110,30 +112,30 @@ export default function SiteSettingsForm() {
   };
 
   if (isLoading) return (
-    <section id="configuracoes" className="space-y-4"><div className="text-sm text-muted-foreground">Carregando…</div></section>
+    <section id="configuracoes" className="space-y-4"><div className="text-sm text-muted-foreground">{t("common.loading")}</div></section>
   );
 
   return (
     <section id="configuracoes" className="space-y-6">
       <header>
-        <h2 className="text-xl font-semibold">Configurações do site</h2>
-        <p className="text-sm text-muted-foreground">Nome, logo, paleta de cores (RGB) e tema claro/escuro.</p>
+        <h2 className="text-xl font-semibold">{t("admin.settings.title")}</h2>
+        <p className="text-sm text-muted-foreground">{t("admin.settings.subtitle")}</p>
       </header>
 
       <Card>
         <CardHeader>
-          <CardTitle>Identidade</CardTitle>
+          <CardTitle>{t("admin.settings.identity")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div className="grid gap-2">
-            <label className="text-sm">Nome do site</label>
+            <label className="text-sm">{t("admin.settings.site_name")}</label>
             <Input defaultValue={settings?.site_name ?? ""} onBlur={(e) => update.mutate({ site_name: e.target.value })} />
           </div>
           <div className="grid gap-2">
-            <label className="text-sm">Logo</label>
+            <label className="text-sm">{t("admin.settings.logo")}</label>
             <div className="flex items-center gap-2">
               <Input type="file" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)} />
-              <Button type="button" onClick={handleUploadLogo} disabled={!logoFile}>Enviar</Button>
+              <Button type="button" onClick={handleUploadLogo} disabled={!logoFile}>{t("common.send")}</Button>
             </div>
             {settings?.logo_url && (
               <img src={settings.logo_url} alt="Logo do tudofaz" className="h-12 w-auto mt-2" loading="lazy" />
@@ -144,12 +146,12 @@ export default function SiteSettingsForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Paleta de cores (RGB)</CardTitle>
+          <CardTitle>{t("admin.settings.color_palette")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-6 md:grid-cols-2">
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm">Primária</span>
+              <span className="text-sm">{t("admin.settings.primary")}</span>
               <div className="h-6 w-16 rounded border" style={{ backgroundColor: primaryPreview }} />
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -160,7 +162,7 @@ export default function SiteSettingsForm() {
           </div>
           <div className="grid gap-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm">Acento</span>
+              <span className="text-sm">{t("admin.settings.accent")}</span>
               <div className="h-6 w-16 rounded border" style={{ backgroundColor: accentPreview }} />
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -170,57 +172,57 @@ export default function SiteSettingsForm() {
             </div>
           </div>
           <div className="md:col-span-2">
-            <Button onClick={persistColors}>Salvar paleta</Button>
+            <Button onClick={persistColors}>{t("admin.settings.save_palette")}</Button>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Tema</CardTitle>
+          <CardTitle>{t("admin.settings.theme")}</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center gap-2">
-          <Button variant="secondary" onClick={() => setTheme("light")}>Modo claro</Button>
-          <Button onClick={() => setTheme("dark")}>Modo escuro</Button>
+          <Button variant="secondary" onClick={() => setTheme("light")}>{t("admin.settings.light_mode")}</Button>
+          <Button onClick={() => setTheme("dark")}>{t("admin.settings.dark_mode")}</Button>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Imagens do Site</CardTitle>
+          <CardTitle>{t("admin.settings.site_images")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-6">
           <div className="grid gap-2">
-            <label className="text-sm">Imagem Hero Principal</label>
+            <label className="text-sm">{t("admin.settings.hero_image")}</label>
             <div className="flex items-center gap-2">
               <Input type="file" accept="image/*" onChange={(e) => setHeroFile(e.target.files?.[0] ?? null)} />
-              <Button type="button" onClick={handleUploadHero} disabled={!heroFile}>Enviar</Button>
+              <Button type="button" onClick={handleUploadHero} disabled={!heroFile}>{t("common.send")}</Button>
             </div>
             {settings?.hero_image_url && (
               <img src={settings.hero_image_url} alt="Imagem Hero" className="h-24 w-auto mt-2 rounded" loading="lazy" />
             )}
           </div>
           <div className="grid gap-2">
-            <label className="text-sm">Favicon (PNG)</label>
+            <label className="text-sm">{t("admin.settings.favicon")}</label>
             <div className="flex items-center gap-2">
               <Input type="file" accept="image/png,image/jpg,image/jpeg" onChange={(e) => setFaviconFile(e.target.files?.[0] ?? null)} />
-              <Button type="button" onClick={handleUploadFavicon} disabled={!faviconFile}>Enviar</Button>
+              <Button type="button" onClick={handleUploadFavicon} disabled={!faviconFile}>{t("common.send")}</Button>
             </div>
             {settings?.favicon_url && (
               <img src={settings.favicon_url} alt="Favicon" className="h-8 w-8 mt-2" loading="lazy" />
             )}
-            <p className="text-xs text-muted-foreground">Importante: Use PNG/JPG. Arquivos .ico não são suportados.</p>
+            <p className="text-xs text-muted-foreground">{t("admin.settings.favicon_note")}</p>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Promo</CardTitle>
+          <CardTitle>{t("admin.settings.promo")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <label className="text-sm">HTML promocional</label>
+            <label className="text-sm">{t("admin.settings.promo_html")}</label>
             <Textarea defaultValue={settings?.promo_html ?? ""} rows={6} onBlur={(e) => update.mutate({ promo_html: e.target.value })} />
           </div>
         </CardContent>
@@ -228,15 +230,15 @@ export default function SiteSettingsForm() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Pagamentos</CardTitle>
+          <CardTitle>{t("admin.settings.payments")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-2">
           <div className="flex items-center gap-2">
             <Checkbox id="stripe_enabled" checked={!!settings?.stripe_enabled} onCheckedChange={(v) => update.mutate({ stripe_enabled: !!v })} />
-            <label htmlFor="stripe_enabled" className="text-sm">Stripe habilitado</label>
+            <label htmlFor="stripe_enabled" className="text-sm">{t("admin.settings.stripe_enabled")}</label>
           </div>
           <div className="grid gap-2 md:col-span-2">
-            <label className="text-sm">Stripe Publishable Key</label>
+            <label className="text-sm">{t("admin.settings.stripe_key")}</label>
             <Input 
               placeholder="pk_live_..."
               defaultValue={settings?.stripe_publishable_key ?? "pk_live_51RvgiIRx02bCc2sPkyWKK6gnESAtpKxJNEpuw8qYNp4uzjQiD806GIIi93vArDSHGPXcJNE7XAtTPrUe0dmqPGp2001O10cOcc"} 

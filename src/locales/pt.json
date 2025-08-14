@@ -1,7 +1,15 @@
 {
   "site": { "name": "tudofaz.com" },
   "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar" },
-  "common": { "loading": "Carregando..." },
+  "common": { 
+    "loading": "Carregando...", 
+    "error": "Erro", 
+    "save": "Salvar",
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "success": "Sucesso"
+  },
   "home": { "tagline_small": "Seu marketplace local completo" },
   "promo": {
     "badge": "Promova seu anúncio",
@@ -25,6 +33,53 @@
     "poweredBy": "Powered by Stripe",
     "acceptedBrands": "Bandeiras aceitas",
     "copyright": "Todos os direitos reservados."
+  },
+  "admin": {
+    "settings": {
+      "title": "Configurações do site",
+      "subtitle": "Nome, logo, paleta de cores (RGB) e tema claro/escuro.",
+      "saved": "Configurações salvas",
+      "save_error": "Erro ao salvar",
+      "identity": "Identidade",
+      "site_name": "Nome do site",
+      "logo": "Logo",
+      "upload_error_logo": "Erro ao enviar logo",
+      "upload_error_hero": "Erro ao enviar imagem hero",
+      "upload_error_favicon": "Erro ao enviar favicon",
+      "color_palette": "Paleta de cores (RGB)",
+      "primary": "Primária",
+      "accent": "Acento",
+      "save_palette": "Salvar paleta",
+      "theme": "Tema",
+      "light_mode": "Modo claro",
+      "dark_mode": "Modo escuro",
+      "site_images": "Imagens do Site",
+      "hero_image": "Imagem Hero Principal",
+      "favicon": "Favicon (PNG)",
+      "favicon_note": "Importante: Use PNG/JPG. Arquivos .ico não são suportados.",
+      "promo": "Promo",
+      "promo_html": "HTML promocional",
+      "payments": "Pagamentos",
+      "stripe_enabled": "Stripe habilitado",
+      "stripe_key": "Stripe Publishable Key"
+    },
+    "moderate": {
+      "title": "Moderação de anúncios",
+      "subtitle": "Aprove os anúncios pendentes e gerencie o destaque.",
+      "approved": "Anúncio aprovado",
+      "approve_error": "Erro ao aprovar",
+      "highlight_error": "Erro ao atualizar destaque",
+      "no_pending": "Não há anúncios pendentes.",
+      "created_at": "Criado em",
+      "no_price": "sem preço"
+    },
+    "orders": {
+      "title": "Pedidos",
+      "subtitle": "Acompanhe os últimos pedidos e atualize o status.",
+      "update_error": "Erro ao atualizar status",
+      "user": "usuario",
+      "listing": "anúncio"
+    }
   },
   "categories": {
     "menu": "Categorias",

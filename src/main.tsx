@@ -7,11 +7,11 @@ import './i18n'
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/src/sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
+      .then(() => {
+        // Service Worker registrado com sucesso
       })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
+      .catch(() => {
+        // Falha no registro do Service Worker
       });
   });
 }

@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 export default function ModerateListings() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const qc = useQueryClient();
 
@@ -28,11 +30,11 @@ export default function ModerateListings() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Anúncio aprovado" });
+      toast({ title: t("admin.moderate.approved") });
       qc.invalidateQueries({ queryKey: ["pending-listings"] });
       qc.invalidateQueries({ queryKey: ["admin-stats"] });
     },
-    onError: (e: any) => toast({ title: "Erro ao aprovar", description: e.message }),
+    onError: (e: any) => toast({ title: t("admin.moderate.approve_error"), description: e.message }),
   });
 
   const toggleHighlight = useMutation({
@@ -44,7 +46,7 @@ export default function ModerateListings() {
       toast({ title: "Destaque atualizado" });
       qc.invalidateQueries({ queryKey: ["pending-listings"] });
     },
-    onError: (e: any) => toast({ title: "Erro ao atualizar destaque", description: e.message }),
+    onError: (e: any) => toast({ title: t("admin.moderate.highlight_error"), description: e.message }),
   });
 
   return (
