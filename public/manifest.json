@@ -9,15 +9,22 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/placeholder.svg",
-      "type": "image/svg+xml",
+      "src": "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png",
       "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "categories": ["shopping", "business", "productivity"],
