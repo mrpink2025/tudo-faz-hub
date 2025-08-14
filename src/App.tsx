@@ -31,6 +31,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
 import { MessageNotifications } from "./components/notifications/MessageNotifications";
+import DynamicFavicon from "./components/branding/DynamicFavicon";
 import "./i18n";
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -39,6 +40,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <BrandingLoader />
+        <DynamicFavicon />
         <Header />
         <Routes>
           <Route path="/" element={<Index />} />
