@@ -1,19 +1,19 @@
 // Enhanced Service Worker with Smart Caching Strategy
-const CACHE_NAME = 'tudofaz-v2.0';
-const STATIC_CACHE = 'tudofaz-static-v2.0';
-const DYNAMIC_CACHE = 'tudofaz-dynamic-v2.0';
-const API_CACHE = 'tudofaz-api-v2.0';
+const CACHE_NAME = `tudofaz-v2.1-${Date.now()}`;
+const STATIC_CACHE = `tudofaz-static-v2.1-${Date.now()}`;
+const DYNAMIC_CACHE = `tudofaz-dynamic-v2.1-${Date.now()}`;
+const API_CACHE = `tudofaz-api-v2.1-${Date.now()}`;
 
 // Cache strategies configuration
 const CACHE_STRATEGIES = {
   static: {
     name: STATIC_CACHE,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    maxAge: 1 * 60 * 60 * 1000, // 1 hour (reduced from 30 days)
     maxEntries: 60
   },
   dynamic: {
     name: DYNAMIC_CACHE,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 10 * 60 * 1000, // 10 minutes (reduced from 24 hours)
     maxEntries: 100
   },
   api: {
