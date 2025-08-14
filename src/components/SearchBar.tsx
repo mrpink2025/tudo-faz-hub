@@ -4,14 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useValidation } from "@/hooks/useValidation";
+import { searchSchema } from "@/lib/validationSchemas";
 
 const SearchBar = () => {
   const { t } = useTranslation();
+  const { validate } = useValidation();
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/explorar?q=${encodeURIComponent(q)}`);
+    
+    const validation = validate(searchSchema, { query: q.trim() }, false);
+    if (!validation.success) return;
+    
+    navigate(`/explorar?q=${encodeURIComponent(q.trim())}`);
   };
   return (
     <form onSubmit={onSubmit} className="w-full max-w-xl mx-auto flex gap-2">

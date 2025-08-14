@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -12,28 +11,17 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Checkbox } from "@/components/ui/checkbox";
-
-const emailSchema = z.object({
-  email: z.string().email("E-mail inválido"),
-  password: z.string().min(6, "Mínimo de 6 caracteres"),
-});
-
-type EmailForm = z.infer<typeof emailSchema>;
-
-const signupSchema = emailSchema.extend({
-  acceptTerms: z.boolean().refine((v) => v === true, {
-    message: "Você deve aceitar os Termos de Uso e a Política de Privacidade para continuar",
-  }),
-});
-
-type SignupForm = z.infer<typeof signupSchema>;
+import { useRateLimit } from "@/hooks/useRateLimit";
+import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/lib/validationSchemas";
+import { logger } from "@/utils/logger";
 const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
-const { session } = useSupabaseAuth();
-const { isAdmin, loading: loadingRole } = useIsAdmin();
-const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
+  const { session } = useSupabaseAuth();
+  const { isAdmin, loading: loadingRole } = useIsAdmin();
+  const { checkRateLimit } = useRateLimit();
+  const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
 
   useEffect(() => {
     document.title = "Entrar ou Criar Conta - tudofaz";
@@ -51,38 +39,60 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
     navigate(isAdmin ? "/admin" : from, { replace: true });
   }, [session, isAdmin, loadingRole, navigate, location.state]);
 
-  const loginForm = useForm<EmailForm>({ resolver: zodResolver(emailSchema), defaultValues: { email: "", password: "" } });
-  const signupForm = useForm<SignupForm>({ resolver: zodResolver(signupSchema), defaultValues: { email: "", password: "", acceptTerms: false } });
+  const loginForm = useForm<LoginInput>({ resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "" } });
+  const signupForm = useForm<SignupInput>({ resolver: zodResolver(signupSchema), defaultValues: { email: "", password: "", confirmPassword: "" } });
 
-  const handleLogin = async (values: EmailForm) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
-    });
-    if (error) {
-      toast({ title: "Erro ao entrar", description: error.message });
-      return;
+  const handleLogin = async (values: LoginInput) => {
+    if (checkRateLimit('auth', values.email)) return;
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+      
+      if (error) {
+        logger.error("Login failed", { error: error.message, email: values.email });
+        toast({ title: "Erro ao entrar", description: error.message });
+        return;
+      }
+      
+      logger.info("User logged in successfully", { email: values.email });
+      toast({ title: "Bem-vindo", description: "Login realizado com sucesso." });
+      // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
+    } catch (err) {
+      logger.error("Unexpected login error", { error: err, email: values.email });
+      toast({ title: "Erro", description: "Erro inesperado ao fazer login" });
     }
-    toast({ title: "Bem-vindo", description: "Login realizado com sucesso." });
-    // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
   };
 
-  const handleSignup = async (values: SignupForm) => {
-    const redirectUrl = `${window.location.origin}/confirmar-email`;
-    const { error } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.password,
-      options: { emailRedirectTo: redirectUrl },
-    });
-    if (error) {
-      toast({ title: "Erro ao cadastrar", description: error.message });
-      return;
+  const handleSignup = async (values: SignupInput) => {
+    if (checkRateLimit('auth', values.email)) return;
+    
+    try {
+      const redirectUrl = `${window.location.origin}/confirmar-email`;
+      const { error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: { emailRedirectTo: redirectUrl },
+      });
+      
+      if (error) {
+        logger.error("Signup failed", { error: error.message, email: values.email });
+        toast({ title: "Erro ao cadastrar", description: error.message });
+        return;
+      }
+      
+      logger.info("User signed up successfully", { email: values.email });
+      toast({ 
+        title: "Verifique seu e-mail", 
+        description: "Enviamos um link de confirmação para ativar sua conta." 
+      });
+      setTab("entrar");
+    } catch (err) {
+      logger.error("Unexpected signup error", { error: err, email: values.email });
+      toast({ title: "Erro", description: "Erro inesperado ao criar conta" });
     }
-    toast({ 
-      title: "Verifique seu e-mail", 
-      description: "Enviamos um link de confirmação para ativar sua conta." 
-    });
-    setTab("entrar");
   };
 
   return (
@@ -141,41 +151,20 @@ const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Mínimo 6 caracteres" {...field} />
+                      <Input type="password" placeholder="Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
-                <FormField
-                  name="acceptTerms"
-                  control={signupForm.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="flex items-start space-x-3">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            aria-label="Aceitar Termos de Uso e Política de Privacidade"
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel className="font-normal">
-                            Li e aceito os{" "}
-                            <a href="/termos" target="_blank" rel="noopener noreferrer" className="underline">
-                              Termos de Uso
-                            </a>{" "}
-                            e a{" "}
-                            <a href="/privacidade" target="_blank" rel="noopener noreferrer" className="underline">
-                              Política de Privacidade
-                            </a>
-                          </FormLabel>
-                        </div>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <FormField name="confirmPassword" control={signupForm.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirmar Senha</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Digite a senha novamente" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
                 <Button type="submit">Criar conta</Button>
               </form>
             </Form>

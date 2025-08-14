@@ -8,6 +8,8 @@ import { useRealTimeChat } from '@/hooks/useRealTimeChat';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { format, isToday, isYesterday } from 'date-fns';
 import { pt } from 'date-fns/locale';
+import { useValidation } from '@/hooks/useValidation';
+import { messageSchema } from '@/lib/validationSchemas';
 
 interface ChatWindowProps {
   recipientId: string;
@@ -23,6 +25,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   onBack
 }) => {
   const { user } = useSupabaseAuth();
+  const { validate } = useValidation();
   const { messages, loading, sending, sendMessage } = useRealTimeChat(recipientId);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -37,9 +40,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || sending) return;
+    
+    const validation = validate(messageSchema, {
+      content: newMessage.trim(),
+      recipient_id: recipientId
+    }, false);
+    
+    if (!validation.success || !newMessage.trim() || sending) return;
 
-    await sendMessage(newMessage, recipientId);
+    await sendMessage(newMessage.trim(), recipientId);
     setNewMessage('');
   };
 

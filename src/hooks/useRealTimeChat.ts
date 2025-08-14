@@ -3,6 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useSupabaseAuth } from './useSupabaseAuth';
 import { toast } from 'sonner';
 import { logger } from '@/utils/logger';
+import { useRateLimit } from './useRateLimit';
+import { useValidation } from './useValidation';
+import { messageSchema } from '@/lib/validationSchemas';
 
 interface Message {
   id: string;
