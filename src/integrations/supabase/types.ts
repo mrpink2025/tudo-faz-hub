@@ -438,6 +438,10 @@ export type Database = {
           title: string
         }[]
       }
+      send_notification_email: {
+        Args: { message: string; subject: string; user_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
