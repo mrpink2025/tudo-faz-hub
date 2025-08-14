@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSupabaseAuth } from './useSupabaseAuth';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 interface Message {
   id: string;
@@ -39,7 +40,7 @@ export const useRealTimeChat = (recipientId?: string) => {
       if (error) throw error;
       setConversations(data || []);
     } catch (error) {
-      console.error('Erro ao buscar conversas:', error);
+      logger.error('Erro ao buscar conversas', { error, userId: user?.id });
     }
   }, [user]);
 
@@ -66,7 +67,7 @@ export const useRealTimeChat = (recipientId?: string) => {
       // Atualizar lista de conversas para remover contador de não lidas
       await fetchConversations();
     } catch (error) {
-      console.error('Erro ao buscar mensagens:', error);
+      logger.error('Erro ao buscar mensagens', { error, otherUserId });
       toast.error('Erro ao carregar mensagens');
     } finally {
       setLoading(false);
@@ -92,7 +93,7 @@ export const useRealTimeChat = (recipientId?: string) => {
       // Atualizar lista de conversas
       await fetchConversations();
     } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
+      logger.error('Erro ao enviar mensagem', { error, toUserId, content });
       toast.error('Erro ao enviar mensagem');
     } finally {
       setSending(false);

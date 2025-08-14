@@ -8,6 +8,8 @@ import { CreditHistory } from "@/components/credits/CreditHistory";
 import { CreditStats } from "@/components/credits/CreditStats";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Wallet, History, BarChart3 } from "lucide-react";
+import { logger } from "@/utils/logger";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 const formatBRL = (value: number, locale: string) =>
   new Intl.NumberFormat(locale === "pt" ? "pt-BR" : locale, { style: "currency", currency: "BRL" }).format(value / 100);
@@ -21,6 +23,7 @@ const packs = [
 const Credits = () => {
   const { t, i18n } = useTranslation();
   const { toast } = useToast();
+  const { user } = useSupabaseAuth();
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [transactions, setTransactions] = useState<any[]>([]);
@@ -49,7 +52,7 @@ const Credits = () => {
         .maybeSingle();
       
       if (walletError) {
-        console.warn("wallet fetch error", walletError.message);
+        logger.warn("wallet fetch error", { error: walletError.message, userId: user?.id });
       }
 
       // Fetch transactions
@@ -60,7 +63,7 @@ const Credits = () => {
         .limit(10);
 
       if (transactionError) {
-        console.warn("transactions fetch error", transactionError.message);
+        logger.warn("transactions fetch error", { error: transactionError.message, userId: user?.id });
       }
 
       if (isMounted) {
@@ -88,7 +91,7 @@ const Credits = () => {
         throw new Error("No checkout URL returned");
       }
     } catch (err: any) {
-      console.error("create-payment-credits error", err);
+      logger.error("create-payment-credits error", { error: err, packId });
       toast({ title: t("common.error", { defaultValue: "Erro" }), description: err.message ?? String(err) });
     }
   };

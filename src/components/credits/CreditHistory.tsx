@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
 import { Calendar, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
+import { logger } from "@/utils/logger";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 
 interface CreditTransaction {
   id: string;
@@ -23,6 +25,7 @@ interface CreditHistoryProps {
 
 export function CreditHistory({ onClose }: CreditHistoryProps) {
   const { t } = useTranslation();
+  const { user } = useSupabaseAuth();
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -42,7 +45,7 @@ export function CreditHistory({ onClose }: CreditHistoryProps) {
       if (error) throw error;
       setTransactions(data || []);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      logger.error("Error fetching transactions", { error, userId: user?.id });
     } finally {
       setLoading(false);
     }

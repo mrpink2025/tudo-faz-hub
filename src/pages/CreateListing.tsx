@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { logger } from "@/utils/logger";
 
 const MAX_PHOTOS = 10;
 
@@ -181,7 +182,7 @@ const CreateListing = () => {
               state: stateUf,
             });
           if (locErr) {
-            console.error(locErr);
+            logger.error("Error updating location", { error: locErr, listingId });
           }
         } else {
           // Insert new location
@@ -194,7 +195,7 @@ const CreateListing = () => {
             state: stateUf,
           });
           if (locErr) {
-            console.error(locErr);
+            logger.error("Error inserting location", { error: locErr, listingId });
           }
         }
       }
@@ -230,7 +231,7 @@ const CreateListing = () => {
       toast({ title: editId ? "Anúncio atualizado com sucesso!" : t("create.success") });
       if (listingId) navigate(`/anuncio/${listingId}`);
     } catch (err: any) {
-      console.error(err);
+      logger.error("Error creating/updating listing", { error: err, editId });
       toast({ title: t("create.error") });
     } finally {
       setLoading(false);

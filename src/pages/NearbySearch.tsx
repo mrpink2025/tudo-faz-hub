@@ -13,6 +13,7 @@ import Map from "@/components/ui/map";
 import { AdvancedSearchFilters } from "@/components/search/AdvancedSearchFilters";
 import { PWAManager } from "@/components/pwa/PWAManager";
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
+import { logger } from "@/utils/logger";
 
 interface NearbySearchPageProps {}
 
@@ -27,12 +28,11 @@ export default function NearbySearchPage({}: NearbySearchPageProps) {
 
   const handleLocationSelect = (lat: number, lng: number, address?: string) => {
     setUserLocation({ lat, lng });
-    // In a real implementation, this would fetch nearby listings
-    console.log('Location selected:', { lat, lng, address });
+    logger.info('Location selected for nearby search', { lat, lng, address });
   };
 
   const handleFiltersChange = (filters: any) => {
-    console.log('Filters changed:', filters);
+    logger.info('Search filters changed', { filters });
     // In a real implementation, this would filter the listings
   };
 

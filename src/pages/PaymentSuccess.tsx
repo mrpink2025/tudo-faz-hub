@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/utils/logger";
 
 const PaymentSuccess = () => {
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ const PaymentSuccess = () => {
       if (error) throw error;
       toast({ title: t("credits.verified", { defaultValue: "Créditos adicionados" }), description: data?.message ?? "OK" });
     } catch (err: any) {
-      console.error("verify-payment-credits error", err);
+      logger.error("verify-payment-credits error", { error: err, sessionId });
       toast({ title: t("common.error", { defaultValue: "Erro" }), description: err.message ?? String(err) });
     }
   };
