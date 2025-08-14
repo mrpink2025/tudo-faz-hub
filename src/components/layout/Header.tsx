@@ -48,9 +48,9 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.explore")}</NavLink>
-          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.messages")}</NavLink>
-          <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("credits.nav")}</NavLink>
+          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
+          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
+          <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("credits.nav")}</NavLink>
           {user && <NotificationCenter />}
           {!user ? (
             <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
