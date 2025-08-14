@@ -18,10 +18,8 @@ export default function AdminLayout() {
       </header>
       <div className="flex min-h-[calc(100vh-3rem)] w-full overflow-hidden">
         <AdminSidebar />
-        <main className="flex-1 p-4 md:p-6 overflow-x-hidden max-w-0">
-          <div className="max-w-full overflow-hidden">
-            <Outlet />
-          </div>
+        <main className="flex-1 p-4 md:p-6">
+          <Outlet />
         </main>
       </div>
     </SidebarProvider>
