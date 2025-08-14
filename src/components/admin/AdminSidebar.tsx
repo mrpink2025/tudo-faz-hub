@@ -1,7 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, ListChecks, ShoppingCart, Settings, Users } from "lucide-react";
+import { LayoutDashboard, ListChecks, ShoppingCart, Settings, Users, Activity } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
+
 const items = [{
   titleKey: "admin.sidebar.dashboard",
   url: "/admin",
@@ -14,6 +15,10 @@ const items = [{
   titleKey: "admin.sidebar.users",
   url: "/admin/users",
   icon: Users
+}, {
+  titleKey: "Monitoramento",
+  url: "/admin/monitoring",
+  icon: Activity
 }, {
   titleKey: "admin.sidebar.settings",
   url: "/admin/settings",

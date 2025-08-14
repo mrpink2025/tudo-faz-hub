@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_dashboard: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          time_period: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          time_period: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          time_period?: string
+        }
+        Relationships: []
+      }
       auth_audit_log: {
         Row: {
           created_at: string | null
@@ -366,6 +396,33 @@ export type Database = {
           },
         ]
       }
+      performance_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          labels: Json
+          metric_type: string
+          timestamp: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          labels?: Json
+          metric_type: string
+          timestamp: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          labels?: Json
+          metric_type?: string
+          timestamp?: string
+          value?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -441,6 +498,72 @@ export type Database = {
           stripe_enabled?: boolean | null
           stripe_publishable_key?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      system_health: {
+        Row: {
+          checks: Json
+          created_at: string
+          id: string
+          last_check: string
+          response_time: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          checks?: Json
+          created_at?: string
+          id: string
+          last_check?: string
+          response_time?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          checks?: Json
+          created_at?: string
+          id?: string
+          last_check?: string
+          response_time?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      telemetry_events: {
+        Row: {
+          created_at: string
+          event_data: Json
+          event_type: string
+          id: string
+          session_id: string
+          timestamp: string
+          url: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json
+          event_type: string
+          id?: string
+          session_id: string
+          timestamp: string
+          url: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json
+          event_type?: string
+          id?: string
+          session_id?: string
+          timestamp?: string
+          url?: string
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -570,6 +693,10 @@ export type Database = {
       }
     }
     Functions: {
+      cleanup_telemetry_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_basic_profile_info: {
         Args: { profile_user_id: string }
         Returns: {
