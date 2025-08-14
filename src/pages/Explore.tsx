@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
 import { useListings } from "@/hooks/useListings";
@@ -6,9 +6,13 @@ import { ListingCard } from "@/components/listings/ListingCard";
 import PromoCTA from "@/components/PromoCTA";
 import FeaturedListingsSection from "@/components/listings/FeaturedListingsSection";
 import { useTranslation } from "react-i18next";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
+import { Button } from "@/components/ui/button";
+import { SlidersHorizontal } from "lucide-react";
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const selectedSlug = searchParams.get("categoria") ?? undefined;
   const { data: categories, isLoading: loadingCats, error: catsError } = useCategories();
   const { t } = useTranslation();
@@ -59,12 +63,30 @@ const Explore = () => {
   return (
     <main className="container py-10">
       <header className="mb-6">
-        <h1 className="font-display text-3xl">
-          {rootCategory ? t("explore.headerCat", { name: rootCategory.name_pt }) : t("explore.headerBase")}
-        </h1>
-        <p className="text-muted-foreground">
-          {t("explore.useSearch")}
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-display text-3xl">
+              {rootCategory ? t("explore.headerCat", { name: rootCategory.name_pt }) : t("explore.headerBase")}
+            </h1>
+            <p className="text-muted-foreground">
+              {t("explore.useSearch")}
+            </p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+            className="gap-2"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Filtros
+          </Button>
+        </div>
+        
+        {showAdvancedSearch && (
+          <div className="mt-6">
+            <AdvancedSearch />
+          </div>
+        )}
       </header>
 
       {loadingCats && (

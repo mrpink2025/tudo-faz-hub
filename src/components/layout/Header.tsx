@@ -18,6 +18,7 @@ import {
 import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { NotificationCenter } from "@/components/NotificationCenter";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -50,6 +51,7 @@ const Header = () => {
           <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.explore")}</NavLink>
           <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.messages")}</NavLink>
           <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("credits.nav")}</NavLink>
+          {user && <NotificationCenter />}
           {!user ? (
             <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
           ) : (

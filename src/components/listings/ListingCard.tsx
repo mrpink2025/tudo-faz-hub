@@ -1,7 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { Heart } from "lucide-react";
+import { useFavorites } from "@/hooks/useFavorites";
 
 type Listing = {
   id: string;
@@ -24,12 +27,13 @@ const formatPrice = (value: number | null | undefined, currency: string | null |
 
 export const ListingCard = ({ listing }: { listing: Listing }) => {
   const { t, i18n } = useTranslation();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const imgSrc = listing.cover_image || "/placeholder.svg";
   const locale = (i18n.language || "pt-BR");
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
       <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
-        <div className="bg-muted">
+        <div className="bg-muted relative">
           <AspectRatio ratio={16 / 9}>
             <img
               src={imgSrc}
@@ -38,6 +42,20 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
               className="h-full w-full object-cover"
             />
           </AspectRatio>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2 h-8 w-8 bg-background/80 hover:bg-background/90"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleFavorite(listing.id);
+            }}
+          >
+            <Heart 
+              className={`w-4 h-4 ${isFavorite(listing.id) ? 'fill-primary text-primary' : 'text-muted-foreground'}`} 
+            />
+          </Button>
         </div>
         <CardHeader>
           <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
