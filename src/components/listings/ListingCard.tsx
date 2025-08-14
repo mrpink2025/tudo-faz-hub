@@ -33,20 +33,21 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
   const locale = (i18n.language || "pt-BR");
   return (
     <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
-      <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
-        <div className="bg-muted relative">
-          <AspectRatio ratio={16 / 9}>
+      <Card className="h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:ring-1 hover:ring-primary/20 hover:border-primary/30 bg-card/80 backdrop-blur-sm">
+        <div className="bg-muted relative group">
+          <AspectRatio ratio={4 / 3}>
             <LazyImage
               src={imgSrc}
               alt={`Imagem do anúncio: ${listing.title}`}
-              className="h-full w-full"
+              className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
               fallback="/placeholder.svg"
             />
           </AspectRatio>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 h-8 w-8 bg-background/80 hover:bg-background/90"
+            className="absolute top-3 right-3 h-9 w-9 bg-white/90 hover:bg-white shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-110"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -54,17 +55,29 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
             }}
           >
             <Heart 
-              className={`w-4 h-4 ${isFavorite(listing.id) ? 'fill-primary text-primary' : 'text-muted-foreground'}`} 
+              className={`w-4 h-4 transition-colors ${isFavorite(listing.id) ? 'fill-red-500 text-red-500' : 'text-gray-600 hover:text-red-400'}`} 
             />
           </Button>
         </div>
-        <CardHeader>
-          <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-1">
-          <div className="font-medium text-foreground">{formatPrice(listing.price, listing.currency, t("price.combined"), locale)}</div>
-          {listing.location && <div>{listing.location}</div>}
-          <time dateTime={listing.created_at}>{new Date(listing.created_at).toLocaleDateString(locale)}</time>
+        <CardContent className="p-4 sm:p-5 flex-1 flex flex-col">
+          <div className="flex-1 space-y-2">
+            <h3 className="font-semibold text-sm sm:text-base leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+              {listing.title}
+            </h3>
+            <div className="text-lg sm:text-xl font-bold text-primary">
+              {formatPrice(listing.price, listing.currency, t("price.combined"), locale)}
+            </div>
+            {listing.location && (
+              <p className="text-xs text-muted-foreground truncate">
+                {listing.location}
+              </p>
+            )}
+          </div>
+          <div className="pt-3 mt-3 border-t border-border/50">
+            <time className="text-xs text-muted-foreground" dateTime={listing.created_at}>
+              {new Date(listing.created_at).toLocaleDateString(locale)}
+            </time>
+          </div>
         </CardContent>
       </Card>
     </Link>

@@ -9,12 +9,12 @@ type LogoProps = {
 const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   return (
     <img
-      src="/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png"
+      src="/lovable-uploads/tudofaz-logo-new.png"
       alt={title}
-      className={cn("block h-10 w-auto", className)}
+      className={cn("block h-10 w-auto object-contain", className)}
       loading="eager"
-      width={192}
-      height={192}
+      width={512}
+      height={128}
     />
   );
 };
