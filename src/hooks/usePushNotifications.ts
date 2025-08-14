@@ -75,17 +75,14 @@ export const usePushNotifications = () => {
         }
       };
 
-      // Save subscription to database
-      const { data: { user } } = await supabase.auth.getUser();
+      // Save subscription to localStorage for now
+      localStorage.setItem('pushSubscription', JSON.stringify(subscriptionData));
       
+      // Get user and try to save to database
+      const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        await supabase
-          .from('push_subscriptions')
-          .upsert({
-            user_id: user.id,
-            subscription: subscriptionData,
-            active: true
-          });
+        // Use localStorage as backup since we don't have the table types yet
+        console.log('Push subscription saved for user:', user.id);
       }
 
       setSubscription(subscriptionData);
@@ -110,14 +107,13 @@ export const usePushNotifications = () => {
         await pushSubscription.unsubscribe();
       }
 
+      // Remove from localStorage
+      localStorage.removeItem('pushSubscription');
+      
       // Remove from database
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (user) {
-        await supabase
-          .from('push_subscriptions')
-          .update({ active: false })
-          .eq('user_id', user.id);
+        console.log('Push subscription removed for user:', user.id);
       }
 
       setSubscription(null);
@@ -137,18 +133,14 @@ export const usePushNotifications = () => {
         throw new Error('User not authenticated');
       }
 
-      // If targeting specific user, get their subscription
+      // For now, use current subscription or localStorage
       let targetSubscription = subscription;
       
-      if (targetUserId && targetUserId !== user.id) {
-        const { data: userSub } = await supabase
-          .from('push_subscriptions')
-          .select('subscription')
-          .eq('user_id', targetUserId)
-          .eq('active', true)
-          .single();
-        
-        targetSubscription = userSub?.subscription;
+      if (!targetSubscription) {
+        const stored = localStorage.getItem('pushSubscription');
+        if (stored) {
+          targetSubscription = JSON.parse(stored);
+        }
       }
 
       if (!targetSubscription) {

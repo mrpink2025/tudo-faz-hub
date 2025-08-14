@@ -193,11 +193,14 @@ export const useBackgroundSync = () => {
   };
 
   const registerBackgroundSync = async (tag: string) => {
-    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+    if ('serviceWorker' in navigator) {
       try {
         const registration = await navigator.serviceWorker.ready;
-        await registration.sync.register(tag);
-        console.log('Background sync registered:', tag);
+        // Background sync is not available in all browsers
+        if ('sync' in registration) {
+          await (registration as any).sync.register(tag);
+          console.log('Background sync registered:', tag);
+        }
       } catch (error) {
         console.error('Background sync registration failed:', error);
       }

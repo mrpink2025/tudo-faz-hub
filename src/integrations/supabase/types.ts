@@ -456,6 +456,69 @@ export type Database = {
         }
         Relationships: []
       }
+      push_notifications: {
+        Row: {
+          body: string
+          created_at: string
+          error_message: string | null
+          id: string
+          payload: Json | null
+          sent_at: string | null
+          status: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          payload?: Json | null
+          sent_at?: string | null
+          status?: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          payload?: Json | null
+          sent_at?: string | null
+          status?: string
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          subscription: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          subscription: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          subscription?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           brand_accent: string | null

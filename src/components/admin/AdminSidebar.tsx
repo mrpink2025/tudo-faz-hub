@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, ListChecks, ShoppingCart, Settings, Users, Activity } from "lucide-react";
+import { LayoutDashboard, ListChecks, ShoppingCart, Settings, Users, Activity, Search } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useTranslation } from "react-i18next";
 
@@ -19,6 +19,10 @@ const items = [{
   titleKey: "Monitoramento",
   url: "/admin/monitoring",
   icon: Activity
+}, {
+  titleKey: "SEO & PWA",
+  url: "/admin/seo",
+  icon: Search
 }, {
   titleKey: "admin.sidebar.settings",
   url: "/admin/settings",
