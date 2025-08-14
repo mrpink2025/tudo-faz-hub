@@ -1,11 +1,28 @@
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
-import hero from "@/assets/hero-tudofaz.jpg";
+import heroDefault from "@/assets/hero-blue.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 const Hero = () => {
   const { t } = useTranslation();
+  
+  const { data: settings } = useQuery({
+    queryKey: ["site-settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("hero_image_url")
+        .eq("id", 1)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const heroImage = settings?.hero_image_url || heroDefault;
   return (
     <section className="relative overflow-hidden bg-[var(--gradient-subtle)]">
       {/* Subtle brand glow background */}
@@ -69,7 +86,7 @@ const Hero = () => {
         </div>
         <div className="relative">
           <img
-            src={hero}
+            src={heroImage}
             alt={t("images.alt_hero")}
             className="w-full rounded-xl shadow-xl animate-float"
             loading="lazy"

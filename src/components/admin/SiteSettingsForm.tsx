@@ -18,7 +18,9 @@ function parseRgbString(val?: string | null) {
 export default function SiteSettingsForm() {
   const { toast } = useToast();
   const qc = useQueryClient();
-  const [file, setFile] = useState<File | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [heroFile, setHeroFile] = useState<File | null>(null);
+  const [faviconFile, setFaviconFile] = useState<File | null>(null);
 
   const { data: settings, isLoading } = useQuery({
     queryKey: ["site-settings"],
@@ -55,15 +57,39 @@ export default function SiteSettingsForm() {
   });
 
   const handleUploadLogo = async () => {
-    if (!file) return;
+    if (!logoFile) return;
     const path = `logos/site-logo.png`;
-    const { error } = await supabase.storage.from("assets").upload(path, file, { upsert: true, contentType: file.type });
+    const { error } = await supabase.storage.from("assets").upload(path, logoFile, { upsert: true, contentType: logoFile.type });
     if (error) {
       toast({ title: "Erro ao enviar logo", description: error.message });
       return;
     }
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
     update.mutate({ logo_url: data.publicUrl });
+  };
+
+  const handleUploadHero = async () => {
+    if (!heroFile) return;
+    const path = `hero/hero-image.jpg`;
+    const { error } = await supabase.storage.from("assets").upload(path, heroFile, { upsert: true, contentType: heroFile.type });
+    if (error) {
+      toast({ title: "Erro ao enviar imagem hero", description: error.message });
+      return;
+    }
+    const { data } = supabase.storage.from("assets").getPublicUrl(path);
+    update.mutate({ hero_image_url: data.publicUrl });
+  };
+
+  const handleUploadFavicon = async () => {
+    if (!faviconFile) return;
+    const path = `favicon/favicon.png`;
+    const { error } = await supabase.storage.from("assets").upload(path, faviconFile, { upsert: true, contentType: faviconFile.type });
+    if (error) {
+      toast({ title: "Erro ao enviar favicon", description: error.message });
+      return;
+    }
+    const { data } = supabase.storage.from("assets").getPublicUrl(path);
+    update.mutate({ favicon_url: data.publicUrl });
   };
 
   const primaryPreview = useMemo(() => `rgb(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b})`, [primaryRgb]);
@@ -106,8 +132,8 @@ export default function SiteSettingsForm() {
           <div className="grid gap-2">
             <label className="text-sm">Logo</label>
             <div className="flex items-center gap-2">
-              <Input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-              <Button type="button" onClick={handleUploadLogo} disabled={!file}>Enviar</Button>
+              <Input type="file" accept="image/*" onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)} />
+              <Button type="button" onClick={handleUploadLogo} disabled={!logoFile}>Enviar</Button>
             </div>
             {settings?.logo_url && (
               <img src={settings.logo_url} alt="Logo do tudofaz" className="h-12 w-auto mt-2" loading="lazy" />
@@ -156,6 +182,35 @@ export default function SiteSettingsForm() {
         <CardContent className="flex items-center gap-2">
           <Button variant="secondary" onClick={() => setTheme("light")}>Modo claro</Button>
           <Button onClick={() => setTheme("dark")}>Modo escuro</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Imagens do Site</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-6">
+          <div className="grid gap-2">
+            <label className="text-sm">Imagem Hero Principal</label>
+            <div className="flex items-center gap-2">
+              <Input type="file" accept="image/*" onChange={(e) => setHeroFile(e.target.files?.[0] ?? null)} />
+              <Button type="button" onClick={handleUploadHero} disabled={!heroFile}>Enviar</Button>
+            </div>
+            {settings?.hero_image_url && (
+              <img src={settings.hero_image_url} alt="Imagem Hero" className="h-24 w-auto mt-2 rounded" loading="lazy" />
+            )}
+          </div>
+          <div className="grid gap-2">
+            <label className="text-sm">Favicon (PNG)</label>
+            <div className="flex items-center gap-2">
+              <Input type="file" accept="image/png,image/jpg,image/jpeg" onChange={(e) => setFaviconFile(e.target.files?.[0] ?? null)} />
+              <Button type="button" onClick={handleUploadFavicon} disabled={!faviconFile}>Enviar</Button>
+            </div>
+            {settings?.favicon_url && (
+              <img src={settings.favicon_url} alt="Favicon" className="h-8 w-8 mt-2" loading="lazy" />
+            )}
+            <p className="text-xs text-muted-foreground">Importante: Use PNG/JPG. Arquivos .ico não são suportados.</p>
+          </div>
         </CardContent>
       </Card>
 

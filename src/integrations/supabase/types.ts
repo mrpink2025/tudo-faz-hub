@@ -301,8 +301,11 @@ export type Database = {
         Row: {
           brand_accent: string | null
           brand_primary: string | null
+          favicon_url: string | null
+          hero_image_url: string | null
           id: number
           logo_url: string | null
+          og_image_url: string | null
           promo_html: string | null
           site_name: string | null
           stripe_enabled: boolean | null
@@ -312,8 +315,11 @@ export type Database = {
         Insert: {
           brand_accent?: string | null
           brand_primary?: string | null
+          favicon_url?: string | null
+          hero_image_url?: string | null
           id?: number
           logo_url?: string | null
+          og_image_url?: string | null
           promo_html?: string | null
           site_name?: string | null
           stripe_enabled?: boolean | null
@@ -323,8 +329,11 @@ export type Database = {
         Update: {
           brand_accent?: string | null
           brand_primary?: string | null
+          favicon_url?: string | null
+          hero_image_url?: string | null
           id?: number
           logo_url?: string | null
+          og_image_url?: string | null
           promo_html?: string | null
           site_name?: string | null
           stripe_enabled?: boolean | null
