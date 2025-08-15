@@ -27,7 +27,9 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
         if (response.ok) {
           const data = await response.json();
           if (data && data.length > 0 && data[0].logo_url) {
-            setLogoUrl(data[0].logo_url);
+            // Adicionar cache bust para forçar atualização da imagem
+            const logoWithCacheBust = `${data[0].logo_url}?v=${Date.now()}`;
+            setLogoUrl(logoWithCacheBust);
           } else {
             setLogoUrl(defaultLogo);
           }
