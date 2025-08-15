@@ -60,38 +60,72 @@ export default function SiteSettingsForm() {
 
   const handleUploadLogo = async () => {
     if (!logoFile) return;
-    const path = `logos/site-logo.png`;
-    const { error } = await supabase.storage.from("assets").upload(path, logoFile, { upsert: true, contentType: logoFile.type });
+    
+    // Detectar extensão do arquivo para manter compatibilidade
+    const fileExtension = logoFile.name.split('.').pop()?.toLowerCase() || 'png';
+    const path = `logos/site-logo.${fileExtension}`;
+    
+    const { error } = await supabase.storage.from("assets").upload(path, logoFile, { 
+      upsert: true, 
+      contentType: logoFile.type 
+    });
+    
     if (error) {
-      toast({ title: t("admin.settings.upload_error_logo"), description: error.message });
+      toast({ title: t("admin.settings.upload_error_logo"), description: error.message, variant: "destructive" });
       return;
     }
+    
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
-    update.mutate({ logo_url: data.publicUrl });
+    await update.mutateAsync({ logo_url: data.publicUrl });
+    setLogoFile(null); // Limpar o file input após upload
+    
+    // Forçar reload do cache
+    qc.invalidateQueries({ queryKey: ["site-settings"] });
+    qc.invalidateQueries({ queryKey: ["site-settings-public"] });
   };
 
   const handleUploadHero = async () => {
     if (!heroFile) return;
-    const path = `hero/hero-image.jpg`;
-    const { error } = await supabase.storage.from("assets").upload(path, heroFile, { upsert: true, contentType: heroFile.type });
+    
+    // Detectar extensão do arquivo
+    const fileExtension = heroFile.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const path = `hero/hero-image.${fileExtension}`;
+    
+    const { error } = await supabase.storage.from("assets").upload(path, heroFile, { 
+      upsert: true, 
+      contentType: heroFile.type 
+    });
+    
     if (error) {
-      toast({ title: t("admin.settings.upload_error_hero"), description: error.message });
+      toast({ title: t("admin.settings.upload_error_hero"), description: error.message, variant: "destructive" });
       return;
     }
+    
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
     update.mutate({ hero_image_url: data.publicUrl });
+    setHeroFile(null); // Limpar o file input após upload
   };
 
   const handleUploadFavicon = async () => {
     if (!faviconFile) return;
-    const path = `favicon/favicon.png`;
-    const { error } = await supabase.storage.from("assets").upload(path, faviconFile, { upsert: true, contentType: faviconFile.type });
+    
+    // Detectar extensão do arquivo
+    const fileExtension = faviconFile.name.split('.').pop()?.toLowerCase() || 'png';
+    const path = `favicon/favicon.${fileExtension}`;
+    
+    const { error } = await supabase.storage.from("assets").upload(path, faviconFile, { 
+      upsert: true, 
+      contentType: faviconFile.type 
+    });
+    
     if (error) {
-      toast({ title: t("admin.settings.upload_error_favicon"), description: error.message });
+      toast({ title: t("admin.settings.upload_error_favicon"), description: error.message, variant: "destructive" });
       return;
     }
+    
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
     update.mutate({ favicon_url: data.publicUrl });
+    setFaviconFile(null); // Limpar o file input após upload
   };
 
   const primaryPreview = useMemo(() => `rgb(${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b})`, [primaryRgb]);
