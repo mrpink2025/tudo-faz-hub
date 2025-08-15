@@ -4,12 +4,11 @@ import { supabase } from '@/integrations/supabase/client';
 
 const DynamicFavicon = () => {
   const { data: settings } = useQuery({
-    queryKey: ["site-settings-favicon"],
+    queryKey: ["site-settings-public-favicon"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("site_settings")
+        .from("site_settings_public")
         .select("logo_url, favicon_url")
-        .eq("id", 1)
         .maybeSingle();
       if (error) throw error;
       return data;

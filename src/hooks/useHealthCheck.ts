@@ -40,10 +40,10 @@ export const useHealthCheck = () => {
     };
 
     try {
-      // Database check
+      // Database check - using public table for health check
       const { data: dbTest, error: dbError } = await supabase
-        .from('site_settings')
-        .select('id')
+        .from('site_settings_public')
+        .select('site_name')
         .limit(1);
       checks.database = !dbError;
 
