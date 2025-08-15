@@ -73,14 +73,18 @@ const Hero = () => {
           <p className="text-muted-foreground text-base lg:text-lg max-w-prose">
             Produtos, serviços, empregos, imóveis e muito mais próximos de você. Publique anúncios em minutos e alcance sua comunidade.
           </p>
-          <SearchBar />
-          <div className="flex items-center gap-3">
-            <Link to="/publicar">
-              <Button variant="hero" size="xl">Publicar anúncio</Button>
-            </Link>
-            <Link to="/explorar">
-              <Button variant="soft" size="xl">Explorar</Button>
-            </Link>
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
+            <div className="flex-1">
+              <SearchBar />
+            </div>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <Link to="/publicar">
+                <Button variant="hero" size="xl">Publicar anúncio</Button>
+              </Link>
+              <Link to="/explorar">
+                <Button variant="soft" size="xl">Explorar</Button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="relative">
