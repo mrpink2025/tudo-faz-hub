@@ -22,7 +22,7 @@ const SearchBar = () => {
     navigate(`/explorar?q=${encodeURIComponent(q.trim())}`);
   };
   return (
-    <form onSubmit={onSubmit} className="w-full max-w-xl mx-auto">
+    <form onSubmit={onSubmit} className="w-full">
       <div className="flex gap-2 items-center">
         <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
