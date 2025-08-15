@@ -13,26 +13,22 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // Fetch direto da API REST sem autenticação
-        const response = await fetch(
-          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings_public?select=logo_url',
+        // Primeiro tentar buscar das configurações logadas
+        const { data: userData } = await fetch(
+          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings?select=logo_url&id=eq.1',
           {
             headers: {
               'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc',
               'Content-Type': 'application/json'
             }
           }
-        );
+        ).then(res => res.json());
         
-        if (response.ok) {
-          const data = await response.json();
-          if (data && data.length > 0 && data[0].logo_url) {
-            // Adicionar cache bust para forçar atualização da imagem
-            const logoWithCacheBust = `${data[0].logo_url}?v=${Date.now()}`;
-            setLogoUrl(logoWithCacheBust);
-          } else {
-            setLogoUrl(defaultLogo);
-          }
+        if (userData && userData.length > 0 && userData[0].logo_url) {
+          // Adicionar cache bust baseado no timestamp atual + random
+          const cacheBust = `?v=${Date.now()}&r=${Math.random()}`;
+          const logoWithCacheBust = `${userData[0].logo_url}${cacheBust}`;
+          setLogoUrl(logoWithCacheBust);
         } else {
           setLogoUrl(defaultLogo);
         }
@@ -43,6 +39,11 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
     };
 
     fetchLogo();
+    
+    // Polling para atualizar o logo periodicamente enquanto no admin
+    const interval = setInterval(fetchLogo, 2000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
