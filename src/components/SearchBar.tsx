@@ -23,20 +23,15 @@ const SearchBar = () => {
   };
   return (
     <form onSubmit={onSubmit} className="w-full">
-      <div className="flex gap-2 items-center">
-        <div className="relative flex-1 min-w-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="pl-10 h-11"
-            placeholder={t("search.search_placeholder")}
-            aria-label={t("search.search_aria")}
-          />
-        </div>
-        <Button type="submit" variant="hero" className="h-11 px-4 whitespace-nowrap">
-          {t("search.search_button")}
-        </Button>
+      <div className="relative flex-1 min-w-0">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          className="pl-10 h-11"
+          placeholder={t("search.search_placeholder")}
+          aria-label={t("search.search_aria")}
+        />
       </div>
     </form>
   );
