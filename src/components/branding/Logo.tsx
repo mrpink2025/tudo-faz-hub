@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 
 type LogoProps = {
   className?: string;
@@ -9,21 +7,33 @@ type LogoProps = {
 };
 
 const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
-  const { data: settings } = useQuery({
-    queryKey: ["site-settings"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("site_settings")
-        .select("logo_url")
-        .eq("id", 1)
-        .maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-  });
+  const defaultLogo = "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png";
+  const [logoUrl, setLogoUrl] = useState(defaultLogo);
 
-  // Fallback para logo padrão se não houver logo configurada
-  const logoUrl = settings?.logo_url || "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png";
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const response = await fetch('https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings_public?id=eq.1&select=logo_url', {
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc',
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0 && data[0].logo_url) {
+            setLogoUrl(data[0].logo_url);
+          }
+        }
+      } catch (error) {
+        console.log('Error fetching logo:', error);
+        setLogoUrl(defaultLogo);
+      }
+    };
+
+    fetchLogo();
+  }, []);
 
   return (
     <img
