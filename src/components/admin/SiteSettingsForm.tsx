@@ -75,12 +75,19 @@ export default function SiteSettingsForm() {
     }
     
     const { data } = supabase.storage.from("assets").getPublicUrl(path);
-    await update.mutateAsync({ logo_url: data.publicUrl });
+    // Adicionar cache bust mais forte
+    const logoUrlWithCacheBust = `${data.publicUrl}?v=${Date.now()}&cb=${Math.random().toString(36).substring(7)}`;
+    await update.mutateAsync({ logo_url: logoUrlWithCacheBust });
     setLogoFile(null); // Limpar o file input após upload
     
-    // Forçar reload do cache
+    // Forçar reload do cache e recarregar página
     qc.invalidateQueries({ queryKey: ["site-settings"] });
     qc.invalidateQueries({ queryKey: ["site-settings-public"] });
+    
+    // Forçar reload da página para garantir que o logo seja atualizado
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   };
 
   const handleUploadHero = async () => {
