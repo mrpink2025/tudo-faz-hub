@@ -61,9 +61,8 @@ export default function SiteSettingsForm() {
   const handleUploadLogo = async () => {
     if (!logoFile) return;
     
-    // Detectar extensão do arquivo para manter compatibilidade
-    const fileExtension = logoFile.name.split('.').pop()?.toLowerCase() || 'png';
-    const path = `logos/site-logo.${fileExtension}`;
+    // Usar sempre o mesmo nome para forçar substituição
+    const path = `logos/site-logo.png`;
     
     const { error } = await supabase.storage.from("assets").upload(path, logoFile, { 
       upsert: true, 
