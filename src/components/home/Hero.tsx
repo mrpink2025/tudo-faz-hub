@@ -78,9 +78,6 @@ const Hero = () => {
               <SearchBar />
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
-              <Link to="/publicar">
-                <Button variant="hero" size="xl">Publicar anúncio</Button>
-              </Link>
               <Link to="/explorar">
                 <Button variant="soft" size="xl">Explorar</Button>
               </Link>
