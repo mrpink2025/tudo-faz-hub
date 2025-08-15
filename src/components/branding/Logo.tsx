@@ -13,9 +13,9 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // Primeiro tentar buscar das configurações logadas
+        // Buscar da tabela pública que tem acesso liberado
         const { data: userData } = await fetch(
-          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings?select=logo_url&id=eq.1',
+          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings_public?select=logo_url',
           {
             headers: {
               'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc',
