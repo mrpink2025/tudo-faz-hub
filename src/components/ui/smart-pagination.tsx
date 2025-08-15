@@ -153,17 +153,19 @@ export function PageSizeSelect({
   return (
     <div className={cn("flex items-center space-x-2", className)}>
       <span className="text-sm text-muted-foreground">Itens por página:</span>
-      <select
-        value={pageSize}
-        onChange={(e) => onPageSizeChange(parseInt(e.target.value))}
-        className="text-sm border rounded px-2 py-1 bg-background"
-      >
+      <div className="flex space-x-1">
         {options.map(option => (
-          <option key={option} value={option}>
+          <Button
+            key={option}
+            variant={pageSize === option ? "default" : "outline"}
+            size="sm"
+            onClick={() => onPageSizeChange(option)}
+            className="h-8 px-3 text-xs"
+          >
             {option}
-          </option>
+          </Button>
         ))}
-      </select>
+      </div>
     </div>
   );
 }
