@@ -30,7 +30,6 @@ const Categories = () => {
     return (
       <section className="py-10 lg:py-14">
         <div className="container">
-          <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <Card key={index}>
@@ -56,7 +55,6 @@ const Categories = () => {
     return (
       <section className="py-10 lg:py-14">
         <div className="container">
-          <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
           <div className="text-center text-muted-foreground">
             Erro ao carregar categorias. Tente novamente mais tarde.
           </div>
@@ -91,7 +89,6 @@ const Categories = () => {
   return (
     <section className="py-10 lg:py-14">
       <div className="container">
-        <h2 className="font-display text-2xl mb-6">{t('categories.title')}</h2>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {mainCategories.map((category) => {
             const Icon = iconMap[category.slug] || Package;
