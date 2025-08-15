@@ -7,7 +7,7 @@ type LogoProps = {
 };
 
 const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
-  const defaultLogo = "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png";
+  const defaultLogo = "/lovable-uploads/a87f8885-b030-49a0-904c-ef954b5ed0aa.png";
   const [logoUrl, setLogoUrl] = useState(defaultLogo);
 
   useEffect(() => {
