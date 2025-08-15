@@ -20,7 +20,7 @@ const DynamicFavicon = () => {
     // Usar favicon_url se disponível, senão usar logo_url, senão usar fallback
     const faviconUrl = settings?.favicon_url || 
                       settings?.logo_url || 
-                      "/lovable-uploads/35efc0ad-a245-43eb-8397-fc5392b06da7.png";
+                      "/lovable-uploads/a87f8885-b030-49a0-904c-ef954b5ed0aa.png";
 
     // Remover favicon existente
     const existingFavicon = document.querySelector('link[rel="icon"]');
