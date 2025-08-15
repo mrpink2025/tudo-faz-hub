@@ -78,19 +78,24 @@ const Header = () => {
           </Link>
         </div>
       </nav>
-      <div className="container md:hidden pb-3 space-y-2 text-[hsl(var(--foreground))]">
+      <div className="container md:hidden pb-3 space-y-2 text-white">
         <SearchBar />
-        <div className="flex items-center gap-4 overflow-x-auto text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.explore")}</NavLink>
-          {user ? (
-            <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.messages")}</NavLink>
-          ) : (
-            <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
-          )}
-          <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("credits.nav")}</NavLink>
-          <Link to="/publicar">
-            <Button variant="hero" size="sm">{t("nav.publish_short")}</Button>
-          </Link>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-4 overflow-x-auto text-sm">
+            <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
+            {user ? (
+              <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
+            ) : (
+              <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.login")}</NavLink>
+            )}
+            <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("credits.nav")}</NavLink>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <LanguageSwitcher />
+            <Link to="/publicar">
+              <Button variant="hero" size="sm">{t("nav.publish_short")}</Button>
+            </Link>
+          </div>
         </div>
       </div>
       <FeaturedListingsBar />
