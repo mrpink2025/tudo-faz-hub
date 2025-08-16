@@ -19,6 +19,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminSettings from "./pages/admin/Settings";
 import AdminMonitoring from "./pages/admin/Monitoring";
 import AdminSEO from "./pages/admin/SEO";
+import AdminSalesReports from "./pages/admin/SalesReports";
 import Credits from "./pages/Credits";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCanceled from "./pages/PaymentCanceled";
@@ -73,6 +74,7 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
               <Route path="monitoring" element={<AdminMonitoring />} />
               <Route path="seo" element={<AdminSEO />} />
+              <Route path="sales" element={<AdminSalesReports />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

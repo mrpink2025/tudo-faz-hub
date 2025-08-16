@@ -1420,6 +1420,47 @@ export type Database = {
         Args: { listing_uuid: string }
         Returns: Json
       }
+      get_sales_analytics: {
+        Args: {
+          p_end_date?: string
+          p_seller_id?: string
+          p_start_date?: string
+        }
+        Returns: {
+          affiliate_commission: number
+          affiliate_id: string
+          amount: number
+          buyer_email: string
+          buyer_id: string
+          buyer_name: string
+          created_at: string
+          currency: string
+          order_id: string
+          sale_date: string
+          sale_hour: number
+          seller_email: string
+          seller_id: string
+          seller_name: string
+          status: string
+          total_items: number
+        }[]
+      }
+      get_sales_summary: {
+        Args: {
+          p_end_date?: string
+          p_seller_id?: string
+          p_start_date?: string
+        }
+        Returns: {
+          avg_order_value: number
+          peak_hour: number
+          revenue_today: number
+          top_selling_day: string
+          total_orders_today: number
+          total_revenue: number
+          total_sales: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
