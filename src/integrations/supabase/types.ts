@@ -1324,6 +1324,10 @@ export type Database = {
         }
         Returns: Json
       }
+      detect_suspicious_activity: {
+        Args: { p_action: string; p_ip_address?: unknown; p_user_id: string }
+        Returns: boolean
+      }
       generate_affiliate_code: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -1379,6 +1383,14 @@ export type Database = {
       get_listing_rating: {
         Args: { listing_uuid: string }
         Returns: Json
+      }
+      get_public_product_reviews: {
+        Args: { p_listing_id: string }
+        Returns: {
+          comment: string
+          created_at: string
+          rating: number
+        }[]
       }
       get_sales_analytics: {
         Args: {
@@ -1470,6 +1482,10 @@ export type Database = {
           p_user_agent?: string
           p_user_id: string
         }
+        Returns: undefined
+      }
+      log_security_event: {
+        Args: { p_details?: Json; p_event_type: string; p_user_id?: string }
         Returns: undefined
       }
       mark_messages_as_read: {
