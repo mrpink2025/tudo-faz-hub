@@ -28,6 +28,7 @@ import NearbySearch from "./pages/NearbySearch";
 import EmailConfirmation from "./pages/EmailConfirmation";
 import AffiliateCenter from "./pages/AffiliateCenter";
 import AdvertiserCenter from "./pages/AdvertiserCenter";
+import OrdersManagement from "./pages/OrdersManagement";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
             <Route path="/afiliados" element={<ProtectedRoute><AffiliateCenter /></ProtectedRoute>} />
             <Route path="/anunciante" element={<ProtectedRoute><AdvertiserCenter /></ProtectedRoute>} />
+            <Route path="/pedidos" element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
             <Route path="/proximos" element={<NearbySearch />} />
             <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />
             <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />

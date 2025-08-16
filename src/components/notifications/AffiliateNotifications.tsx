@@ -75,6 +75,69 @@ export function AffiliateNotifications() {
       )
       .subscribe();
 
+    // Escutar mudanças de status de pedidos para notificar compradores e afiliados
+    const ordersChannel = supabase
+      .channel('orders-status-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'orders'
+        },
+        async (payload) => {
+          // Verificar se o status mudou e se afeta o usuário atual
+          if (payload.old.status !== payload.new.status) {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            
+            // Se for o comprador
+            if (payload.new.user_id === currentUser?.id) {
+              const statusLabels: Record<string, string> = {
+                "pending": "Pendente",
+                "in_analysis": "Em Análise", 
+                "approved": "Aprovado",
+                "canceled": "Cancelado",
+              };
+              
+              const newStatusLabel = statusLabels[payload.new.status] || payload.new.status;
+              toast({
+                title: "Status do Pedido Atualizado",
+                description: `Seu pedido foi alterado para: ${newStatusLabel}`,
+                variant: payload.new.status === "approved" ? "default" : 
+                         payload.new.status === "canceled" ? "destructive" : "default",
+              });
+            }
+            
+            // Se for o afiliado
+            if (payload.new.affiliate_id) {
+              const { data: affiliate } = await supabase
+                .from('affiliates')
+                .select('user_id')
+                .eq('id', payload.new.affiliate_id)
+                .single();
+
+              if (affiliate?.user_id === currentUser?.id) {
+                const statusLabels: Record<string, string> = {
+                  "pending": "Pendente",
+                  "in_analysis": "Em Análise",
+                  "approved": "Aprovado",
+                  "canceled": "Cancelado",
+                };
+                
+                const newStatusLabel = statusLabels[payload.new.status] || payload.new.status;
+                toast({
+                  title: "Status da Venda Atualizado",
+                  description: `A venda que você indicou foi alterada para: ${newStatusLabel}`,
+                  variant: payload.new.status === "approved" ? "default" : 
+                           payload.new.status === "canceled" ? "destructive" : "default",
+                });
+              }
+            }
+          }
+        }
+      )
+      .subscribe();
+
     // Escutar mudanças na tabela affiliate_commissions para notificar afiliados
     const commissionsChannel = supabase
       .channel('affiliate-commissions-changes')
@@ -130,6 +193,12 @@ export function AffiliateNotifications() {
                 title: "Comissão Paga! 🎉",
                 description: `Sua comissão de R$ ${commissionValue} foi paga!`,
               });
+            } else if (payload.new.status === 'canceled') {
+              toast({
+                title: "Comissão Cancelada",
+                description: `Sua comissão de R$ ${commissionValue} foi cancelada devido ao cancelamento do pedido.`,
+                variant: "destructive",
+              });
             }
           }
         }
@@ -138,6 +207,7 @@ export function AffiliateNotifications() {
 
     return () => {
       supabase.removeChannel(requestsChannel);
+      supabase.removeChannel(ordersChannel);
       supabase.removeChannel(commissionsChannel);
     };
   }, [user, toast]);
