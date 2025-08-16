@@ -13,16 +13,19 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // Buscar da tabela pública que tem acesso liberado
-        const { data: userData } = await fetch(
-          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/site_settings_public?select=logo_url',
+        // Usar a função RPC segura para buscar dados
+        const response = await fetch(
+          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/rpc/get_site_settings_public',
           {
+            method: 'POST',
             headers: {
               'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc',
               'Content-Type': 'application/json'
             }
           }
-        ).then(res => res.json());
+        );
+        
+        const userData = await response.json();
         
         if (userData && userData.length > 0 && userData[0].logo_url) {
           // Adicionar cache bust baseado no timestamp atual + random
@@ -41,7 +44,7 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
     fetchLogo();
     
     // Polling para atualizar o logo periodicamente enquanto no admin
-    const interval = setInterval(fetchLogo, 2000);
+    const interval = setInterval(fetchLogo, 5000); // Reduzido para 5 segundos
     
     return () => clearInterval(interval);
   }, []);

@@ -65,8 +65,7 @@ export function useShoppingCart() {
         .select(`
           *,
           listings!inner(
-            id, title, price, currency, cover_image, user_id,
-            profiles!listings_user_id_fkey(full_name)
+            id, title, price, currency, cover_image, user_id
           )
         `)
         .order("added_at", { ascending: false });
@@ -77,10 +76,33 @@ export function useShoppingCart() {
 
   const addToCart = useMutation({
     mutationFn: async ({ listingId, quantity = 1 }: { listingId: string; quantity?: number }) => {
+      const user = (await supabase.auth.getUser()).data.user;
+      if (!user) throw new Error("Usuário não autenticado");
+
+      // Check if item already exists in cart
+      const { data: existingItem } = await supabase
+        .from("shopping_cart")
+        .select("id, quantity")
+        .eq("user_id", user.id)
+        .eq("listing_id", listingId)
+        .maybeSingle();
+
+      if (existingItem) {
+        // Update quantity instead of inserting duplicate
+        const { data, error } = await supabase
+          .from("shopping_cart")
+          .update({ quantity: existingItem.quantity + quantity })
+          .eq("id", existingItem.id)
+          .select()
+          .single();
+        if (error) throw error;
+        return data;
+      }
+
       // Check if can add to cart (same seller validation)
       const { data: canAdd, error: validationError } = await supabase
         .rpc("validate_cart_seller", {
-          user_uuid: (await supabase.auth.getUser()).data.user?.id,
+          user_uuid: user.id,
           new_listing_id: listingId,
         });
 
@@ -91,8 +113,8 @@ export function useShoppingCart() {
 
       const { data, error } = await supabase
         .from("shopping_cart")
-        .upsert({
-          user_id: (await supabase.auth.getUser()).data.user?.id,
+        .insert({
+          user_id: user.id,
           listing_id: listingId,
           quantity,
         })
@@ -212,8 +234,7 @@ export function useProductReviews(listingId?: string) {
       const { data, error } = await supabase
         .from("product_reviews")
         .select(`
-          *,
-          profiles!product_reviews_user_id_fkey(full_name, avatar_url)
+          *
         `)
         .eq("listing_id", listingId)
         .order("created_at", { ascending: false });

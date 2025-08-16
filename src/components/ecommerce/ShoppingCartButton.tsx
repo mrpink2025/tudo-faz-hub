@@ -78,7 +78,7 @@ export function ShoppingCartButton() {
                           R$ {(item.listings.price / 100).toFixed(2)}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Vendedor: {(item.listings.profiles as any)?.full_name}
+                          Produto do marketplace
                         </p>
 
                         <div className="flex items-center justify-between mt-3">

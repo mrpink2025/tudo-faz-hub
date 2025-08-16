@@ -191,15 +191,15 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={(review.profiles as any)?.avatar_url} />
+                    <AvatarImage src="/placeholder.svg" />
                     <AvatarFallback>
-                      {(review.profiles as any)?.full_name?.[0] || "U"}
+                      U
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <span className="font-medium">
-                        {(review.profiles as any)?.full_name || "Usuário"}
+                        Usuário Verificado
                       </span>
                       <div className="flex items-center gap-2">
                         <div className="flex items-center">

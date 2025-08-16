@@ -34,8 +34,22 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
       return;
     }
 
-    // Redirecionar para página de checkout interna
-    navigate(`/checkout?listing=${listing.id}&quantity=1`);
+    // Primeiro adicionar ao carrinho e depois ir para checkout
+    try {
+      await addToCart.mutateAsync({
+        listingId: listing.id,
+        quantity: 1,
+      });
+      
+      // Redirecionar para página de checkout
+      navigate('/checkout');
+    } catch (error: any) {
+      toast({
+        title: "Erro na compra",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleAddToCart = () => {
