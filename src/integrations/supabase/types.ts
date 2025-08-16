@@ -724,6 +724,50 @@ export type Database = {
           },
         ]
       }
+      order_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          order_id: string
+          read: boolean | null
+          seller_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          order_id: string
+          read?: boolean | null
+          seller_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          order_id?: string
+          read?: boolean | null
+          seller_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           affiliate_commission: number | null
@@ -732,11 +776,14 @@ export type Database = {
           created_at: string
           currency: string | null
           delivery_address: Json | null
+          delivery_method: string | null
+          estimated_delivery_date: string | null
           id: string
           listing_id: string | null
           order_items: Json | null
           order_notes: string | null
           seller_id: string | null
+          seller_notes: string | null
           status: string | null
           stripe_session_id: string | null
           tracking_code: string | null
@@ -750,11 +797,14 @@ export type Database = {
           created_at?: string
           currency?: string | null
           delivery_address?: Json | null
+          delivery_method?: string | null
+          estimated_delivery_date?: string | null
           id?: string
           listing_id?: string | null
           order_items?: Json | null
           order_notes?: string | null
           seller_id?: string | null
+          seller_notes?: string | null
           status?: string | null
           stripe_session_id?: string | null
           tracking_code?: string | null
@@ -768,11 +818,14 @@ export type Database = {
           created_at?: string
           currency?: string | null
           delivery_address?: Json | null
+          delivery_method?: string | null
+          estimated_delivery_date?: string | null
           id?: string
           listing_id?: string | null
           order_items?: Json | null
           order_notes?: string | null
           seller_id?: string | null
+          seller_notes?: string | null
           status?: string | null
           stripe_session_id?: string | null
           tracking_code?: string | null

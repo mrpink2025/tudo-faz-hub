@@ -28,6 +28,7 @@ import NearbySearch from "./pages/NearbySearch";
 import EmailConfirmation from "./pages/EmailConfirmation";
 import AffiliateCenter from "./pages/AffiliateCenter";
 import AdvertiserCenter from "./pages/AdvertiserCenter";
+import SellerDashboard from "./pages/SellerDashboard";
 import OrdersManagement from "./pages/OrdersManagement";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
@@ -53,7 +54,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/explorar" element={<Explore />} />
             <Route path="/anuncio/:id" element={<ListingDetail />} />
-            <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
+            <Route path="/seller-dashboard" element={<ProtectedRoute><SellerDashboard /></ProtectedRoute>} />
             <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
             <Route path="/afiliados" element={<ProtectedRoute><AffiliateCenter /></ProtectedRoute>} />
