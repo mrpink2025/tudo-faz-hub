@@ -7,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAffiliates, useAffiliateListings, useAffiliateRequests, useAffiliateLinks, useAffiliateCommissions } from "@/hooks/useAffiliates";
 import { useState } from "react";
-import { Link, Copy, DollarSign, MousePointer, TrendingUp, Wallet } from "lucide-react";
+import { Link, Copy, DollarSign, MousePointer, TrendingUp, Wallet, Target, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { WithdrawalModal } from "@/components/affiliate/WithdrawalModal";
 
 export default function AffiliateCenter() {
   const { toast } = useToast();
@@ -107,6 +108,13 @@ export default function AffiliateCenter() {
               </div>
               <Wallet className="h-8 w-8 text-green-600" />
             </div>
+            <div className="mt-4">
+              <WithdrawalModal 
+                availableBalance={stats?.available_balance || 0}
+                pixKey={affiliateProfile.pix_key || ""}
+                formatCurrency={formatCurrency}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -149,14 +157,109 @@ export default function AffiliateCenter() {
         </Card>
       </div>
 
-      <Tabs defaultValue="products" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+      <Tabs defaultValue="dashboard" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="products">Produtos</TabsTrigger>
           <TabsTrigger value="requests">Solicitações</TabsTrigger>
           <TabsTrigger value="links">Meus Links</TabsTrigger>
           <TabsTrigger value="commissions">Comissões</TabsTrigger>
           <TabsTrigger value="profile">Perfil</TabsTrigger>
         </TabsList>
+
+        {/* Dashboard */}
+        <TabsContent value="dashboard" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Performance dos Links */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Performance
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">Taxa de Conversão:</span>
+                    <span className="font-semibold">
+                      {stats?.totalClicks > 0 
+                        ? ((stats?.totalSales || 0) / stats.totalClicks * 100).toFixed(2)
+                        : '0.00'
+                      }%
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Valor por Clique:</span>
+                    <span className="font-semibold">
+                      {stats?.totalClicks > 0 
+                        ? formatCurrency((stats?.total_earnings || 0) / stats.totalClicks)
+                        : formatCurrency(0)
+                      }
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Links Ativos:</span>
+                    <span className="font-semibold">{myLinks?.length || 0}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Top Produtos */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Top Produtos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {myLinks?.slice(0, 3).map((link) => (
+                    <div key={link.id} className="flex justify-between text-sm">
+                      <span className="truncate">{link.listings?.title}</span>
+                      <span className="font-semibold">{link.clicks_count} cliques</span>
+                    </div>
+                  ))}
+                  {(!myLinks || myLinks.length === 0) && (
+                    <p className="text-sm text-muted-foreground">Nenhum link criado ainda</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Estatísticas Rápidas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Eye className="h-5 w-5" />
+                  Resumo Rápido
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">Comissões Pendentes:</span>
+                    <span className="font-semibold">
+                      {commissions?.filter(c => c.status === 'pending').length || 0}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Comissões Pagas:</span>
+                    <span className="font-semibold">
+                      {commissions?.filter(c => c.status === 'paid').length || 0}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Produtos Disponíveis:</span>
+                    <span className="font-semibold">{availableListings?.length || 0}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
         {/* Produtos Disponíveis */}
         <TabsContent value="products" className="space-y-4">
