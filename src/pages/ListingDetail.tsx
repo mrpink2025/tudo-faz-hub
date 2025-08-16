@@ -193,7 +193,12 @@ const ListingDetail = () => {
                   <CardContent>
                     <div className="text-2xl font-semibold">
                       {listing.price != null
-                        ? new Intl.NumberFormat(i18n.language || "pt-BR", { style: "currency", currency: listing.currency || "BRL" }).format(listing.price / 100)
+                        ? new Intl.NumberFormat('pt-BR', { 
+                            style: "currency", 
+                            currency: listing.currency || "BRL",
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          }).format(listing.price / 100)
                         : t("price.combined")}
                     </div>
                   </CardContent>

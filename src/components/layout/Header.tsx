@@ -20,6 +20,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { OrderNotifications } from "@/components/notifications/OrderNotifications";
+import { MobileMenuDropdown } from "./MobileMenuDropdown";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -92,19 +93,14 @@ const Header = () => {
       <div className="container md:hidden pb-3 space-y-2 text-white">
         <SearchBar />
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-4 overflow-x-auto text-sm">
-            <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
+          <div className="flex items-center gap-3 overflow-x-auto text-sm">
+            <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("nav.explore")}</NavLink>
             {user ? (
-              <>
-                <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
-                <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
-                <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
-                <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Pedidos</NavLink>
-              </>
+              <MobileMenuDropdown user={user} />
             ) : (
-              <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.login")}</NavLink>
+              <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("nav.login")}</NavLink>
             )}
-            <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("credits.nav")}</NavLink>
+            <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("credits.nav")}</NavLink>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <LanguageSwitcher />

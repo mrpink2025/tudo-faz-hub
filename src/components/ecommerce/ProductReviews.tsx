@@ -91,15 +91,15 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span>Avaliações</span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <CardTitle className="text-lg sm:text-xl">Avaliações</CardTitle>
             <div className="flex items-center gap-2">
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-5 w-5 ${
+                    className={`h-4 w-4 ${
                       i < Math.floor(averageRating)
                         ? "fill-yellow-400 text-yellow-400"
                         : "text-muted-foreground"
@@ -107,11 +107,8 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
                   />
                 ))}
               </div>
-              <span className="text-lg font-semibold">
-                {averageRating.toFixed(1)}
-              </span>
-              <span className="text-muted-foreground">
-                ({reviewCount} {reviewCount === 1 ? "avaliação" : "avaliações"})
+              <span className="text-sm text-muted-foreground whitespace-nowrap">
+                ({reviewCount} avaliações)
               </span>
             </div>
           </div>
@@ -184,7 +181,7 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
               </DialogContent>
             </Dialog>
           )}
-        </CardTitle>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
@@ -200,33 +197,35 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <span className="font-medium">
                         {(review.profiles as any)?.full_name || "Usuário"}
                       </span>
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < review.rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                        ))}
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < review.rating
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-muted-foreground"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {review.user_id === user?.id && (
+                          <Badge variant="outline" className="text-xs">
+                            Sua avaliação
+                          </Badge>
+                        )}
                       </div>
-                      {review.user_id === user?.id && (
-                        <Badge variant="outline" className="text-xs">
-                          Sua avaliação
-                        </Badge>
-                      )}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
                       {new Date(review.created_at).toLocaleDateString("pt-BR")}
                     </p>
                     {review.comment && (
-                      <p className="text-sm mt-2">{review.comment}</p>
+                      <p className="text-sm mt-2 break-words">{review.comment}</p>
                     )}
                   </div>
                 </div>
