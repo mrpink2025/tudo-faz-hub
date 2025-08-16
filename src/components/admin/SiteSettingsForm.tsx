@@ -280,10 +280,14 @@ export default function SiteSettingsForm() {
           <div className="grid gap-2 md:col-span-2">
             <label className="text-sm">{t("admin.settings.stripe_key")}</label>
             <Input 
-              placeholder="pk_live_..."
-              defaultValue={settings?.stripe_publishable_key ?? "pk_live_51RvgiIRx02bCc2sPkyWKK6gnESAtpKxJNEpuw8qYNp4uzjQiD806GIIi93vArDSHGPXcJNE7XAtTPrUe0dmqPGp2001O10cOcc"} 
+              type="password"
+              placeholder="pk_live_... ou pk_test_..."
+              defaultValue={settings?.stripe_publishable_key ?? ""} 
               onBlur={(e) => update.mutate({ stripe_publishable_key: e.target.value })} 
             />
+            <p className="text-xs text-muted-foreground">
+              {t("admin.settings.stripe_key_note", { defaultValue: "Chave pública do Stripe (pode ser configurada publicamente)" })}
+            </p>
           </div>
         </CardContent>
       </Card>
