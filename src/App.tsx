@@ -55,6 +55,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/explorar" element={<Explore />} />
+            <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
             <Route path="/anuncio/:id" element={<ListingDetail />} />
             <Route path="/seller-dashboard" element={<ProtectedRoute><SellerDashboard /></ProtectedRoute>} />
             <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
