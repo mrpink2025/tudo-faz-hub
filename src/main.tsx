@@ -5,6 +5,7 @@ import './i18n'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { defaultQueryConfig } from "@/utils/query-config";
 import ErrorBoundaryClass from "@/components/ui/error-boundary";
+import { HelmetProvider } from 'react-helmet-async';
 
 // Configure React Query with optimizations
 const queryClient = new QueryClient({
@@ -26,8 +27,10 @@ if ('serviceWorker' in navigator) {
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundaryClass>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </HelmetProvider>
   </ErrorBoundaryClass>
 );
