@@ -551,10 +551,13 @@ export type Database = {
           description: string | null
           highlighted: boolean | null
           id: string
+          inventory_count: number | null
           lat: number | null
           lng: number | null
           location: string | null
           price: number | null
+          sellable: boolean | null
+          sold_count: number | null
           status: string | null
           title: string
           updated_at: string
@@ -571,10 +574,13 @@ export type Database = {
           description?: string | null
           highlighted?: boolean | null
           id?: string
+          inventory_count?: number | null
           lat?: number | null
           lng?: number | null
           location?: string | null
           price?: number | null
+          sellable?: boolean | null
+          sold_count?: number | null
           status?: string | null
           title: string
           updated_at?: string
@@ -591,10 +597,13 @@ export type Database = {
           description?: string | null
           highlighted?: boolean | null
           id?: string
+          inventory_count?: number | null
           lat?: number | null
           lng?: number | null
           location?: string | null
           price?: number | null
+          sellable?: boolean | null
+          sold_count?: number | null
           status?: string | null
           title?: string
           updated_at?: string
@@ -670,6 +679,51 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          listing_id: string
+          order_id: string
+          quantity: number
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          order_id: string
+          quantity?: number
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          order_id?: string
+          quantity?: number
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           affiliate_commission: number | null
@@ -677,8 +731,12 @@ export type Database = {
           amount: number | null
           created_at: string
           currency: string | null
+          delivery_address: Json | null
           id: string
           listing_id: string | null
+          order_items: Json | null
+          order_notes: string | null
+          seller_id: string | null
           status: string | null
           stripe_session_id: string | null
           tracking_code: string | null
@@ -691,8 +749,12 @@ export type Database = {
           amount?: number | null
           created_at?: string
           currency?: string | null
+          delivery_address?: Json | null
           id?: string
           listing_id?: string | null
+          order_items?: Json | null
+          order_notes?: string | null
+          seller_id?: string | null
           status?: string | null
           stripe_session_id?: string | null
           tracking_code?: string | null
@@ -705,8 +767,12 @@ export type Database = {
           amount?: number | null
           created_at?: string
           currency?: string | null
+          delivery_address?: Json | null
           id?: string
           listing_id?: string | null
+          order_items?: Json | null
+          order_notes?: string | null
+          seller_id?: string | null
           status?: string | null
           stripe_session_id?: string | null
           tracking_code?: string | null
@@ -757,6 +823,54 @@ export type Database = {
         }
         Relationships: []
       }
+      product_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: string
+          listing_id: string
+          order_id: string
+          rating: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id: string
+          order_id: string
+          rating: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          listing_id?: string
+          order_id?: string
+          rating?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -789,6 +903,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      purchase_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          order_id: string
+          seller_id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          order_id: string
+          seller_id: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          order_id?: string
+          seller_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       push_notifications: {
         Row: {
@@ -852,6 +1004,68 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      seller_permissions: {
+        Row: {
+          approved: boolean | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          approved?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shopping_cart: {
+        Row: {
+          added_at: string | null
+          id: string
+          listing_id: string
+          quantity: number
+          user_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          id?: string
+          listing_id: string
+          quantity?: number
+          user_id: string
+        }
+        Update: {
+          added_at?: string | null
+          id?: string
+          listing_id?: string
+          quantity?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_cart_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_settings: {
         Row: {
@@ -1090,6 +1304,10 @@ export type Database = {
       }
     }
     Functions: {
+      can_user_sell: {
+        Args: { user_uuid: string }
+        Returns: boolean
+      }
       cleanup_telemetry_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -1145,6 +1363,10 @@ export type Database = {
           unread_count: number
         }[]
       }
+      get_listing_rating: {
+        Args: { listing_uuid: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1194,6 +1416,10 @@ export type Database = {
       send_notification_email: {
         Args: { message: string; subject: string; user_email: string }
         Returns: undefined
+      }
+      validate_cart_seller: {
+        Args: { new_listing_id: string; user_uuid: string }
+        Returns: boolean
       }
     }
     Enums: {
