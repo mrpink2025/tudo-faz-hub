@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { logger } from "@/utils/logger";
@@ -16,6 +18,18 @@ import { useRateLimit } from "@/hooks/useRateLimit";
 import { useValidation } from "@/hooks/useValidation";
 import { listingSchema, type ListingInput } from "@/lib/validationSchemas";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { 
+  Camera, 
+  MapPin, 
+  Tag, 
+  FileText, 
+  DollarSign, 
+  Users, 
+  ShoppingCart, 
+  Package,
+  Sparkles,
+  CheckCircle
+} from "lucide-react";
 
 const MAX_PHOTOS = 10;
 
@@ -264,171 +278,422 @@ const CreateListing = () => {
   };
 
   return (
-    <main className="container py-10">
-      <header className="mb-6">
-        <h1 className="font-display text-3xl">{editId ? "Editar Anúncio" : t("create.pageTitle")}</h1>
-        <p className="text-muted-foreground">{editId ? "Atualize as informações do seu anúncio" : t("create.pageSubtitle")}</p>
-      </header>
-
-      <form onSubmit={handleSubmit} className="grid gap-6 max-w-2xl">
-        <div className="grid gap-2">
-          <Label htmlFor="title">{t("create.fields.title")}</Label>
-          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="description">{t("create.fields.description")}</Label>
-          <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={6} />
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="price">{t("create.fields.priceBRL")}</Label>
-          <Input id="price" type="number" min="0" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={t("create.fields.optional") as string} />
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="category-root">{t("create.fields.category")}</Label>
-          <select
-            id="category-root"
-            className="h-10 rounded-md border bg-background px-3 text-sm"
-            value={rootId}
-            onChange={(e) => { setRootId(e.target.value); setSubId(""); }}
-            required
-          >
-            <option value="" disabled>{t("create.fields.select")}</option>
-            {roots.map((c: any) => (
-              <option key={c.id} value={c.id}>{c.name_pt}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="subcategory">{t("create.fields.subcategory")}</Label>
-          <select
-            id="subcategory"
-            className="h-10 rounded-md border bg-background px-3 text-sm"
-            value={subId}
-            onChange={(e) => setSubId(e.target.value)}
-            required
-          >
-            <option value="" disabled>{t("create.fields.select")}</option>
-            {subcategories.map((c: any) => (
-              <option key={c.id} value={c.id}>{c.name_pt}</option>
-            ))}
-          </select>
-          {rootId && subcategories.length === 0 && (
-            <p className="text-xs text-muted-foreground">{t("create.fields.noSubcategories")}</p>
-          )}
-        </div>
-
-        {/* Endereço (somente cidade/bairro públicos) */}
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="city">Cidade</Label>
-            <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} required />
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
+      <div className="container py-8 max-w-4xl">
+        {/* Header Section */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              {editId ? "Editar" : "Novo"} Anúncio
+            </span>
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="state">Estado (UF)</Label>
-            <Input id="state" value={stateUf} onChange={(e) => setStateUf(e.target.value.toUpperCase())} required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="neighborhood">Bairro (opcional)</Label>
-            <Input id="neighborhood" value={neighborhood} onChange={(e) => setNeighborhood(e.target.value)} />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="address1">Endereço (opcional, não público)</Label>
-            <Input id="address1" value={address1} onChange={(e) => setAddress1(e.target.value)} />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="address2">Complemento (opcional)</Label>
-            <Input id="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
-          </div>
+          <h1 className="font-display text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-2">
+            {editId ? "Editar Anúncio" : "Criar Anúncio"}
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            {editId ? "Atualize as informações do seu anúncio" : "Preencha os dados para criar um anúncio incrível"}
+          </p>
         </div>
 
-        {/* Configurações de E-commerce */}
-        <div className="grid gap-4 p-4 border rounded-lg">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label className="text-base">Produto Vendável</Label>
-              <p className="text-sm text-muted-foreground">
-                Marque se este produto pode ser comprado diretamente online
-              </p>
-            </div>
-            <Switch 
-              checked={sellable} 
-              onCheckedChange={setSellable}
-            />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Informações Básicas */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FileText className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Informações Básicas</CardTitle>
+                  <CardDescription>Título, descrição e categoria do seu anúncio</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-sm font-medium flex items-center gap-2">
+                  <Tag className="h-4 w-4" />
+                  {t("create.fields.title")} <Badge variant="secondary">Obrigatório</Badge>
+                </Label>
+                <Input 
+                  id="title" 
+                  value={title} 
+                  onChange={(e) => setTitle(e.target.value)} 
+                  required 
+                  className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+                  placeholder="Ex: iPhone 15 Pro Max 256GB Novo"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-sm font-medium">
+                  {t("create.fields.description")}
+                </Label>
+                <Textarea 
+                  id="description" 
+                  value={description} 
+                  onChange={(e) => setDescription(e.target.value)} 
+                  rows={6} 
+                  className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+                  placeholder="Descreva detalhadamente seu produto ou serviço..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="category-root" className="text-sm font-medium flex items-center gap-2">
+                    <Tag className="h-4 w-4" />
+                    {t("create.fields.category")} <Badge variant="secondary">Obrigatório</Badge>
+                  </Label>
+                  <select
+                    id="category-root"
+                    className="h-11 rounded-md border bg-background px-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 w-full"
+                    value={rootId}
+                    onChange={(e) => { setRootId(e.target.value); setSubId(""); }}
+                    required
+                  >
+                    <option value="" disabled>{t("create.fields.select")}</option>
+                    {roots.map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.name_pt}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subcategory" className="text-sm font-medium">
+                    {t("create.fields.subcategory")} <Badge variant="secondary">Obrigatório</Badge>
+                  </Label>
+                  <select
+                    id="subcategory"
+                    className="h-11 rounded-md border bg-background px-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 w-full"
+                    value={subId}
+                    onChange={(e) => setSubId(e.target.value)}
+                    required
+                    disabled={!rootId}
+                  >
+                    <option value="" disabled>{t("create.fields.select")}</option>
+                    {subcategories.map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.name_pt}</option>
+                    ))}
+                  </select>
+                  {rootId && subcategories.length === 0 && (
+                    <p className="text-xs text-muted-foreground">{t("create.fields.noSubcategories")}</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Preço */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <DollarSign className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Preço</CardTitle>
+                  <CardDescription>Defina o valor do seu produto ou serviço</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="price" className="text-sm font-medium">
+                  {t("create.fields.priceBRL")}
+                </Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
+                    R$
+                  </span>
+                  <Input 
+                    id="price" 
+                    type="number" 
+                    min="0" 
+                    value={price} 
+                    onChange={(e) => setPrice(e.target.value)} 
+                    placeholder="0,00"
+                    className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-green-200"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t("create.fields.optional")} - Deixe em branco se preferir negociar
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Localização */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <MapPin className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Localização</CardTitle>
+                  <CardDescription>Onde seu produto ou serviço está localizado</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="city" className="text-sm font-medium">
+                    Cidade <Badge variant="secondary">Obrigatório</Badge>
+                  </Label>
+                  <Input 
+                    id="city" 
+                    value={city} 
+                    onChange={(e) => setCity(e.target.value)} 
+                    required 
+                    className="transition-all duration-200 focus:ring-2 focus:ring-blue-200"
+                    placeholder="Ex: São Paulo"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state" className="text-sm font-medium">
+                    Estado (UF) <Badge variant="secondary">Obrigatório</Badge>
+                  </Label>
+                  <Input 
+                    id="state" 
+                    value={stateUf} 
+                    onChange={(e) => setStateUf(e.target.value.toUpperCase())} 
+                    required 
+                    maxLength={2}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-blue-200"
+                    placeholder="SP"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="neighborhood" className="text-sm font-medium">
+                  Bairro (opcional)
+                </Label>
+                <Input 
+                  id="neighborhood" 
+                  value={neighborhood} 
+                  onChange={(e) => setNeighborhood(e.target.value)} 
+                  className="transition-all duration-200 focus:ring-2 focus:ring-blue-200"
+                  placeholder="Ex: Vila Madalena"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="address1" className="text-sm font-medium">
+                  Endereço (opcional, não público)
+                </Label>
+                <Input 
+                  id="address1" 
+                  value={address1} 
+                  onChange={(e) => setAddress1(e.target.value)} 
+                  className="transition-all duration-200 focus:ring-2 focus:ring-blue-200"
+                  placeholder="Ex: Rua das Flores, 123"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="address2" className="text-sm font-medium">
+                  Complemento (opcional)
+                </Label>
+                <Input 
+                  id="address2" 
+                  value={address2} 
+                  onChange={(e) => setAddress2(e.target.value)} 
+                  className="transition-all duration-200 focus:ring-2 focus:ring-blue-200"
+                  placeholder="Ex: Apto 45, Bloco B"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* E-commerce */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <ShoppingCart className="h-5 w-5 text-purple-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Venda Online</CardTitle>
+                  <CardDescription>Configure se o produto pode ser vendido diretamente</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-purple-600" />
+                    <Label className="text-base font-medium">Produto Vendável</Label>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Marque se este produto pode ser comprado diretamente online
+                  </p>
+                </div>
+                <Switch 
+                  checked={sellable} 
+                  onCheckedChange={setSellable}
+                  className="data-[state=checked]:bg-purple-600"
+                />
+              </div>
+              
+              {sellable && (
+                <div className="space-y-2 animate-fade-in">
+                  <Label htmlFor="inventory" className="text-sm font-medium flex items-center gap-2">
+                    <Package className="h-4 w-4" />
+                    Quantidade em Estoque
+                  </Label>
+                  <Input 
+                    id="inventory" 
+                    type="number" 
+                    min="0" 
+                    value={inventoryCount} 
+                    onChange={(e) => setInventoryCount(e.target.value)} 
+                    placeholder="Ex: 10, 50, 100"
+                    className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Quantidade de produtos disponíveis para venda online
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Afiliados */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <Users className="h-5 w-5 text-orange-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Sistema de Afiliados</CardTitle>
+                  <CardDescription>Permita que outros divulguem seu produto</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-orange-600" />
+                    <Label className="text-base font-medium">Sistema de Afiliados</Label>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Permita que outros usuários divulguem seu produto e ganhem comissão
+                  </p>
+                </div>
+                <Switch 
+                  checked={affiliateEnabled} 
+                  onCheckedChange={setAffiliateEnabled}
+                  className="data-[state=checked]:bg-orange-600"
+                />
+              </div>
+              
+              {affiliateEnabled && (
+                <div className="space-y-2 animate-fade-in">
+                  <Label htmlFor="commission" className="text-sm font-medium flex items-center gap-2">
+                    <DollarSign className="h-4 w-4" />
+                    Taxa de Comissão (%)
+                  </Label>
+                  <Input 
+                    id="commission" 
+                    type="number" 
+                    min="0" 
+                    max="50" 
+                    step="0.5"
+                    value={commissionRate} 
+                    onChange={(e) => setCommissionRate(e.target.value)} 
+                    placeholder="Ex: 5, 10, 15"
+                    className="transition-all duration-200 focus:ring-2 focus:ring-orange-200"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Porcentagem que será paga aos afiliados por venda gerada
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Fotos */}
+          <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-pink-100 rounded-lg">
+                  <Camera className="h-5 w-5 text-pink-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Fotos do Produto</CardTitle>
+                  <CardDescription>Adicione até {MAX_PHOTOS} fotos</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="photos" className="text-sm font-medium">
+                  {t("create.fields.photosLabel", { max: MAX_PHOTOS })}
+                </Label>
+                <div className="relative">
+                  <Input 
+                    id="photos" 
+                    type="file" 
+                    accept="image/*" 
+                    multiple 
+                    onChange={handleFiles} 
+                    className="transition-all duration-200 focus:ring-2 focus:ring-pink-200"
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground">
+                    {t("create.fields.photosCount", { count: files.length, max: MAX_PHOTOS })}
+                  </p>
+                  {files.length > 0 && (
+                    <Badge variant="outline" className="flex items-center gap-1">
+                      <CheckCircle className="h-3 w-3" />
+                      {files.length} arquivo{files.length > 1 ? 's' : ''} selecionado{files.length > 1 ? 's' : ''}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Botões de Ação */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className="flex-1 h-12 text-lg font-medium bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  {editId ? "Atualizando..." : t("create.buttons.publishing")}
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  {editId ? "Atualizar Anúncio" : t("create.buttons.publish")}
+                </div>
+              )}
+            </Button>
+            <Link to="/" className="flex-1">
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full h-12 text-lg font-medium border-2 hover:bg-muted/50 transition-all duration-300"
+              >
+                {t("create.buttons.cancel")}
+              </Button>
+            </Link>
           </div>
-          
-          {sellable && (
-            <div className="grid gap-2">
-              <Label htmlFor="inventory">Quantidade em Estoque</Label>
-              <Input 
-                id="inventory" 
-                type="number" 
-                min="0" 
-                value={inventoryCount} 
-                onChange={(e) => setInventoryCount(e.target.value)} 
-                placeholder="Ex: 10, 50, 100"
-              />
-              <p className="text-xs text-muted-foreground">
-                Quantidade de produtos disponíveis para venda online
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Configurações de Afiliados */}
-        <div className="grid gap-4 p-4 border rounded-lg">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label className="text-base">Sistema de Afiliados</Label>
-              <p className="text-sm text-muted-foreground">
-                Permita que outros usuários divulguem seu produto e ganhem comissão
-              </p>
-            </div>
-            <Switch 
-              checked={affiliateEnabled} 
-              onCheckedChange={setAffiliateEnabled}
-            />
-          </div>
-          
-          {affiliateEnabled && (
-            <div className="grid gap-2">
-              <Label htmlFor="commission">Taxa de Comissão (%)</Label>
-              <Input 
-                id="commission" 
-                type="number" 
-                min="0" 
-                max="50" 
-                step="0.5"
-                value={commissionRate} 
-                onChange={(e) => setCommissionRate(e.target.value)} 
-                placeholder="Ex: 5, 10, 15"
-              />
-              <p className="text-xs text-muted-foreground">
-                Porcentagem que será paga aos afiliados por venda gerada
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="grid gap-2">
-          <Label htmlFor="photos">{t("create.fields.photosLabel", { max: MAX_PHOTOS })}</Label>
-          <Input id="photos" type="file" accept="image/*" multiple onChange={handleFiles} />
-          <p className="text-xs text-muted-foreground">{t("create.fields.photosCount", { count: files.length, max: MAX_PHOTOS })}</p>
-        </div>
-
-        <div className="flex gap-3">
-          <Button type="submit" disabled={loading}>
-            {loading ? (editId ? "Atualizando..." : t("create.buttons.publishing")) : (editId ? "Atualizar Anúncio" : t("create.buttons.publish"))}
-          </Button>
-          <Link to="/">
-            <Button type="button" variant="outline">{t("create.buttons.cancel")}</Button>
-          </Link>
-        </div>
-      </form>
-    </main>
+        </form>
+      </div>
+    </div>
   );
 };
 
