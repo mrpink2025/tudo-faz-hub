@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -346,37 +347,46 @@ const CreateListing = () => {
                     <Tag className="h-4 w-4" />
                     {t("create.fields.category")} <Badge variant="secondary">Obrigatório</Badge>
                   </Label>
-                  <select
-                    id="category-root"
-                    className="h-11 rounded-md border bg-background px-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 w-full"
-                    value={rootId}
-                    onChange={(e) => { setRootId(e.target.value); setSubId(""); }}
-                    required
+                  <Select 
+                    value={rootId} 
+                    onValueChange={(value) => { 
+                      setRootId(value); 
+                      setSubId(""); 
+                    }}
                   >
-                    <option value="" disabled>{t("create.fields.select")}</option>
-                    {roots.map((c: any) => (
-                      <option key={c.id} value={c.id}>{c.name_pt}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="h-11 transition-all duration-200 focus:ring-2 focus:ring-primary/20">
+                      <SelectValue placeholder={t("create.fields.select")} />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {roots.map((c: any) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name_pt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="subcategory" className="text-sm font-medium">
                     {t("create.fields.subcategory")} <Badge variant="secondary">Obrigatório</Badge>
                   </Label>
-                  <select
-                    id="subcategory"
-                    className="h-11 rounded-md border bg-background px-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 w-full"
-                    value={subId}
-                    onChange={(e) => setSubId(e.target.value)}
-                    required
+                  <Select 
+                    value={subId} 
+                    onValueChange={setSubId}
                     disabled={!rootId}
                   >
-                    <option value="" disabled>{t("create.fields.select")}</option>
-                    {subcategories.map((c: any) => (
-                      <option key={c.id} value={c.id}>{c.name_pt}</option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="h-11 transition-all duration-200 focus:ring-2 focus:ring-primary/20">
+                      <SelectValue placeholder={t("create.fields.select")} />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-64">
+                      {subcategories.map((c: any) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name_pt}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {rootId && subcategories.length === 0 && (
                     <p className="text-xs text-muted-foreground">{t("create.fields.noSubcategories")}</p>
                   )}
