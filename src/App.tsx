@@ -26,6 +26,8 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import NearbySearch from "./pages/NearbySearch";
 import EmailConfirmation from "./pages/EmailConfirmation";
+import AffiliateCenter from "./pages/AffiliateCenter";
+import AdvertiserCenter from "./pages/AdvertiserCenter";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
@@ -52,6 +54,8 @@ const App = () => (
             <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
             <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
+            <Route path="/afiliados" element={<ProtectedRoute><AffiliateCenter /></ProtectedRoute>} />
+            <Route path="/anunciante" element={<ProtectedRoute><AdvertiserCenter /></ProtectedRoute>} />
             <Route path="/proximos" element={<NearbySearch />} />
             <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />
             <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />

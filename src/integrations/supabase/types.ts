@@ -1067,6 +1067,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      generate_affiliate_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_tracking_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_basic_profile_info: {
         Args: { profile_user_id: string }
         Returns: {
