@@ -12,12 +12,9 @@ const Hero = () => {
   const { data: settings } = useQuery({
     queryKey: ["site-settings-public"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("site_settings_public")
-        .select("hero_image_url")
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_site_settings_public");
       if (error) throw error;
-      return data;
+      return data?.[0] || null;
     },
   });
 

@@ -40,11 +40,8 @@ export const useHealthCheck = () => {
     };
 
     try {
-      // Database check - using public table for health check
-      const { data: dbTest, error: dbError } = await supabase
-        .from('site_settings_public')
-        .select('site_name')
-        .limit(1);
+      // Database check - using secure function for health check
+      const { data: dbTest, error: dbError } = await supabase.rpc("get_site_settings_public");
       checks.database = !dbError;
 
       // Auth check

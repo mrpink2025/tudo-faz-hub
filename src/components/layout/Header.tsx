@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { OrderNotifications } from "@/components/notifications/OrderNotifications";
 import { MobileMenuDropdown } from "./MobileMenuDropdown";
+import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -70,7 +71,7 @@ const Header = () => {
                   <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-popover text-foreground">
+              <DropdownMenuContent align="end" className="bg-popover text-foreground z-[60]">
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
@@ -79,11 +80,15 @@ const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/mensagens">Mensagens</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/creditos">{t("credits.nav")}</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>Sair</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+          <ShoppingCartButton />
           <LanguageSwitcher />
           <Link to="/publicar">
             <Button variant="hero" size="sm">{t("nav.publish")}</Button>
@@ -100,9 +105,9 @@ const Header = () => {
             ) : (
               <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("nav.login")}</NavLink>
             )}
-            <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("credits.nav")}</NavLink>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
+            <ShoppingCartButton />
             <LanguageSwitcher />
             <Link to="/publicar">
               <Button variant="hero" size="sm">{t("nav.publish_short")}</Button>

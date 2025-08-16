@@ -8,6 +8,7 @@ import { useProductReviews } from "@/hooks/useEcommerce";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { BuyNowButton } from "./BuyNowButton";
 
 interface ProductCardProps {
   listing: {
@@ -135,19 +136,14 @@ export function ProductCard({ listing }: ProductCardProps) {
 
       {listing.sellable && (
         <CardFooter className="p-4 pt-0">
-          <Button
-            onClick={handleAddToCart}
-            disabled={listing.inventory_count <= 0 || addToCart.isPending}
-            className="w-full"
-            variant={listing.inventory_count <= 0 ? "secondary" : "default"}
-          >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            {listing.inventory_count <= 0
-              ? "Indisponível"
-              : addToCart.isPending
-              ? "Adicionando..."
-              : "Adicionar ao Carrinho"}
-          </Button>
+          {listing.inventory_count > 0 ? (
+            <BuyNowButton listing={listing} />
+          ) : (
+            <Button disabled className="w-full" variant="secondary">
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Indisponível
+            </Button>
+          )}
         </CardFooter>
       )}
     </Card>
