@@ -7,6 +7,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
+import Checkout from "./pages/Checkout";
 import CreateListing from "./pages/CreateListing";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
             <Route path="/afiliados" element={<ProtectedRoute><AffiliateCenter /></ProtectedRoute>} />
             <Route path="/anunciante" element={<ProtectedRoute><AdvertiserCenter /></ProtectedRoute>} />
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/pedidos" element={<ProtectedRoute><OrdersManagement /></ProtectedRoute>} />
             <Route path="/proximos" element={<NearbySearch />} />
             <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />

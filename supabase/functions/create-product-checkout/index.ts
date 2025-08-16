@@ -24,7 +24,13 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated");
 
-    const { items, seller_id } = await req.json();
+    const { 
+      items, 
+      seller_id, 
+      customer_data, 
+      shipping_address, 
+      total_amount 
+    } = await req.json();
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
@@ -35,15 +41,16 @@ serve(async (req) => {
       price_data: {
         currency: "brl",
         product_data: {
-          name: `Produto ID: ${item.listing_id}`,
+          name: item.title || `Produto ID: ${item.listing_id}`,
+          description: `Quantidade: ${item.quantity}`,
         },
         unit_amount: item.price,
       },
       quantity: item.quantity,
     }));
 
-    const session = await stripe.checkout.sessions.create({
-      customer_email: user.email,
+    // Create Stripe checkout session with pre-filled customer data
+    const sessionConfig: any = {
       line_items: lineItems,
       mode: "payment",
       success_url: `${req.headers.get("origin")}/pagamento-sucesso?session_id={CHECKOUT_SESSION_ID}`,
@@ -53,7 +60,40 @@ serve(async (req) => {
         seller_id: seller_id,
         items: JSON.stringify(items),
       },
-    });
+      payment_method_types: ["card", "boleto"],
+      billing_address_collection: "required",
+    };
+
+    // Pre-fill customer data if provided
+    if (customer_data) {
+      sessionConfig.customer_email = customer_data.email;
+      if (customer_data.name) {
+        sessionConfig.customer_creation = "always";
+      }
+    } else {
+      sessionConfig.customer_email = user.email;
+    }
+
+    // Pre-fill shipping address if provided
+    if (shipping_address) {
+      sessionConfig.shipping_address_collection = {
+        allowed_countries: ['BR'],
+      };
+      sessionConfig.shipping_options = [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 0, // Frete grátis
+              currency: 'brl',
+            },
+            display_name: 'Frete Grátis',
+          },
+        },
+      ];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     // Create order record
     const supabaseService = createClient(
@@ -62,16 +102,24 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    const totalAmount = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+    const totalAmount = total_amount || items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
     
-    await supabaseService.from("orders").insert({
+    const orderData: any = {
       user_id: user.id,
       seller_id: seller_id,
       stripe_session_id: session.id,
       amount: totalAmount,
       currency: "brl",
       status: "pending",
-    });
+      order_items: items,
+    };
+
+    // Add shipping address if provided
+    if (shipping_address) {
+      orderData.delivery_address = shipping_address;
+    }
+
+    await supabaseService.from("orders").insert(orderData);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

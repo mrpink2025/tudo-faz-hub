@@ -46,6 +46,12 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Mobile: Carrinho e Tradução na linha do logo */}
+        <div className="flex md:hidden items-center gap-2">
+          <ShoppingCartButton />
+          <LanguageSwitcher />
+        </div>
+
         <div className="flex-1 hidden md:block">
           <SearchBar />
         </div>
@@ -107,8 +113,6 @@ const Header = () => {
             )}
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <ShoppingCartButton />
-            <LanguageSwitcher />
             <Link to="/publicar">
               <Button variant="hero" size="sm">{t("nav.publish_short")}</Button>
             </Link>

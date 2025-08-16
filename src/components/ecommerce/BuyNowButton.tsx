@@ -5,6 +5,7 @@ import { useShoppingCart } from "@/hooks/useEcommerce";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useNavigate } from "react-router-dom";
 
 interface BuyNowButtonProps {
   listing: {
@@ -21,6 +22,7 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
   const { addToCart } = useShoppingCart();
   const { toast } = useToast();
   const { user } = useSupabaseAuth();
+  const navigate = useNavigate();
 
   const handleBuyNow = async () => {
     if (!user) {
@@ -32,34 +34,8 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
       return;
     }
 
-    setIsLoading(true);
-    try {
-      // Create checkout directly
-      const { data, error } = await supabase.functions.invoke("create-product-checkout", {
-        body: {
-          items: [{
-            listing_id: listing.id,
-            quantity: 1,
-            price: listing.price,
-          }],
-          seller_id: listing.user_id,
-        },
-      });
-
-      if (error) throw error;
-      if (!data?.url) throw new Error("No checkout URL returned");
-
-      // Open Stripe checkout in the same tab for buy now
-      window.location.href = data.url;
-    } catch (error: any) {
-      toast({
-        title: "Erro na compra",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // Redirecionar para página de checkout interna
+    navigate(`/checkout?listing=${listing.id}&quantity=1`);
   };
 
   const handleAddToCart = () => {

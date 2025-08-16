@@ -15,46 +15,26 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useShoppingCart } from "@/hooks/useEcommerce";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export function ShoppingCartButton() {
   const [isOpen, setIsOpen] = useState(false);
   const { cartItems, cartCount, cartTotal, updateQuantity, removeFromCart, isLoading } = useShoppingCart();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (!cartItems || cartItems.length === 0) return;
-
-    try {
-      const { data, error } = await supabase.functions.invoke("create-product-checkout", {
-        body: {
-          items: cartItems.map(item => ({
-            listing_id: item.listing_id,
-            quantity: item.quantity,
-            price: item.listings.price,
-          })),
-          seller_id: cartItems[0].listings.user_id,
-        },
-      });
-
-      if (error) throw error;
-      if (!data?.url) throw new Error("No checkout URL returned");
-
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
-      setIsOpen(false);
-    } catch (error: any) {
-      toast({
-        title: "Erro no checkout",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+    
+    // Redirecionar para página de checkout interna
+    navigate('/checkout');
+    setIsOpen(false);
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
+        <Button variant="outline" size="icon" className="relative bg-white/10 border-white/20 hover:bg-white/20 text-white">
           <ShoppingCart className="h-4 w-4" />
           {cartCount > 0 && (
             <Badge
