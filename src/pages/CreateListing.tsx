@@ -38,6 +38,9 @@ const CreateListing = () => {
   // Affiliate settings
   const [affiliateEnabled, setAffiliateEnabled] = useState(false);
   const [commissionRate, setCommissionRate] = useState<string>("5");
+  // E-commerce settings
+  const [sellable, setSellable] = useState(false);
+  const [inventoryCount, setInventoryCount] = useState<string>("0");
   // Address fields
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -80,6 +83,8 @@ const CreateListing = () => {
           setRootId(listing.category_id || "");
           setAffiliateEnabled(listing.affiliate_enabled || false);
           setCommissionRate((listing.affiliate_commission_rate / 100)?.toString() || "5");
+          setSellable(listing.sellable || false);
+          setInventoryCount(listing.inventory_count?.toString() || "0");
           
           // Load location data
           const { data: location } = await supabase
@@ -155,6 +160,8 @@ const CreateListing = () => {
             location: locationPublic,
             affiliate_enabled: affiliateEnabled,
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
+            sellable,
+            inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
           })
           .eq("id", editId);
 
@@ -175,6 +182,8 @@ const CreateListing = () => {
             location: locationPublic,
             affiliate_enabled: affiliateEnabled,
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
+            sellable,
+            inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
           })
           .select("id")
           .maybeSingle();
@@ -334,6 +343,39 @@ const CreateListing = () => {
             <Label htmlFor="address2">Complemento (opcional)</Label>
             <Input id="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
           </div>
+        </div>
+
+        {/* Configurações de E-commerce */}
+        <div className="grid gap-4 p-4 border rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="text-base">Produto Vendável</Label>
+              <p className="text-sm text-muted-foreground">
+                Marque se este produto pode ser comprado diretamente online
+              </p>
+            </div>
+            <Switch 
+              checked={sellable} 
+              onCheckedChange={setSellable}
+            />
+          </div>
+          
+          {sellable && (
+            <div className="grid gap-2">
+              <Label htmlFor="inventory">Quantidade em Estoque</Label>
+              <Input 
+                id="inventory" 
+                type="number" 
+                min="0" 
+                value={inventoryCount} 
+                onChange={(e) => setInventoryCount(e.target.value)} 
+                placeholder="Ex: 10, 50, 100"
+              />
+              <p className="text-xs text-muted-foreground">
+                Quantidade de produtos disponíveis para venda online
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Configurações de Afiliados */}
