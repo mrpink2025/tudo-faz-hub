@@ -111,7 +111,7 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
         <CardContent className="text-sm text-muted-foreground space-y-2">
           <div className="font-medium text-foreground text-lg">
             {listing.price != null ? 
-              formatPrice(listing.price / 100, listing.currency, t("price.combined"), locale) :
+              formatPrice(listing.price, listing.currency, t("price.combined"), locale) :
               t("price.combined")
             }
           </div>
