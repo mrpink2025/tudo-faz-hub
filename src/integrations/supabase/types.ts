@@ -1094,6 +1094,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      detect_affiliate_fraud: {
+        Args: {
+          p_affiliate_link_id: string
+          p_user_agent?: string
+          p_visitor_ip: unknown
+        }
+        Returns: Json
+      }
       generate_affiliate_code: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -1101,6 +1109,14 @@ export type Database = {
       generate_tracking_code: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_affiliate_analytics: {
+        Args: {
+          p_affiliate_id: string
+          p_end_date?: string
+          p_start_date?: string
+        }
+        Returns: Json
       }
       get_basic_profile_info: {
         Args: { profile_user_id: string }
@@ -1170,6 +1186,10 @@ export type Database = {
       mark_messages_as_read: {
         Args: { conversation_user: string }
         Returns: undefined
+      }
+      process_affiliate_payouts: {
+        Args: { p_batch_size?: number }
+        Returns: Json
       }
       send_notification_email: {
         Args: { message: string; subject: string; user_email: string }

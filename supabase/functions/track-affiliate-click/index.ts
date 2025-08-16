@@ -47,6 +47,38 @@ serve(async (req) => {
                      req.headers.get("x-real-ip") || 
                      "unknown";
 
+    // Run fraud detection
+    const { data: fraudCheck, error: fraudError } = await supabaseClient
+      .rpc("detect_affiliate_fraud", {
+        p_affiliate_link_id: affiliateLink.id,
+        p_visitor_ip: clientIP,
+        p_user_agent: userAgent || req.headers.get("user-agent")
+      });
+
+    if (fraudError) {
+      console.error("Fraud detection error:", fraudError);
+    }
+
+    // Block fraudulent clicks
+    if (fraudCheck?.is_fraudulent) {
+      console.warn("Fraudulent click blocked:", {
+        ip: clientIP,
+        reasons: fraudCheck.reasons,
+        score: fraudCheck.fraud_score
+      });
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          blocked: true, 
+          reason: "Suspicious activity detected" 
+        }),
+        { 
+          status: 403, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+
     // Verificar se já existe um clique nas últimas 24 horas do mesmo IP
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: existingClick } = await supabaseClient
@@ -89,7 +121,12 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true, tracked: !existingClick }),
+      JSON.stringify({ 
+        success: true, 
+        tracked: !existingClick,
+        fraud_score: fraudCheck?.fraud_score || 0,
+        is_suspicious: fraudCheck?.is_suspicious || false
+      }),
       { 
         status: 200, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
