@@ -1305,56 +1305,7 @@ export type Database = {
       }
     }
     Views: {
-      listing_locations_public: {
-        Row: {
-          city: string | null
-          listing_id: string | null
-          neighborhood: string | null
-          state: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "listing_locations_listing_id_fkey"
-            columns: ["listing_id"]
-            isOneToOne: true
-            referencedRelation: "listings"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      site_settings_public: {
-        Row: {
-          brand_accent: string | null
-          brand_primary: string | null
-          favicon_url: string | null
-          hero_image_url: string | null
-          logo_url: string | null
-          og_image_url: string | null
-          promo_html: string | null
-          site_name: string | null
-        }
-        Insert: {
-          brand_accent?: string | null
-          brand_primary?: string | null
-          favicon_url?: string | null
-          hero_image_url?: string | null
-          logo_url?: string | null
-          og_image_url?: string | null
-          promo_html?: string | null
-          site_name?: string | null
-        }
-        Update: {
-          brand_accent?: string | null
-          brand_primary?: string | null
-          favicon_url?: string | null
-          hero_image_url?: string | null
-          logo_url?: string | null
-          og_image_url?: string | null
-          promo_html?: string | null
-          site_name?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       can_user_sell: {
@@ -1416,6 +1367,15 @@ export type Database = {
           unread_count: number
         }[]
       }
+      get_listing_location_public: {
+        Args: { p_listing_id: string }
+        Returns: {
+          city: string
+          listing_id: string
+          neighborhood: string
+          state: string
+        }[]
+      }
       get_listing_rating: {
         Args: { listing_uuid: string }
         Returns: Json
@@ -1459,6 +1419,19 @@ export type Database = {
           total_orders_today: number
           total_revenue: number
           total_sales: number
+        }[]
+      }
+      get_site_settings_public: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          brand_accent: string
+          brand_primary: string
+          favicon_url: string
+          hero_image_url: string
+          logo_url: string
+          og_image_url: string
+          promo_html: string
+          site_name: string
         }[]
       }
       has_role: {
