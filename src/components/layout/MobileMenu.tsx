@@ -56,28 +56,32 @@ const MobileMenu = () => {
                       <AccordionTrigger className="text-base">
                         <span className="truncate">{root.name_pt ?? root.slug}</span>
                       </AccordionTrigger>
-                      <AccordionContent>
-                        <div className="pb-2">
-                          <Link
-                            to={`/explorar?categoria=${encodeURIComponent(root.slug)}`}
-                            className="text-sm underline hover:text-primary transition-colors"
-                          >
-                            Ver todos em {root.name_pt ?? root.slug}
-                          </Link>
-                        </div>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {getChildren(root.id).map((child: any) => (
-                            <li key={child.id}>
-                              <Link
-                                to={`/explorar?categoria=${encodeURIComponent(child.slug)}`}
-                                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                              >
-                                {child.name_pt ?? child.slug}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </AccordionContent>
+                       <AccordionContent>
+                         <div className="pb-2">
+                           <DrawerClose asChild>
+                             <Link
+                               to={`/explorar?categoria=${encodeURIComponent(root.slug)}`}
+                               className="text-sm underline hover:text-primary transition-colors"
+                             >
+                               Ver todos em {root.name_pt ?? root.slug}
+                             </Link>
+                           </DrawerClose>
+                         </div>
+                         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                           {getChildren(root.id).map((child: any) => (
+                             <li key={child.id}>
+                               <DrawerClose asChild>
+                                 <Link
+                                   to={`/explorar?categoria=${encodeURIComponent(child.slug)}`}
+                                   className="text-sm text-muted-foreground hover:text-foreground transition-colors block py-1"
+                                 >
+                                   {child.name_pt ?? child.slug}
+                                 </Link>
+                               </DrawerClose>
+                             </li>
+                           ))}
+                         </ul>
+                       </AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
