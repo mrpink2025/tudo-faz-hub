@@ -116,7 +116,12 @@ export function ProductCard({ listing }: ProductCardProps) {
 
         <div className="mt-2">
           <span className="text-2xl font-bold text-primary">
-            R$ {(listing.price / 100).toFixed(2)}
+            {new Intl.NumberFormat('pt-BR', { 
+              style: "currency", 
+              currency: "BRL",
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }).format(listing.price / 100)}
           </span>
         </div>
 

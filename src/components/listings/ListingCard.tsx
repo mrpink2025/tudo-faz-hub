@@ -28,9 +28,16 @@ type Listing = {
 const formatPrice = (value: number | null | undefined, currency: string | null | undefined, fallback: string, locale: string) => {
   if (value == null) return fallback;
   try {
-    return new Intl.NumberFormat(locale, { style: "currency", currency: currency || "BRL" }).format(value);
+    // Converter centavos para reais e formatar no padrão brasileiro
+    const valueInReais = value / 100;
+    return new Intl.NumberFormat('pt-BR', { 
+      style: "currency", 
+      currency: currency || "BRL",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(valueInReais);
   } catch {
-    return `${value}`;
+    return `R$ ${(value / 100).toFixed(2).replace('.', ',')}`;
   }
 };
 
