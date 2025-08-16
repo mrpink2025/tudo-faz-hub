@@ -5,6 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { ProductCard } from "@/components/ecommerce/ProductCard";
+import { ProductReviews } from "@/components/ecommerce/ProductReviews";
+import ContactSellerButton from "@/components/chat/ContactSellerButton";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +22,10 @@ const ListingDetail = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("listings")
-        .select("*, categories:category_id(name_pt, slug)")
+        .select(`
+          *, 
+          categories:category_id(name_pt, slug)
+        `)
         .eq("id", id)
         .maybeSingle();
       if (error) throw error;
@@ -176,24 +182,39 @@ const ListingDetail = () => {
           </div>
 
           <aside className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("listing.price")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-semibold">
-                  {listing.price != null
-                    ? new Intl.NumberFormat(i18n.language || "pt-BR", { style: "currency", currency: listing.currency || "BRL" }).format(listing.price)
-                    : t("price.combined")}
-                </div>
-              </CardContent>
-            </Card>
+            {listing.sellable ? (
+              <ProductCard listing={listing} />
+            ) : (
+              <>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{t("listing.price")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-semibold">
+                      {listing.price != null
+                        ? new Intl.NumberFormat(i18n.language || "pt-BR", { style: "currency", currency: listing.currency || "BRL" }).format(listing.price / 100)
+                        : t("price.combined")}
+                    </div>
+                  </CardContent>
+                </Card>
 
-            <Link to={listing.user_id ? `/mensagens?to=${listing.user_id}` : "/mensagens"}>
-              <Button className="w-full">{t("listing.messageButton")}</Button>
-            </Link>
+                <ContactSellerButton 
+                  sellerId={listing.user_id}
+                  sellerName="Vendedor"
+                  listingTitle={listing.title}
+                />
+              </>
+            )}
           </aside>
         </div>
+
+        {/* Product Reviews Section - Only show for sellable items */}
+        {listing.sellable && (
+          <div className="mt-8">
+            <ProductReviews listingId={listing.id} />
+          </div>
+        )}
       </article>
     </main>
   );

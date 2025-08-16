@@ -12,6 +12,10 @@ export type NearbyListing = {
   lat: number;
   lng: number;
   distance_km: number;
+  sellable?: boolean;
+  inventory_count?: number;
+  sold_count?: number;
+  user_id?: string;
 };
 
 export const useNearbyListings = (

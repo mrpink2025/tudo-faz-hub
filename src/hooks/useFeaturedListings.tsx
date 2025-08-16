@@ -9,6 +9,10 @@ export type FeaturedListing = {
   location: string | null;
   created_at: string;
   cover_image: string | null;
+  sellable?: boolean;
+  inventory_count?: number;
+  sold_count?: number;
+  user_id?: string;
 };
 
 export const useFeaturedListings = (limit: number = 10) => {
@@ -17,7 +21,7 @@ export const useFeaturedListings = (limit: number = 10) => {
     queryFn: async (): Promise<FeaturedListing[]> => {
       const { data, error } = await supabase
         .from("listings")
-        .select("id,title,price,currency,location,created_at,cover_image")
+        .select("id,title,price,currency,location,created_at,cover_image,sellable,inventory_count,sold_count,user_id")
         .eq("highlighted", true)
         .eq("approved", true)
         .eq("status", "published")

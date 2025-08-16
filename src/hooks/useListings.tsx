@@ -69,7 +69,7 @@ export const useListings = (
       const queryFunction = async () => {
         let query = supabase
           .from("listings")
-          .select("id, title, price, currency, location, created_at, category_id, cover_image", { count: 'exact' })
+          .select("id, title, price, currency, location, created_at, category_id, cover_image, sellable, inventory_count, sold_count, user_id", { count: 'exact' })
           .eq("approved", true)
           .eq("status", "published");
 
