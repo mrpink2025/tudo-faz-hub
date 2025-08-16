@@ -17,7 +17,11 @@ export default function OrdersTable() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("orders")
-        .select("id, amount, currency, status, created_at, user_id, listing_id")
+        .select(`
+          id, amount, currency, status, created_at, user_id, listing_id,
+          affiliate_id, affiliate_commission, tracking_code,
+          affiliates(affiliate_code)
+        `)
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;
@@ -55,8 +59,15 @@ export default function OrdersTable() {
                 <div className="text-xs text-muted-foreground">{new Date(o.created_at).toLocaleString()}</div>
               </CardHeader>
               <CardContent className="flex items-center justify-between gap-4">
-                <div className="text-sm text-muted-foreground">
-                  {o.currency ?? "BRL"} {o.amount ?? 0} • {t('admin.orders.user')}: {o.user_id?.slice(0, 8)} • {t('admin.orders.listing')}: {o.listing_id?.slice(0, 8)}
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>
+                    {o.currency ?? "BRL"} {o.amount ?? 0} • {t('admin.orders.user')}: {o.user_id?.slice(0, 8)} • {t('admin.orders.listing')}: {o.listing_id?.slice(0, 8)}
+                  </div>
+                  {o.affiliate_id && (
+                    <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                      🎯 Afiliado: {o.affiliates?.affiliate_code} • Comissão: {o.affiliate_commission || 0} centavos
+                    </div>
+                  )}
                 </div>
                 <Select value={o.status ?? "pending"} onValueChange={(v) => updateStatus.mutate({ id: o.id, status: v })}>
                   <SelectTrigger className="w-36">

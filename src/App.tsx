@@ -32,6 +32,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import { BrandingLoader } from "./hooks/useBranding";
 import { MessageNotifications } from "./components/notifications/MessageNotifications";
+import { AffiliateNotifications } from "./components/notifications/AffiliateNotifications";
 import { TelemetryProvider } from "./components/monitoring/TelemetryProvider";
 import DynamicFavicon from "./components/branding/DynamicFavicon";
 import "./i18n";
@@ -75,6 +76,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <MessageNotifications />
+          <AffiliateNotifications />
           <Footer />
         </TelemetryProvider>
       </BrowserRouter>

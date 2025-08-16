@@ -7,6 +7,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
@@ -34,6 +35,9 @@ const CreateListing = () => {
   const [subId, setSubId] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
+  // Affiliate settings
+  const [affiliateEnabled, setAffiliateEnabled] = useState(false);
+  const [commissionRate, setCommissionRate] = useState<string>("5");
   // Address fields
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -74,6 +78,8 @@ const CreateListing = () => {
           setDescription(listing.description || "");
           setPrice(listing.price?.toString() || "");
           setRootId(listing.category_id || "");
+          setAffiliateEnabled(listing.affiliate_enabled || false);
+          setCommissionRate((listing.affiliate_commission_rate / 100)?.toString() || "5");
           
           // Load location data
           const { data: location } = await supabase
@@ -147,6 +153,8 @@ const CreateListing = () => {
             price: parsedPrice,
             currency: "BRL",
             location: locationPublic,
+            affiliate_enabled: affiliateEnabled,
+            affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
           })
           .eq("id", editId);
 
@@ -165,6 +173,8 @@ const CreateListing = () => {
             status: "published",
             approved: true,
             location: locationPublic,
+            affiliate_enabled: affiliateEnabled,
+            affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
           })
           .select("id")
           .maybeSingle();
@@ -324,6 +334,41 @@ const CreateListing = () => {
             <Label htmlFor="address2">Complemento (opcional)</Label>
             <Input id="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
           </div>
+        </div>
+
+        {/* Configurações de Afiliados */}
+        <div className="grid gap-4 p-4 border rounded-lg">
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="text-base">Sistema de Afiliados</Label>
+              <p className="text-sm text-muted-foreground">
+                Permita que outros usuários divulguem seu produto e ganhem comissão
+              </p>
+            </div>
+            <Switch 
+              checked={affiliateEnabled} 
+              onCheckedChange={setAffiliateEnabled}
+            />
+          </div>
+          
+          {affiliateEnabled && (
+            <div className="grid gap-2">
+              <Label htmlFor="commission">Taxa de Comissão (%)</Label>
+              <Input 
+                id="commission" 
+                type="number" 
+                min="0" 
+                max="50" 
+                step="0.5"
+                value={commissionRate} 
+                onChange={(e) => setCommissionRate(e.target.value)} 
+                placeholder="Ex: 5, 10, 15"
+              />
+              <p className="text-xs text-muted-foreground">
+                Porcentagem que será paga aos afiliados por venda gerada
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-2">

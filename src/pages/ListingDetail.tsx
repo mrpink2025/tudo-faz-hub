@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,11 @@ import { useTranslation } from "react-i18next";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
+
+  // Capturar código de rastreamento de afiliado da URL
+  const trackingCode = searchParams.get("ref");
 
   const { data: listing, isLoading, error } = useQuery({
     queryKey: ["listing", id],
@@ -39,6 +43,28 @@ const ListingDetail = () => {
   });
 
   const heroUrl = listing?.cover_image || images?.[0]?.url || "/placeholder.svg";
+
+  // Registrar clique de afiliado se presente
+  useEffect(() => {
+    if (trackingCode && id && listing) {
+      const trackClick = async () => {
+        try {
+          await supabase.functions.invoke("track-affiliate-click", {
+            body: {
+              trackingCode,
+              listingId: id,
+              userAgent: navigator.userAgent,
+              referrer: document.referrer,
+            },
+          });
+        } catch (error) {
+          console.error("Error tracking affiliate click:", error);
+        }
+      };
+      
+      trackClick();
+    }
+  }, [trackingCode, id, listing]);
 
   useEffect(() => {
     const title = listing?.title ? `${listing.title} - tudofaz.com` : `${t("listing.pageTitle")} - tudofaz.com`;

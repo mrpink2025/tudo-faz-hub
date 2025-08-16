@@ -50,6 +50,8 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-6 text-sm">
           <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
           <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
+          <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
+          <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
           <NavLink to="/creditos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("credits.nav")}</NavLink>
           {user && <NotificationCenter />}
           {!user ? (
@@ -84,7 +86,11 @@ const Header = () => {
           <div className="flex items-center gap-4 overflow-x-auto text-sm">
             <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
             {user ? (
-              <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
+              <>
+                <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
+                <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
+                <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
+              </>
             ) : (
               <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.login")}</NavLink>
             )}
