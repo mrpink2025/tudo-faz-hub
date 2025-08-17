@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useBackgroundRemoval } from "@/hooks/useBackgroundRemoval";
 
 type LogoProps = {
   className?: string;
@@ -9,6 +10,8 @@ type LogoProps = {
 const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   const defaultLogo = "/lovable-uploads/a87f8885-b030-49a0-904c-ef954b5ed0aa.png";
   const [logoUrl, setLogoUrl] = useState(defaultLogo);
+  const [processedLogoUrl, setProcessedLogoUrl] = useState(defaultLogo);
+  const { processImage, isProcessing } = useBackgroundRemoval();
 
   useEffect(() => {
     const fetchLogo = async () => {
@@ -49,11 +52,30 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
     return () => clearInterval(interval);
   }, []);
 
+  // Process image to remove background when logoUrl changes
+  useEffect(() => {
+    const processLogo = async () => {
+      if (logoUrl) {
+        try {
+          const processed = await processImage(logoUrl);
+          setProcessedLogoUrl(processed);
+        } catch (error) {
+          console.error('Error processing logo:', error);
+          setProcessedLogoUrl(logoUrl);
+        }
+      }
+    };
+
+    processLogo();
+  }, [logoUrl, processImage]);
+
   return (
     <img
-      src={logoUrl}
+      src={processedLogoUrl}
       alt={title}
-      className={cn("block h-9 w-auto object-contain", className)}
+      className={cn("block h-9 w-auto object-contain", className, { 
+        "opacity-70": isProcessing 
+      })}
       loading="eager"
       style={{ maxWidth: '100%' }}
     />
