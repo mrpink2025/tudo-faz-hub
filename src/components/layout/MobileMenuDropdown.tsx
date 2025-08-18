@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 interface MobileMenuDropdownProps {
   user: any;
@@ -10,6 +11,7 @@ interface MobileMenuDropdownProps {
 
 export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
   const { t } = useTranslation();
+  const { isAdmin } = useIsAdmin();
 
   if (!user) return null;
 
@@ -22,6 +24,13 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover text-foreground z-50">
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <NavLink to="/admin" className="w-full flex items-center">
+              {t("nav.admin_panel")}
+            </NavLink>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <NavLink to="/mensagens" className="w-full flex items-center">
             {t("nav.messages")}

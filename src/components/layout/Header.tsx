@@ -4,6 +4,7 @@ import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
 import MobileMenu from "./MobileMenu";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Logo from "@/components/branding/Logo";
@@ -25,6 +26,7 @@ import { useSearch } from "@/contexts/SearchContext";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
+  const { isAdmin } = useIsAdmin();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { currentSearchValue } = useSearch();
@@ -81,6 +83,11 @@ const Header = () => {
               <DropdownMenuContent align="end" className="bg-popover text-foreground z-[60]">
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/admin">{t("nav.admin_panel")}</Link>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem asChild>
                   <Link to="/seller-dashboard">{t("nav.seller_dashboard")}</Link>
                 </DropdownMenuItem>

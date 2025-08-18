@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Painel do Vendedor", "logout": "Sair" },
+  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Painel do Vendedor", "admin_panel": "Painel Admin", "logout": "Sair" },
   "common": { 
     "loading": "Carregando...", 
     "error": "Erro", 

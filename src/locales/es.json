@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - inicio", "explore": "Explorar", "messages": "Mensajes", "login": "Entrar", "publish": "Publicar anuncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Panel del Vendedor", "logout": "Salir" },
+  "nav": { "home_aria": "tudofaz - inicio", "explore": "Explorar", "messages": "Mensajes", "login": "Entrar", "publish": "Publicar anuncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Panel del Vendedor", "admin_panel": "Panel de Admin", "logout": "Salir" },
   "common": { "loading": "Cargando..." },
   "home": { "tagline_small": "Tu mercado local completo", "hero_description": "Productos, servicios, empleos, bienes raíces y mucho más cerca de ti. Publica anuncios en minutos y llega a tu comunidad.", "credit_tooltip": "Inicia sesión para gestionar créditos y destacados" },
   "promo": {
