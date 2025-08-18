@@ -65,9 +65,9 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-6 text-sm">
           <Link to={exploreLink} className="text-white hover:opacity-80">{t("nav.explore")}</Link>
           <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
-          <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
-          <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
-          <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Pedidos</NavLink>
+          <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.affiliates")}</NavLink>
+          <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.advertiser")}</NavLink>
+          <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.orders")}</NavLink>
            {user && <UnifiedNotifications />}
           {!user ? (
             <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
@@ -82,16 +82,16 @@ const Header = () => {
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/seller-dashboard">Painel do Vendedor</Link>
+                  <Link to="/seller-dashboard">{t("nav.seller_dashboard")}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/mensagens">Mensagens</Link>
+                  <Link to="/mensagens">{t("nav.messages")}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/creditos">{t("credits.nav")}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>Sair</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>{t("nav.logout")}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}

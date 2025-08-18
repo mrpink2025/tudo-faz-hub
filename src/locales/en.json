@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - home", "explore": "Explore", "messages": "Messages", "login": "Sign in", "publish": "Post listing", "publish_short": "Post", "affiliates": "Affiliates", "advertiser": "Advertiser", "orders": "Orders" },
+  "nav": { "home_aria": "tudofaz - home", "explore": "Explore", "messages": "Messages", "login": "Sign in", "publish": "Post listing", "publish_short": "Post", "affiliates": "Affiliates", "advertiser": "Advertiser", "orders": "Orders", "seller_dashboard": "Seller Dashboard", "logout": "Sign out" },
   "common": { "loading": "Loading..." },
   "home": { "tagline_small": "Your complete local marketplace", "hero_description": "Products, services, jobs, real estate and much more near you. Post ads in minutes and reach your community.", "credit_tooltip": "Sign in to manage credits and highlights" },
   "promo": {
