@@ -206,6 +206,145 @@ const CategoryMenu = () => {
         'es': 'TVs y Home Theater',
         'zh': '电视与家庭影院',
         'pt': 'TVs e Home Theater'
+      },
+      // Subcategorias adicionais
+      'acessorios': {
+        'en': 'Accessories',
+        'es': 'Accesorios',
+        'zh': '配件',
+        'pt': 'Acessórios'
+      },
+      'acessorios-pets': {
+        'en': 'Pet Accessories',
+        'es': 'Accesorios para Mascotas',
+        'zh': '宠物配件',
+        'pt': 'Acessórios para Pets'
+      },
+      'aves': {
+        'en': 'Birds',
+        'es': 'Aves',
+        'zh': '鸟类',
+        'pt': 'Aves'
+      },
+      'beleza': {
+        'en': 'Beauty & Care',
+        'es': 'Belleza y Cuidados',
+        'zh': '美容护理',
+        'pt': 'Beleza e Cuidados'
+      },
+      'beleza-servicos': {
+        'en': 'Beauty & Aesthetics',
+        'es': 'Belleza y Estética',
+        'zh': '美容美学',
+        'pt': 'Beleza e Estética'
+      },
+      'caes': {
+        'en': 'Dogs',
+        'es': 'Perros',
+        'zh': '狗',
+        'pt': 'Cães'
+      },
+      'calcados': {
+        'en': 'Shoes',
+        'es': 'Calzado',
+        'zh': '鞋类',
+        'pt': 'Calçados'
+      },
+      'cameras': {
+        'en': 'Cameras & Camcorders',
+        'es': 'Cámaras y Filmadoras',
+        'zh': '相机与摄像机',
+        'pt': 'Câmeras e Filmadoras'
+      },
+      'ciclismo': {
+        'en': 'Cycling & Running',
+        'es': 'Ciclismo y Carreras',
+        'zh': '骑行与跑步',
+        'pt': 'Ciclismo e Corrida'
+      },
+      'decoracao': {
+        'en': 'Decoration',
+        'es': 'Decoración',
+        'zh': '装饰',
+        'pt': 'Decoração'
+      },
+      'eletrodomesticos': {
+        'en': 'Home Appliances',
+        'es': 'Electrodomésticos',
+        'zh': '家用电器',
+        'pt': 'Eletrodomésticos'
+      },
+      'eventos': {
+        'en': 'Events & Parties',
+        'es': 'Eventos y Fiestas',
+        'zh': '活动与聚会',
+        'pt': 'Eventos e Festas'
+      },
+      'fitness': {
+        'en': 'Fitness & Gym',
+        'es': 'Fitness y Gimnasio',
+        'zh': '健身与健身房',
+        'pt': 'Fitness e Academia'
+      },
+      'futebol': {
+        'en': 'Football',
+        'es': 'Fútbol',
+        'zh': '足球',
+        'pt': 'Futebol'
+      },
+      'games': {
+        'en': 'Games & Consoles',
+        'es': 'Juegos y Consolas',
+        'zh': '游戏与主机',
+        'pt': 'Games e Consoles'
+      },
+      'gatos': {
+        'en': 'Cats',
+        'es': 'Gatos',
+        'zh': '猫',
+        'pt': 'Gatos'
+      },
+      'jardim': {
+        'en': 'Garden & Outdoor',
+        'es': 'Jardín y Exterior',
+        'zh': '花园与户外',
+        'pt': 'Jardim e Exterior'
+      },
+      'limpeza': {
+        'en': 'Cleaning & Organization',
+        'es': 'Limpieza y Organización',
+        'zh': '清洁与整理',
+        'pt': 'Limpeza e Organização'
+      },
+      'moveis': {
+        'en': 'Furniture',
+        'es': 'Muebles',
+        'zh': '家具',
+        'pt': 'Móveis'
+      },
+      'natacao': {
+        'en': 'Swimming & Water Sports',
+        'es': 'Natación y Deportes Acuáticos',
+        'zh': '游泳与水上运动',
+        'pt': 'Natação e Esportes Aquáticos'
+      },
+      'reformas': {
+        'en': 'Renovations & Construction',
+        'es': 'Reformas y Construcción',
+        'zh': '装修与建筑',
+        'pt': 'Reformas e Construção'
+      },
+      'roupas-femininas': {
+        'en': 'Women\'s Clothing',
+        'es': 'Ropa Femenina',
+        'zh': '女装',
+        'pt': 'Roupas Femininas'
+      },
+      'roupas-masculinas': {
+        'en': 'Men\'s Clothing',
+        'es': 'Ropa Masculina',
+        'zh': '男装',
+        'pt': 'Roupas Masculinas'
       }
     };
 

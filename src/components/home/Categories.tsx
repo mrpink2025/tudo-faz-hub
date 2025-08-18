@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin, CreditCard } from "lucide-react";
+import { Briefcase, Wrench, Home, Car, Smartphone, ShoppingBag, Package, MapPin, CreditCard, Sofa, Shirt, Dumbbell, Settings, PawPrint, Camera, Gamepad2, Tv, Monitor, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,17 +9,31 @@ import { logger } from "@/utils/logger";
 
 // Mapeamento de ícones para as categorias
 const iconMap: Record<string, any> = {
-  empregos: Briefcase,
-  imoveis: Home,
-  servicos: Wrench,
+  // Categorias principais
   veiculos: Car,
+  imoveis: Home,
+  empregos: Briefcase,
+  eletronicos: Smartphone,
+  'casa-decoracao': Sofa,
+  'moda-beleza': Shirt,
+  'esportes-lazer': Dumbbell,
+  servicos: Settings,
+  'animais-pets': PawPrint,
+  outros: Package,
+  local: MapPin,
+  // Subcategorias comuns
+  cameras: Camera,
+  games: Gamepad2,
+  tvs: Tv,
+  computadores: Monitor,
+  celulares: Phone,
+  'pecas-auto': Wrench,
+  acessorios: ShoppingBag,
+  // Fallback para categorias antigas
   'vida-cotidiana': ShoppingBag,
   'vida-domestica-e-cotidiana': ShoppingBag,
   'servicos-financeiros': CreditCard,
-  compras: ShoppingBag,
-  eletronicos: Smartphone,
-  outros: Package,
-  local: MapPin,
+  compras: ShoppingBag
 };
 
 // Traduções dinâmicas para categorias
