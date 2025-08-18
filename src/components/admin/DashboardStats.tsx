@@ -45,7 +45,13 @@ const fetchDashboardData = async () => {
 };
 
 export const DashboardStats = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  // Force refresh translations if needed
+  if (!i18n.isInitialized) {
+    return <DashboardStatsSkeleton />;
+  }
+  
   const { data, isLoading, error } = useQuery({
     queryKey: createQueryKey("dashboard-stats"),
     queryFn: fetchDashboardData,

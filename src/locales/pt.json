@@ -332,7 +332,7 @@
     },
     "stats": {
       "total_users": "Total de Usuários",
-      "total_listings": "Total de Anúncios",
+      "total_listings": "Total de Anúncios", 
       "total_orders": "Total de Pedidos",
       "growth_rate": "Taxa de Crescimento",
       "registered_users": "Usuários registrados",
