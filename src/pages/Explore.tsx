@@ -16,6 +16,7 @@ const Explore = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const selectedSlug = searchParams.get("categoria") ?? undefined;
+  const searchQuery = searchParams.get("q") ?? undefined;
   const { data: categories, isLoading: loadingCats, error: catsError } = useCategories();
   const { t } = useTranslation();
   
@@ -36,6 +37,7 @@ const Explore = () => {
   const { data: listings = [], isLoading: loadingListings, totalCount } = useListings(
     { 
       categorySlug: rootCategory?.slug || selectedSlug,
+      search: searchQuery,
       pageSize
     },
     categories
@@ -109,10 +111,12 @@ const Explore = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-3xl">
-              {rootCategory ? t("explore.headerCat", { name: rootCategory.name_pt }) : t("explore.headerBase")}
+              {searchQuery ? `Resultados para "${searchQuery}"` : 
+               rootCategory ? t("explore.headerCat", { name: rootCategory.name_pt }) : 
+               t("explore.headerBase")}
             </h1>
             <p className="text-muted-foreground">
-              {t("explore.useSearch")}
+              {searchQuery ? `${totalCount || 0} resultados encontrados` : t("explore.useSearch")}
             </p>
           </div>
           <Button 
