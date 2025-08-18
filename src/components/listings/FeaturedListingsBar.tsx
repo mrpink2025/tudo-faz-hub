@@ -33,7 +33,6 @@ const FeaturedListingsBar = () => {
   const [isHovered, setIsHovered] = useState(false);
   const autoplayRef = useRef<NodeJS.Timeout>();
   
-  if (!listings.length) return null;
   const locale = i18n.language || "pt-BR";
 
   // Number of items to show at once
@@ -73,6 +72,11 @@ const FeaturedListingsBar = () => {
       setCurrentIndex(0);
     }
   }, [currentIndex, maxIndex]);
+
+  // Don't render if no listings
+  if (!listings.length) {
+    return null;
+  }
 
   const nextSlide = () => {
     setCurrentIndex((prev) => {
