@@ -24,6 +24,65 @@ const iconMap: Record<string, any> = {
 
 // Traduções dinâmicas para categorias
 const getCategoryName = (category: any, language: string) => {
+  // Traduções estáticas para categorias principais
+  const staticTranslations: Record<string, Record<string, string>> = {
+    'empregos': {
+      'en': 'Jobs',
+      'es': 'Empleos', 
+      'zh': '工作',
+      'pt': 'Empregos'
+    },
+    'imoveis': {
+      'en': 'Real Estate',
+      'es': 'Bienes Raíces',
+      'zh': '房地产',
+      'pt': 'Imóveis'
+    },
+    'servicos': {
+      'en': 'Services',
+      'es': 'Servicios',
+      'zh': '服务',
+      'pt': 'Serviços'
+    },
+    'veiculos': {
+      'en': 'Vehicles',
+      'es': 'Vehículos',
+      'zh': '车辆',
+      'pt': 'Veículos'
+    },
+    'vida-cotidiana': {
+      'en': 'Daily Life',
+      'es': 'Vida Cotidiana',
+      'zh': '日常生活',
+      'pt': 'Vida Cotidiana'
+    },
+    'servicos-financeiros': {
+      'en': 'Financial Services',
+      'es': 'Servicios Financieros',
+      'zh': '金融服务',
+      'pt': 'Serviços Financeiros'
+    },
+    'eletronicos': {
+      'en': 'Electronics',
+      'es': 'Electrónicos',
+      'zh': '电子产品',
+      'pt': 'Eletrônicos'
+    },
+    'outros': {
+      'en': 'Others',
+      'es': 'Otros',
+      'zh': '其他',
+      'pt': 'Outros'
+    }
+  };
+
+  // Primeiro tenta usar tradução estática baseada no slug
+  const slug = category.slug?.toLowerCase();
+  if (staticTranslations[slug] && staticTranslations[slug][language]) {
+    return staticTranslations[slug][language];
+  }
+
+  // Depois tenta usar campos do banco de dados
   switch (language) {
     case 'en':
       return category.name_en || category.name_pt;
