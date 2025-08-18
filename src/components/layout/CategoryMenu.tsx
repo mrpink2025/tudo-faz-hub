@@ -69,6 +69,12 @@ const CategoryMenu = () => {
         'es': 'Otros',
         'zh': '其他',
         'pt': 'Outros'
+      },
+      'local': {
+        'en': 'Local',
+        'es': 'Local',
+        'zh': '本地',
+        'pt': 'Local'
       }
     };
 
@@ -97,11 +103,11 @@ const CategoryMenu = () => {
 
 
   return (
-    <NavigationMenu className="z-50">
+    <NavigationMenu className="z-50 relative">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="min-w-[140px] text-[hsl(var(--foreground))] hover:bg-white/10">{t("categories.menu")}</NavigationMenuTrigger>
-          <NavigationMenuContent className="p-4 bg-popover text-foreground border border-border rounded-md shadow-lg">
+          <NavigationMenuTrigger className="min-w-[140px] text-foreground bg-background hover:bg-accent hover:text-accent-foreground border border-border">{t("categories.menu")}</NavigationMenuTrigger>
+          <NavigationMenuContent className="p-4 bg-popover text-popover-foreground border border-border rounded-md shadow-lg z-50 relative">
             {isLoading && (
               <div className="px-2 py-1.5 text-sm">{t("common.loading")}</div>
             )}
@@ -112,7 +118,7 @@ const CategoryMenu = () => {
             )}
             {!isLoading && !error && roots.length > 0 && (
               <div className="w-[min(90vw,900px)] grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <aside className="sm:col-span-1 max-h-[360px] overflow-y-auto pr-2 border-r border-border">
+                <aside className="sm:col-span-1 max-h-[360px] overflow-y-auto pr-2 border-r border-border/50">
                   <ul className="space-y-1">
                     {roots.map((root: any) => {
                       const isActive = highlightedId === root.id;
@@ -122,7 +128,7 @@ const CategoryMenu = () => {
                             type="button"
                             onMouseEnter={() => setActive(root.id)}
                             onFocus={() => setActive(root.id)}
-                            className={`w-full text-left px-3 py-2 rounded-md transition-colors ${isActive ? "bg-muted text-foreground" : "hover:bg-muted/60"}`}
+                            className={`w-full text-left px-3 py-2 rounded-md transition-colors ${isActive ? "bg-accent text-accent-foreground" : "hover:bg-accent/60 text-muted-foreground hover:text-foreground"}`}
                             aria-haspopup="menu"
                             aria-expanded={isActive}
                           >
