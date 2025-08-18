@@ -44,7 +44,7 @@ const SearchBar = () => {
         <Input
           value={q}
           onChange={(e) => handleInputChange(e.target.value)}
-          className="pl-10 h-11"
+          className="pl-10 h-11 text-foreground caret-foreground"
           placeholder={t("search.search_placeholder")}
           aria-label={t("search.search_aria")}
         />
