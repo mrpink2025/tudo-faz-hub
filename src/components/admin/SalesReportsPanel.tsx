@@ -208,10 +208,10 @@ export const SalesReportsPanel = () => {
                     <XAxis dataKey="formattedDate" />
                     <YAxis />
                     <Tooltip />
-                    <Line 
+                     <Line 
                       type="monotone" 
                       dataKey="vendas" 
-                      stroke="#8884d8" 
+                      stroke="hsl(var(--primary))" 
                       strokeWidth={2}
                     />
                   </LineChart>
@@ -230,7 +230,7 @@ export const SalesReportsPanel = () => {
                     <XAxis dataKey="hour" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="vendas" fill="#82ca9d" />
+                    <Bar dataKey="vendas" fill="hsl(var(--secondary))" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

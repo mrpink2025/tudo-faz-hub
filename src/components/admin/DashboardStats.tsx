@@ -53,9 +53,9 @@ export const DashboardStats = () => {
   });
 
   const pieData = [
-    { name: t('admin.stats.users'), value: data?.users || 0, color: 'hsl(221 83% 53%)' },
-    { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(262 83% 58%)' },
-    { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(142 76% 36%)' }
+    { name: t('admin.stats.users'), value: data?.users || 0, color: 'hsl(var(--primary))' },
+    { name: t('admin.stats.listings'), value: data?.listings || 0, color: 'hsl(var(--secondary))' },
+    { name: t('admin.stats.orders'), value: data?.orders || 0, color: 'hsl(var(--accent))' }
   ];
 
   if (isLoading) {

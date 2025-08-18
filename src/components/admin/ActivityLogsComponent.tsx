@@ -60,11 +60,11 @@ export function ActivityLogsComponent() {
   };
 
   const getActivityColor = (type: string) => {
-    if (type.includes('error')) return 'text-red-600';
-    if (type.includes('success') || type.includes('confirmed')) return 'text-green-600';
-    if (type.includes('email')) return 'text-blue-600';
-    if (type.includes('commission')) return 'text-purple-600';
-    return 'text-gray-600';
+    if (type.includes('error')) return 'text-destructive';
+    if (type.includes('success') || type.includes('confirmed')) return 'text-primary';
+    if (type.includes('email')) return 'text-secondary';
+    if (type.includes('commission')) return 'text-accent';
+    return 'text-muted-foreground';
   };
 
   const getBadgeVariant = (type: string) => {
