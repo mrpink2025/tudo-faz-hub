@@ -42,21 +42,37 @@ const FeaturedListingsBar = () => {
 
   // Auto-advance carousel
   useEffect(() => {
+    // Clear any existing interval first
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current);
+      autoplayRef.current = undefined;
+    }
+
+    // Only set up new interval if conditions are met
     if (!isHovered && listings.length > itemsPerView) {
       autoplayRef.current = setInterval(() => {
         setCurrentIndex((prev) => {
+          const currentMaxIndex = Math.max(0, listings.length - itemsPerView);
           const next = prev + 1;
-          return next > maxIndex ? 0 : next;
+          return next > currentMaxIndex ? 0 : next;
         });
-      }, 4000); // Change slide every 4 seconds
+      }, 4000);
     }
 
     return () => {
       if (autoplayRef.current) {
         clearInterval(autoplayRef.current);
+        autoplayRef.current = undefined;
       }
     };
-  }, [isHovered, listings.length]);
+  }, [isHovered, listings.length, itemsPerView]); // Added all dependencies
+
+  // Reset index if it exceeds maxIndex (when listings change)
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(0);
+    }
+  }, [currentIndex, maxIndex]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => {
