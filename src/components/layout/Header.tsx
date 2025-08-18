@@ -31,6 +31,10 @@ const Header = () => {
   const [searchParams] = useSearchParams();
   const { currentSearchValue } = useSearch();
 
+  // Debug logs
+  console.log('Header - User:', user?.email);
+  console.log('Header - isAdmin:', isAdmin);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
