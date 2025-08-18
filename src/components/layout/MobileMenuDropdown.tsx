@@ -14,6 +14,12 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
 
+  const handleAdminNavigation = () => {
+    setTimeout(() => {
+      navigate('/admin');
+    }, 100);
+  };
+
   if (!user) return null;
 
   return (
@@ -26,7 +32,7 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover text-foreground z-50">
         {isAdmin && (
-          <DropdownMenuItem onClick={() => navigate('/admin')}>
+          <DropdownMenuItem onClick={handleAdminNavigation}>
             {t("nav.admin_panel")}
           </DropdownMenuItem>
         )}

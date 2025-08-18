@@ -36,6 +36,12 @@ const Header = () => {
     await supabase.auth.signOut();
   };
 
+  const handleAdminNavigation = () => {
+    setTimeout(() => {
+      navigate('/admin');
+    }, 100);
+  };
+
   // Create explore link with current search value from input field or URL
   const searchValue = currentSearchValue || searchParams.get('q');
   const exploreLink = searchValue ? `/explorar?q=${encodeURIComponent(searchValue)}` : '/explorar';
@@ -85,7 +91,7 @@ const Header = () => {
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {isAdmin && (
-                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                  <DropdownMenuItem onClick={handleAdminNavigation}>
                     {t("nav.admin_panel")}
                   </DropdownMenuItem>
                 )}
