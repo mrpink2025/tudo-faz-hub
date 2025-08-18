@@ -15,9 +15,7 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
   const navigate = useNavigate();
 
   const handleAdminNavigation = () => {
-    setTimeout(() => {
-      navigate('/admin');
-    }, 100);
+    window.location.href = '/admin';
   };
 
   if (!user) return null;

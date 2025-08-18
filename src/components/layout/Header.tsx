@@ -37,9 +37,7 @@ const Header = () => {
   };
 
   const handleAdminNavigation = () => {
-    setTimeout(() => {
-      navigate('/admin');
-    }, 100);
+    window.location.href = '/admin';
   };
 
   // Create explore link with current search value from input field or URL
