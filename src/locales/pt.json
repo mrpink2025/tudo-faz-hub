@@ -330,34 +330,6 @@
       "published": "Publicado",
       "draft": "Rascunho"
     },
-    "stats": {
-      "total_users": "Total de Usuários",
-      "total_listings": "Total de Anúncios", 
-      "total_orders": "Total de Pedidos",
-      "growth_rate": "Taxa de Crescimento",
-      "registered_users": "Usuários registrados",
-      "published_listings": "Anúncios publicados",
-      "completed_orders": "Pedidos completados",
-      "last_30_days": "Últimos 30 dias",
-      "listings_by_month": "Anúncios por Mês",
-      "general_distribution": "Distribuição Geral",
-      "no_data": "Nenhum dado disponível",
-      "users": "Usuários",
-      "listings": "Anúncios",
-      "orders": "Pedidos"
-    },
-    "orders": {
-      "orders": "Pedidos",
-      "track_orders": "Acompanhe os últimos pedidos e atualize o status",
-      "order": "Pedido",
-      "user": "usuário",
-      "listing": "anúncio",
-      "status_updated": "Status atualizado",
-      "status_error": "Erro ao atualizar status",
-      "no_orders": "Nenhum pedido encontrado",
-      "affiliate": "Afiliado",
-      "commission": "Comissão"
-    },
     "settings": {
       "title": "Configurações",
       "subtitle": "Gerencie as configurações do site",
@@ -385,6 +357,34 @@
       "upload_error_logo": "Erro ao fazer upload do logo",
       "upload_error_hero": "Erro ao fazer upload da imagem hero",
       "upload_error_favicon": "Erro ao fazer upload do favicon"
+    },
+    "stats": {
+      "total_users": "Total de Usuários",
+      "total_listings": "Total de Anúncios", 
+      "total_orders": "Total de Pedidos",
+      "growth_rate": "Taxa de Crescimento",
+      "registered_users": "Usuários registrados",
+      "published_listings": "Anúncios publicados",
+      "completed_orders": "Pedidos completados",
+      "last_30_days": "Últimos 30 dias",
+      "listings_by_month": "Anúncios por Mês",
+      "general_distribution": "Distribuição Geral",
+      "no_data": "Nenhum dado disponível",
+      "users": "Usuários",
+      "listings": "Anúncios",
+      "orders": "Pedidos"
+    },
+    "orders": {
+      "orders": "Pedidos",
+      "track_orders": "Acompanhe os últimos pedidos e atualize o status",
+      "order": "Pedido",
+      "user": "usuário",
+      "listing": "anúncio",
+      "status_updated": "Status atualizado",
+      "status_error": "Erro ao atualizar status",
+      "no_orders": "Nenhum pedido encontrado",
+      "affiliate": "Afiliado",
+      "commission": "Comissão"
     },
     "sales": {
       "title": "Relatórios de Vendas",
