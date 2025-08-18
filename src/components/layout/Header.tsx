@@ -31,10 +31,6 @@ const Header = () => {
   const [searchParams] = useSearchParams();
   const { currentSearchValue } = useSearch();
 
-  // Debug logs
-  console.log('Header - User:', user?.email);
-  console.log('Header - isAdmin:', isAdmin);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
@@ -84,7 +80,7 @@ const Header = () => {
                   <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-popover text-foreground z-[60]">
+              <DropdownMenuContent align="end" className="bg-popover text-foreground z-[100]">
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {isAdmin && (
