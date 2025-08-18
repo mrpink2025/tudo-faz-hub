@@ -36,11 +36,18 @@ const FeaturedListingsBar = () => {
   if (!listings.length) return null;
   const locale = i18n.language || "pt-BR";
 
+  // Number of items to show at once
+  const itemsPerView = 3;
+  const maxIndex = Math.max(0, listings.length - itemsPerView);
+
   // Auto-advance carousel
   useEffect(() => {
-    if (!isHovered && listings.length > 1) {
+    if (!isHovered && listings.length > itemsPerView) {
       autoplayRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % listings.length);
+        setCurrentIndex((prev) => {
+          const next = prev + 1;
+          return next > maxIndex ? 0 : next;
+        });
       }, 4000); // Change slide every 4 seconds
     }
 
@@ -52,15 +59,23 @@ const FeaturedListingsBar = () => {
   }, [isHovered, listings.length]);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % listings.length);
+    setCurrentIndex((prev) => {
+      const next = prev + 1;
+      return next > maxIndex ? 0 : next;
+    });
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + listings.length) % listings.length);
+    setCurrentIndex((prev) => {
+      const next = prev - 1;
+      return next < 0 ? maxIndex : next;
+    });
   };
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
+    if (index <= maxIndex) {
+      setCurrentIndex(index);
+    }
   };
 
   return (
@@ -73,13 +88,13 @@ const FeaturedListingsBar = () => {
       <div className="container py-2 overflow-hidden">
         <div className="relative">
           {/* Carousel container */}
-          <div className="flex transition-transform duration-500 ease-in-out" 
-               style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+          <div className="flex transition-transform duration-500 ease-in-out gap-4" 
+               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}>
             {listings.map((listing) => (
-              <div key={listing.id} className="w-full flex-shrink-0">
+              <div key={listing.id} className="flex-shrink-0" style={{ width: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) * 16 / itemsPerView}px)` }}>
                 <Link
                   to={`/anuncio/${listing.id}`}
-                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/50 transition-all duration-300 group"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 transition-all duration-300 group h-full"
                   aria-label={`Ver anúncio em destaque: ${listing.title}`}
                 >
                   {/* Image */}
@@ -88,11 +103,11 @@ const FeaturedListingsBar = () => {
                       <img
                         src={listing.cover_image}
                         alt={listing.title}
-                        className="w-16 h-16 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-12 h-12 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                        <span className="text-2xl">🏷️</span>
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                        <span className="text-lg">🏷️</span>
                       </div>
                     )}
                   </div>
@@ -102,7 +117,7 @@ const FeaturedListingsBar = () => {
                     <h3 className="font-medium text-sm truncate group-hover:text-primary transition-colors">
                       {listing.title}
                     </h3>
-                    <p className="text-lg font-bold text-primary">
+                    <p className="text-sm font-bold text-primary">
                       {formatPrice(listing.price, listing.currency, t("price.combined"), locale)}
                     </p>
                     {listing.location && (
@@ -117,7 +132,7 @@ const FeaturedListingsBar = () => {
           </div>
 
           {/* Navigation buttons */}
-          {listings.length > 1 && (
+          {listings.length > itemsPerView && (
             <>
               <Button
                 variant="ghost"
@@ -142,9 +157,9 @@ const FeaturedListingsBar = () => {
           )}
 
           {/* Dots indicator */}
-          {listings.length > 1 && (
+          {listings.length > itemsPerView && (
             <div className="flex justify-center mt-2 gap-1">
-              {listings.map((_, index) => (
+              {Array.from({ length: maxIndex + 1 }, (_, index) => (
                 <button
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all duration-200 ${
@@ -153,7 +168,7 @@ const FeaturedListingsBar = () => {
                       : 'bg-primary/30 hover:bg-primary/50'
                   }`}
                   onClick={() => goToSlide(index)}
-                  aria-label={`Ir para anúncio ${index + 1}`}
+                  aria-label={`Ir para grupo ${index + 1}`}
                 />
               ))}
             </div>
