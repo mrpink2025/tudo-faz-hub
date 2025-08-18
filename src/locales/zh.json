@@ -141,6 +141,7 @@
       "payments": "支付",
       "stripe_enabled": "启用Stripe",
       "stripe_key": "Stripe公钥",
+      "stripe_key_note": "Stripe公钥（可以公开配置）",
       "saved": "设置已保存",
       "save_error": "保存错误",
       "upload_error_logo": "上传徽标错误",

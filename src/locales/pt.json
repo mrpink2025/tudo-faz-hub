@@ -348,6 +348,7 @@
       "payments": "Pagamentos",
       "stripe_enabled": "Habilitar Stripe",
       "stripe_key": "Chave Pública Stripe",
+      "stripe_key_note": "Chave pública do Stripe (pode ser configurada publicamente)",
       "saved": "Configurações salvas",
       "save_error": "Erro ao salvar",
       "upload_error_logo": "Erro ao fazer upload do logo",

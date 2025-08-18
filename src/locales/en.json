@@ -141,6 +141,7 @@
       "payments": "Payments",
       "stripe_enabled": "Enable Stripe",
       "stripe_key": "Stripe Public Key",
+      "stripe_key_note": "Stripe public key (can be configured publicly)",
       "saved": "Settings saved",
       "save_error": "Error saving",
       "upload_error_logo": "Error uploading logo",
