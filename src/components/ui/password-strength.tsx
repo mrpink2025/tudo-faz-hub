@@ -42,7 +42,7 @@ const getStrengthLabel = (strength: number) => {
 export function PasswordStrength({ password, className }: PasswordStrengthProps) {
   const { criteria, strength } = useMemo(() => calculatePasswordStrength(password), [password]);
 
-  if (!password) return null;
+  // Sempre mostrar os critérios, mesmo com senha vazia
 
   return (
     <div className={cn("space-y-2", className)}>
