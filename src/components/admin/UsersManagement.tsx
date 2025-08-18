@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { queryConfigs, createQueryKey } from "@/utils/query-config";
 import { Search, Shield, ShieldCheck, Ban, User, Mail, Calendar, UserX } from "lucide-react";
 
 export default function UsersManagement() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const qc = useQueryClient();
   
@@ -75,7 +77,7 @@ export default function UsersManagement() {
         .single();
 
       if (existing) {
-        throw new Error("Usuário já possui esta função");
+        throw new Error(t("admin.users.role_exists"));
       }
 
       const { error } = await supabase
@@ -85,11 +87,11 @@ export default function UsersManagement() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Função atribuída com sucesso" });
+      toast({ title: t("admin.users.role_added") });
       qc.invalidateQueries({ queryKey: createQueryKey("admin-users") });
     },
     onError: (e: any) => toast({ 
-      title: "Erro ao atribuir função", 
+      title: t("admin.users.role_add_error"), 
       description: e.message,
       variant: "destructive"
     }),
@@ -106,11 +108,11 @@ export default function UsersManagement() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Função removida com sucesso" });
+      toast({ title: t("admin.users.role_removed") });
       qc.invalidateQueries({ queryKey: createQueryKey("admin-users") });
     },
     onError: (e: any) => toast({ 
-      title: "Erro ao remover função", 
+      title: t("admin.users.role_remove_error"), 
       description: e.message,
       variant: "destructive"
     }),
@@ -153,22 +155,22 @@ export default function UsersManagement() {
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-2xl font-bold">Gerenciar Usuários</h2>
-        <p className="text-muted-foreground">Visualize e gerencie todos os usuários da plataforma</p>
+        <h2 className="text-2xl font-bold">{t("admin.users.manage")}</h2>
+        <p className="text-muted-foreground">{t("admin.users.manage_desc")}</p>
       </header>
 
       {/* Filtros */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Filtros</CardTitle>
+          <CardTitle className="text-lg">{t("admin.users.filters")}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Buscar usuário</label>
+            <label className="text-sm font-medium">{t("admin.users.search_user")}</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Digite nome ou email..."
+                placeholder={t("admin.users.search_placeholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -177,16 +179,16 @@ export default function UsersManagement() {
           </div>
           
           <div className="space-y-2">
-            <label className="text-sm font-medium">Função</label>
+            <label className="text-sm font-medium">{t("admin.users.role_filter")}</label>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-popover z-50">
-                <SelectItem value="all">Todas as funções</SelectItem>
-                <SelectItem value="admin">Administradores</SelectItem>
-                <SelectItem value="moderator">Moderadores</SelectItem>
-                <SelectItem value="user">Usuários comuns</SelectItem>
+                <SelectItem value="all">{t("admin.users.all_roles")}</SelectItem>
+                <SelectItem value="admin">{t("admin.users.admins")}</SelectItem>
+                <SelectItem value="moderator">{t("admin.users.moderators")}</SelectItem>
+                <SelectItem value="user">{t("admin.users.regular_users")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -198,7 +200,7 @@ export default function UsersManagement() {
         <AdminTableSkeleton />
       ) : error ? (
         <div className="text-center p-4">
-          <p className="text-muted-foreground">Erro: {error.message}</p>
+          <p className="text-muted-foreground">{t("admin.users.error_prefix")} {error.message}</p>
         </div>
       ) : filteredUsers && filteredUsers.length ? (
         <div className="space-y-4">
@@ -215,17 +217,17 @@ export default function UsersManagement() {
                       </Avatar>
                       
                       <div>
-                        <CardTitle className="text-lg">{user.full_name || "Nome não informado"}</CardTitle>
+                        <CardTitle className="text-lg">{user.full_name || t("admin.users.name_not_provided")}</CardTitle>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Mail className="w-4 h-4" />
                           <span>{user.email}</span>
-                          {!user.email_confirmed_at && <Badge variant="outline" className="text-xs">Email não confirmado</Badge>}
+                          {!user.email_confirmed_at && <Badge variant="outline" className="text-xs">{t("admin.users.email_not_confirmed")}</Badge>}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                           <Calendar className="w-3 h-3" />
-                          <span>Cadastrado em {new Date(user.created_at).toLocaleDateString()}</span>
+                          <span>{t("admin.users.registered_on")} {new Date(user.created_at).toLocaleDateString()}</span>
                           {user.last_sign_in_at && (
-                            <span>• Último acesso: {new Date(user.last_sign_in_at).toLocaleDateString()}</span>
+                            <span>• {t("admin.users.last_access")} {new Date(user.last_sign_in_at).toLocaleDateString()}</span>
                           )}
                         </div>
                       </div>
@@ -252,7 +254,7 @@ export default function UsersManagement() {
                         disabled={assignRole.isPending}
                       >
                         <Shield className="w-4 h-4 mr-1" />
-                        Tornar Admin
+                        {t("admin.users.make_admin")}
                       </Button>
                     )}
 
@@ -265,7 +267,7 @@ export default function UsersManagement() {
                         disabled={assignRole.isPending}
                       >
                         <ShieldCheck className="w-4 h-4 mr-1" />
-                        Tornar Moderador
+                        {t("admin.users.make_moderator")}
                       </Button>
                     )}
 
@@ -275,23 +277,23 @@ export default function UsersManagement() {
                         <AlertDialogTrigger asChild>
                           <Button size="sm" variant="destructive">
                             <UserX className="w-4 h-4 mr-1" />
-                            Remover Admin
+                            {t("admin.users.remove_admin")}
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Remover função de administrador</AlertDialogTitle>
+                            <AlertDialogTitle>{t("admin.users.remove_admin_title")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Tem certeza que deseja remover os privilégios de administrador de {user.full_name || user.email}?
+                              {t("admin.users.remove_admin_desc")} {user.full_name || user.email}?
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
                             <AlertDialogAction 
                               onClick={() => removeRole.mutate({ userId: user.id, role: "admin" })}
                               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             >
-                              Remover Admin
+                              {t("admin.users.remove_admin")}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -304,22 +306,22 @@ export default function UsersManagement() {
                         <AlertDialogTrigger asChild>
                           <Button size="sm" variant="secondary">
                             <UserX className="w-4 h-4 mr-1" />
-                            Remover Moderador
+                            {t("admin.users.remove_moderator")}
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Remover função de moderador</AlertDialogTitle>
+                            <AlertDialogTitle>{t("admin.users.remove_moderator_title")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Tem certeza que deseja remover os privilégios de moderador de {user.full_name || user.email}?
+                              {t("admin.users.remove_moderator_desc")} {user.full_name || user.email}?
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
                             <AlertDialogAction 
                               onClick={() => removeRole.mutate({ userId: user.id, role: "moderator" })}
                             >
-                              Remover Moderador
+                              {t("admin.users.remove_moderator")}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -334,7 +336,7 @@ export default function UsersManagement() {
       ) : (
         <Card>
           <CardContent className="text-center py-8">
-            <p className="text-muted-foreground">Nenhum usuário encontrado com os filtros aplicados.</p>
+            <p className="text-muted-foreground">{t("admin.users.no_users_found")}</p>
           </CardContent>
         </Card>
       )}
