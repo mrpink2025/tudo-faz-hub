@@ -235,9 +235,15 @@ export default function UsersManagement() {
                     
                     <div className="flex items-center gap-2">
                       {userRoles.length > 0 ? (
-                        userRoles.map(role => getRoleBadge(role))
+                        userRoles.map((role, index) => (
+                          <span key={`${user.id}-${role}-${index}`}>
+                            {getRoleBadge(role)}
+                          </span>
+                        ))
                       ) : (
-                        getRoleBadge('user')
+                        <span key={`${user.id}-user`}>
+                          {getRoleBadge('user')}
+                        </span>
                       )}
                     </div>
                   </div>
