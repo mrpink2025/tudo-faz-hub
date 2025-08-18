@@ -10,7 +10,7 @@
     "confirm": "Confirmar",
     "success": "Sucesso"
   },
-  "home": { "tagline_small": "Seu marketplace local completo" },
+  "home": { "tagline_small": "Seu marketplace local completo", "hero_description": "Produtos, serviços, empregos, imóveis e muito mais próximos de você. Publique anúncios em minutos e alcance sua comunidade.", "credit_tooltip": "Faça login para gerenciar créditos e destaque" },
   "promo": {
     "badge": "Promova seu anúncio",
     "title": "Destaque seu anúncio e alcance muito mais pessoas",

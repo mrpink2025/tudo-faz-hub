@@ -60,7 +60,7 @@ const Hero = () => {
                 <Link
                   to="/creditos"
                   className="inline-flex items-center gap-2 rounded-md border border-white/40 px-4 py-2 hover:bg-white/10 transition"
-                  title="Faça login para gerenciar créditos e destaque"
+                  title={t("home.credit_tooltip")}
                 >
                   {t("buttons.deposit_feature")}
                 </Link>
@@ -68,7 +68,7 @@ const Hero = () => {
             </div>
           </h1>
           <p className="text-muted-foreground text-base lg:text-lg max-w-prose">
-            Produtos, serviços, empregos, imóveis e muito mais próximos de você. Publique anúncios em minutos e alcance sua comunidade.
+            {t("home.hero_description")}
           </p>
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
             <div className="flex-1">
@@ -76,7 +76,7 @@ const Hero = () => {
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               <Link to="/explorar">
-                <Button variant="soft" size="xl">Explorar</Button>
+                <Button variant="soft" size="xl">{t("nav.explore")}</Button>
               </Link>
             </div>
           </div>
