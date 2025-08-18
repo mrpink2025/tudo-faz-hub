@@ -75,7 +75,7 @@ export function ShoppingCartButton() {
                           {item.listings.title}
                         </h4>
                         <p className="text-sm text-muted-foreground">
-                          R$ {(item.listings.price / 100).toFixed(2)}
+                          R$ {(item.listings.price / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           Produto do marketplace
@@ -142,9 +142,11 @@ export function ShoppingCartButton() {
 
         {cartItems && cartItems.length > 0 && (
           <SheetFooter className="flex-col space-y-4">
-            <div className="flex justify-between items-center text-lg font-semibold">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-lg font-semibold space-y-1 sm:space-y-0">
               <span>Total:</span>
-              <span>R$ {(cartTotal / 100).toFixed(2)}</span>
+              <span className="text-primary text-xl">
+                R$ {(cartTotal / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
             </div>
             <Button 
               onClick={handleCheckout} 
