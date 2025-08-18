@@ -31,7 +31,19 @@
     "error": "加载分类时出错",
     "view_all": "查看 {{name}} 的全部",
     "no_children": "无子分类",
-    "none": "暂无分类"
+    "none": "暂无分类",
+    "veiculos": "车辆与交通",
+    "imoveis": "房地产", 
+    "empregos": "工作与职业",
+    "eletronicos": "电子产品与技术",
+    "casa-decoracao": "家居与装饰",
+    "moda-beleza": "时尚与美容",
+    "esportes-lazer": "体育与休闲",
+    "servicos": "服务",
+    "animais-pets": "动物与宠物",
+    "outros": "其他",
+    "view_ads": "查看{{category}}广告",
+    "error_loading": "加载分类时出错。请稍后重试。"
   },
   "explore": {
     "titleBase": "浏览帖子",

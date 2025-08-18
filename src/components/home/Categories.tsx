@@ -26,11 +26,11 @@ const iconMap: Record<string, any> = {
 const getCategoryName = (category: any, language: string) => {
   // Traduções estáticas para categorias principais
   const staticTranslations: Record<string, Record<string, string>> = {
-    'empregos': {
-      'en': 'Jobs',
-      'es': 'Empleos', 
-      'zh': '工作',
-      'pt': 'Empregos'
+    'veiculos': {
+      'en': 'Vehicles & Transportation',
+      'es': 'Vehículos y Transporte', 
+      'zh': '车辆与交通',
+      'pt': 'Veículos e Transportes'
     },
     'imoveis': {
       'en': 'Real Estate',
@@ -38,35 +38,47 @@ const getCategoryName = (category: any, language: string) => {
       'zh': '房地产',
       'pt': 'Imóveis'
     },
+    'empregos': {
+      'en': 'Jobs & Careers',
+      'es': 'Empleos y Carreras',
+      'zh': '工作与职业',
+      'pt': 'Empregos e Carreiras'
+    },
+    'eletronicos': {
+      'en': 'Electronics & Technology',
+      'es': 'Electrónicos y Tecnología',
+      'zh': '电子产品与技术',
+      'pt': 'Eletrônicos e Tecnologia'
+    },
+    'casa-decoracao': {
+      'en': 'Home & Decoration',
+      'es': 'Casa y Decoración',
+      'zh': '家居与装饰',
+      'pt': 'Casa e Decoração'
+    },
+    'moda-beleza': {
+      'en': 'Fashion & Beauty',
+      'es': 'Moda y Belleza',
+      'zh': '时尚与美容',
+      'pt': 'Moda e Beleza'
+    },
+    'esportes-lazer': {
+      'en': 'Sports & Leisure',
+      'es': 'Deportes y Ocio',
+      'zh': '体育与休闲',
+      'pt': 'Esportes e Lazer'
+    },
     'servicos': {
       'en': 'Services',
       'es': 'Servicios',
       'zh': '服务',
       'pt': 'Serviços'
     },
-    'veiculos': {
-      'en': 'Vehicles',
-      'es': 'Vehículos',
-      'zh': '车辆',
-      'pt': 'Veículos'
-    },
-    'vida-cotidiana': {
-      'en': 'Daily Life',
-      'es': 'Vida Cotidiana',
-      'zh': '日常生活',
-      'pt': 'Vida Cotidiana'
-    },
-    'servicos-financeiros': {
-      'en': 'Financial Services',
-      'es': 'Servicios Financieros',
-      'zh': '金融服务',
-      'pt': 'Serviços Financeiros'
-    },
-    'eletronicos': {
-      'en': 'Electronics',
-      'es': 'Electrónicos',
-      'zh': '电子产品',
-      'pt': 'Eletrônicos'
+    'animais-pets': {
+      'en': 'Animals & Pets',
+      'es': 'Animales y Mascotas',
+      'zh': '动物与宠物',
+      'pt': 'Animais e Pets'
     },
     'outros': {
       'en': 'Others',
@@ -82,17 +94,8 @@ const getCategoryName = (category: any, language: string) => {
     return staticTranslations[slug][language];
   }
 
-  // Depois tenta usar campos do banco de dados
-  switch (language) {
-    case 'en':
-      return category.name_en || category.name_pt;
-    case 'es': 
-      return category.name_es || category.name_pt;
-    case 'zh':
-      return category.name_zh || category.name_pt;
-    default:
-      return category.name_pt;
-  }
+  // Depois tenta usar campos do banco de dados (apenas name_pt disponível)
+  return category.name_pt || category.slug;
 };
 
 const Categories = () => {

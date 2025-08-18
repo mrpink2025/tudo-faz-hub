@@ -164,7 +164,19 @@
     "error": "Erro ao carregar categorias",
     "view_all": "Ver todos em {{name}}",
     "no_children": "Sem subcategorias",
-    "none": "Nenhuma categoria disponível"
+    "none": "Nenhuma categoria disponível",
+    "veiculos": "Veículos e Transportes",
+    "imoveis": "Imóveis",
+    "empregos": "Empregos e Carreiras", 
+    "eletronicos": "Eletrônicos e Tecnologia",
+    "casa-decoracao": "Casa e Decoração",
+    "moda-beleza": "Moda e Beleza",
+    "esportes-lazer": "Esportes e Lazer",
+    "servicos": "Serviços",
+    "animais-pets": "Animais e Pets",
+    "outros": "Outros",
+    "view_ads": "Ver anúncios de {{category}}",
+    "error_loading": "Erro ao carregar categorias. Tente novamente mais tarde."
   },
   "search": {
     "advanced": "Busca Avançada",

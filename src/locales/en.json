@@ -31,7 +31,19 @@
     "error": "Error loading categories",
     "view_all": "View all in {{name}}",
     "no_children": "No subcategories",
-    "none": "No categories available"
+    "none": "No categories available",
+    "veiculos": "Vehicles & Transportation",
+    "imoveis": "Real Estate",
+    "empregos": "Jobs & Careers",
+    "eletronicos": "Electronics & Technology",
+    "casa-decoracao": "Home & Decoration",
+    "moda-beleza": "Fashion & Beauty",
+    "esportes-lazer": "Sports & Leisure",
+    "servicos": "Services",
+    "animais-pets": "Animals & Pets",
+    "outros": "Others",
+    "view_ads": "View {{category}} ads",
+    "error_loading": "Error loading categories. Please try again later."
   },
   "explore": {
     "titleBase": "Explore listings",
