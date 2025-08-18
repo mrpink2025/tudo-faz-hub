@@ -293,7 +293,10 @@
       "role_add_error": "Erro ao atribuir função",
       "role_removed": "Função removida com sucesso",
       "role_remove_error": "Erro ao remover função",
-      "no_users_found": "Nenhum usuário encontrado"
+      "no_users_found": "Nenhum usuário encontrado",
+      "role_admin": "Admin",
+      "role_moderator": "Moderador",
+      "role_user": "Usuário"
     },
     "moderate": {
       "approved": "Anúncio aprovado com sucesso",

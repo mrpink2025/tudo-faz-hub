@@ -117,7 +117,10 @@
       "userIdPlaceholder": "User UUID",
       "assign": "Assign",
       "remove": "Remove",
-      "error_prefix": "Error:"
+      "error_prefix": "Error:",
+      "role_admin": "Admin",
+      "role_moderator": "Moderator",
+      "role_user": "User"
     },
     "settings": {
       "title": "Settings",

@@ -125,11 +125,11 @@ export default function UsersManagement() {
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'admin':
-        return <Badge variant="destructive" className="text-xs"><Shield className="w-3 h-3 mr-1" />Admin</Badge>;
+        return <Badge variant="destructive" className="text-xs"><Shield className="w-3 h-3 mr-1" />{t("admin.users.role_admin", { defaultValue: "Admin" })}</Badge>;
       case 'moderator':
-        return <Badge variant="secondary" className="text-xs"><ShieldCheck className="w-3 h-3 mr-1" />Moderador</Badge>;
+        return <Badge variant="secondary" className="text-xs"><ShieldCheck className="w-3 h-3 mr-1" />{t("admin.users.role_moderator", { defaultValue: "Moderador" })}</Badge>;
       default:
-        return <Badge variant="outline" className="text-xs"><User className="w-3 h-3 mr-1" />Usuário</Badge>;
+        return <Badge variant="outline" className="text-xs"><User className="w-3 h-3 mr-1" />{t("admin.users.role_user", { defaultValue: "Usuário" })}</Badge>;
     }
   };
 
