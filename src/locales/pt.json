@@ -439,22 +439,6 @@
       "info_label": "Info",
       "view_details": "Ver detalhes",
       "no_activity": "Nenhuma atividade registrada para este filtro."
-    },
-    "stats": {
-      "total_users": "Total de Usuários",
-      "total_listings": "Total de Anúncios",
-      "total_orders": "Total de Pedidos",
-      "growth_rate": "Taxa de Crescimento",
-      "registered_users": "Usuários registrados",
-      "published_listings": "Anúncios publicados",
-      "completed_orders": "Pedidos completados",
-      "last_30_days": "Últimos 30 dias",
-      "listings_by_month": "Anúncios por Mês",
-      "general_distribution": "Distribuição Geral",
-      "no_data": "Nenhum dado disponível",
-      "users": "Usuários",
-      "listings": "Anúncios",
-      "orders": "Pedidos"
     }
   },
   "auth": {
