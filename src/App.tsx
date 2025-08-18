@@ -39,6 +39,7 @@ import { MessageNotifications } from "./components/notifications/MessageNotifica
 import { AffiliateNotifications } from "./components/notifications/AffiliateNotifications";
 import { TelemetryProvider } from "./components/monitoring/TelemetryProvider";
 import DynamicFavicon from "./components/branding/DynamicFavicon";
+import { SearchProvider } from "./contexts/SearchContext";
 import "./i18n";
 
 const queryClient = new QueryClient();
@@ -48,9 +49,10 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <TelemetryProvider>
-          <BrandingLoader />
-          <DynamicFavicon />
+        <SearchProvider>
+          <TelemetryProvider>
+            <BrandingLoader />
+            <DynamicFavicon />
           <Header />
           <Routes>
             <Route path="/" element={<Index />} />
@@ -83,10 +85,11 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <MessageNotifications />
-          <AffiliateNotifications />
-          <Footer />
-        </TelemetryProvider>
+            <MessageNotifications />
+            <AffiliateNotifications />
+            <Footer />
+          </TelemetryProvider>
+        </SearchProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

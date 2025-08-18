@@ -21,19 +21,21 @@ import { useTranslation } from "react-i18next";
 import { UnifiedNotifications } from "@/components/notifications/UnifiedNotifications";
 import { MobileMenuDropdown } from "./MobileMenuDropdown";
 import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
+import { useSearch } from "@/contexts/SearchContext";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
+  const { currentSearchValue } = useSearch();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
 
-  // Get current search query to preserve in explore link
-  const currentSearch = searchParams.get('q');
-  const exploreLink = currentSearch ? `/explorar?q=${encodeURIComponent(currentSearch)}` : '/explorar';
+  // Create explore link with current search value from input field or URL
+  const searchValue = currentSearchValue || searchParams.get('q');
+  const exploreLink = searchValue ? `/explorar?q=${encodeURIComponent(searchValue)}` : '/explorar';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-black to-[hsl(var(--brand))] backdrop-blur">
