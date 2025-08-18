@@ -81,12 +81,12 @@ const FeaturedListingsBar = () => {
   return (
     <aside 
       aria-label="Anúncios em destaque" 
-      className="bg-gradient-to-r from-primary/10 via-accent/20 to-primary/10 border-b"
+      className="bg-white border-b border-border shadow-sm"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="container py-2 overflow-hidden">
-        <div className="relative">
+      <div className="container py-3 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-muted/30 to-muted/20 rounded-lg p-4">
           {/* Carousel container */}
           <div className="flex transition-transform duration-500 ease-in-out gap-4" 
                style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}>
@@ -94,35 +94,36 @@ const FeaturedListingsBar = () => {
               <div key={listing.id} className="flex-shrink-0" style={{ width: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) * 16 / itemsPerView}px)` }}>
                 <Link
                   to={`/anuncio/${listing.id}`}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/50 transition-all duration-300 group h-full"
+                  className="flex items-center gap-3 p-4 rounded-lg bg-white hover:bg-primary/5 transition-all duration-300 group h-full border border-border/50 hover:border-primary/30 shadow-sm hover:shadow-md"
                   aria-label={`Ver anúncio em destaque: ${listing.title}`}
                 >
                   {/* Image */}
-                  <div className="relative overflow-hidden rounded-md bg-muted flex-shrink-0">
+                  <div className="relative overflow-hidden rounded-lg bg-muted flex-shrink-0 border border-border/30">
                     {listing.cover_image ? (
                       <img
                         src={listing.cover_image}
                         alt={listing.title}
-                        className="w-12 h-12 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-16 h-16 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                        <span className="text-lg">🏷️</span>
+                      <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                        <span className="text-2xl">🏷️</span>
                       </div>
                     )}
                   </div>
                   
                   {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-sm truncate group-hover:text-primary transition-colors">
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <h3 className="font-semibold text-base leading-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
                       {listing.title}
                     </h3>
-                    <p className="text-sm font-bold text-primary">
+                    <p className="text-lg font-bold text-primary">
                       {formatPrice(listing.price, listing.currency, t("price.combined"), locale)}
                     </p>
                     {listing.location && (
-                      <p className="text-xs text-muted-foreground truncate">
-                        📍 {listing.location}
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <span className="text-xs">📍</span>
+                        <span className="truncate">{listing.location}</span>
                       </p>
                     )}
                   </div>
@@ -135,37 +136,37 @@ const FeaturedListingsBar = () => {
           {listings.length > itemsPerView && (
             <>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white shadow-md h-8 w-8"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/95 hover:bg-white border-border shadow-lg backdrop-blur-sm h-10 w-10 z-10"
                 onClick={prevSlide}
                 aria-label="Anúncio anterior"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-5 w-5" />
               </Button>
               
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white shadow-md h-8 w-8"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/95 hover:bg-white border-border shadow-lg backdrop-blur-sm h-10 w-10 z-10"
                 onClick={nextSlide}
                 aria-label="Próximo anúncio"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </>
           )}
 
           {/* Dots indicator */}
           {listings.length > itemsPerView && (
-            <div className="flex justify-center mt-2 gap-1">
+            <div className="flex justify-center mt-3 gap-2">
               {Array.from({ length: maxIndex + 1 }, (_, index) => (
                 <button
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  className={`h-2 rounded-full transition-all duration-200 ${
                     index === currentIndex 
-                      ? 'bg-primary w-4' 
-                      : 'bg-primary/30 hover:bg-primary/50'
+                      ? 'bg-primary w-6' 
+                      : 'bg-primary/30 hover:bg-primary/50 w-2'
                   }`}
                   onClick={() => goToSlide(index)}
                   aria-label={`Ir para grupo ${index + 1}`}
