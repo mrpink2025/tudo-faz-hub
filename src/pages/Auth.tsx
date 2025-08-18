@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/lib/validationSchemas";
 import { logger } from "@/utils/logger";
+import { PasswordStrength } from "@/components/ui/password-strength";
 const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -149,16 +150,20 @@ const Auth = () => {
                 )} />
                 <FormField name="password" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Senha</FormLabel>
+                    <FormLabel>Senha *</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número" {...field} />
+                      <Input type="password" placeholder="Digite sua senha" {...field} />
                     </FormControl>
+                    <div className="text-xs text-muted-foreground mt-1 space-y-1">
+                      <p>Sua senha deve conter:</p>
+                      <PasswordStrength password={field.value || ""} />
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField name="confirmPassword" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirmar Senha</FormLabel>
+                    <FormLabel>Confirmar Senha *</FormLabel>
                     <FormControl>
                       <Input type="password" placeholder="Digite a senha novamente" {...field} />
                     </FormControl>
