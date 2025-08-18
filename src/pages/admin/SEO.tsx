@@ -3,8 +3,11 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { PWANotifications } from '@/components/pwa/PWANotifications';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Globe, Smartphone, Zap, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const SEODashboard = () => {
+  const { t } = useTranslation();
+  
   return (
     <HelmetProvider>
       <SEOHead 
@@ -15,61 +18,61 @@ const SEODashboard = () => {
       
       <div className="container mx-auto py-6 space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">SEO & PWA Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('admin.seo.title')}</h1>
           <p className="text-muted-foreground">
-            Gerencie SEO, PWA e funcionalidades avançadas da plataforma
+            {t('admin.seo.subtitle')}
           </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sitemap Dinâmico</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.seo.dynamic_sitemap')}</CardTitle>
               <Globe className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Ativo</div>
+              <div className="text-2xl font-bold">{t('admin.seo.active')}</div>
               <p className="text-xs text-muted-foreground">
-                Atualizado automaticamente
+                {t('admin.seo.auto_updated')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">PWA Instalável</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.seo.pwa_installable')}</CardTitle>
               <Smartphone className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Ativo</div>
+              <div className="text-2xl font-bold">{t('admin.seo.active')}</div>
               <p className="text-xs text-muted-foreground">
-                Service Worker ativo
+                {t('admin.seo.service_worker_active')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Background Sync</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.seo.background_sync')}</CardTitle>
               <Zap className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Ativo</div>
+              <div className="text-2xl font-bold">{t('admin.seo.active')}</div>
               <p className="text-xs text-muted-foreground">
-                Sincronização offline
+                {t('admin.seo.offline_sync')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Meta Tags</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('admin.seo.meta_tags')}</CardTitle>
               <Search className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Otimizado</div>
+              <div className="text-2xl font-bold">{t('admin.seo.optimized')}</div>
               <p className="text-xs text-muted-foreground">
-                SEO completo
+                {t('admin.seo.seo_complete')}
               </p>
             </CardContent>
           </Card>
@@ -78,19 +81,19 @@ const SEODashboard = () => {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Funcionalidades SEO</CardTitle>
+              <CardTitle>{t('admin.seo.seo_features')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <h3 className="font-medium">✅ Implementado</h3>
+                <h3 className="font-medium">✅ {t('admin.seo.implemented')}</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Meta tags dinâmicas por página</li>
-                  <li>• Sitemap.xml dinâmico</li>
-                  <li>• Structured data (JSON-LD)</li>
-                  <li>• Open Graph tags</li>
-                  <li>• Twitter Cards</li>
-                  <li>• Canonical URLs</li>
-                  <li>• Mobile optimization</li>
+                  <li>• {t('admin.seo.dynamic_meta_tags')}</li>
+                  <li>• {t('admin.seo.dynamic_sitemap_xml')}</li>
+                  <li>• {t('admin.seo.structured_data')}</li>
+                  <li>• {t('admin.seo.open_graph')}</li>
+                  <li>• {t('admin.seo.twitter_cards')}</li>
+                  <li>• {t('admin.seo.canonical_urls')}</li>
+                  <li>• {t('admin.seo.mobile_optimization')}</li>
                 </ul>
               </div>
             </CardContent>
@@ -98,19 +101,19 @@ const SEODashboard = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Funcionalidades PWA</CardTitle>
+              <CardTitle>{t('admin.seo.pwa_features')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <h3 className="font-medium">✅ Implementado</h3>
+                <h3 className="font-medium">✅ {t('admin.seo.implemented')}</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Service Worker otimizado</li>
-                  <li>• Cache inteligente</li>
-                  <li>• Offline capabilities</li>
-                  <li>• Background sync</li>
-                  <li>• Push notifications</li>
-                  <li>• Install prompts</li>
-                  <li>• App manifest</li>
+                  <li>• {t('admin.seo.optimized_service_worker')}</li>
+                  <li>• {t('admin.seo.intelligent_cache')}</li>
+                  <li>• {t('admin.seo.offline_capabilities')}</li>
+                  <li>• {t('admin.seo.background_sync')}</li>
+                  <li>• {t('admin.seo.push_notifications')}</li>
+                  <li>• {t('admin.seo.install_prompts')}</li>
+                  <li>• {t('admin.seo.app_manifest')}</li>
                 </ul>
               </div>
             </CardContent>
@@ -121,7 +124,7 @@ const SEODashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Links Úteis</CardTitle>
+            <CardTitle>{t('admin.seo.useful_links')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="grid gap-2 md:grid-cols-2">
@@ -130,14 +133,14 @@ const SEODashboard = () => {
                 target="_blank" 
                 className="text-blue-600 hover:underline"
               >
-                Ver Sitemap Dinâmico →
+                {t('admin.seo.view_sitemap')}
               </a>
               <a 
                 href="https://jprmzutdujnufjyvxtss.supabase.co/functions/v1/dynamic-sitemap" 
                 target="_blank" 
                 className="text-blue-600 hover:underline"
               >
-                API do Sitemap →
+                {t('admin.seo.sitemap_api')}
               </a>
             </div>
           </CardContent>
