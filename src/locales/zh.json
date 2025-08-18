@@ -116,12 +116,24 @@
       "assignRole": "分配角色",
       "userIdPlaceholder": "用户 UUID",
       "assign": "分配",
-      "remove": "移除",
-      "added": "已添加角色",
-      "addError": "添加出错",
-      "removed": "已移除角色",
-      "removeError": "移除出错",
-      "none": "没有找到角色。"
+      "remove": "删除",
+      "error_prefix": "错误:"
+    },
+    "stats": {
+      "total_users": "用户总数",
+      "total_listings": "帖子总数",
+      "total_orders": "订单总数",
+      "growth_rate": "增长率",
+      "registered_users": "注册用户",
+      "published_listings": "已发布帖子",
+      "completed_orders": "已完成订单",
+      "last_30_days": "最近30天",
+      "listings_by_month": "每月帖子",
+      "general_distribution": "总体分布",
+      "no_data": "无可用数据",
+      "users": "用户",
+      "listings": "帖子",
+      "orders": "订单"
     }
   },
   "auth": {

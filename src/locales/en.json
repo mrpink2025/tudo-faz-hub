@@ -117,11 +117,23 @@
       "userIdPlaceholder": "User UUID",
       "assign": "Assign",
       "remove": "Remove",
-      "added": "Role added",
-      "addError": "Error adding",
-      "removed": "Role removed",
-      "removeError": "Error removing",
-      "none": "No roles found."
+      "error_prefix": "Error:"
+    },
+    "stats": {
+      "total_users": "Total Users",
+      "total_listings": "Total Listings",
+      "total_orders": "Total Orders",
+      "growth_rate": "Growth Rate",
+      "registered_users": "Registered users",
+      "published_listings": "Published listings",
+      "completed_orders": "Completed orders",
+      "last_30_days": "Last 30 days",
+      "listings_by_month": "Listings by Month",
+      "general_distribution": "General Distribution",
+      "no_data": "No data available",
+      "users": "Users",
+      "listings": "Listings",
+      "orders": "Orders"
     }
   },
   "credits": {

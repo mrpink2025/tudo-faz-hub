@@ -117,11 +117,23 @@
       "userIdPlaceholder": "UUID del usuario",
       "assign": "Asignar",
       "remove": "Eliminar",
-      "added": "Rol agregado",
-      "addError": "Error al agregar",
-      "removed": "Rol eliminado",
-      "removeError": "Error al eliminar",
-      "none": "No se encontraron roles."
+      "error_prefix": "Error:"
+    },
+    "stats": {
+      "total_users": "Total de Usuarios",
+      "total_listings": "Total de Anuncios",
+      "total_orders": "Total de Pedidos",
+      "growth_rate": "Tasa de Crecimiento",
+      "registered_users": "Usuarios registrados",
+      "published_listings": "Anuncios publicados",
+      "completed_orders": "Pedidos completados",
+      "last_30_days": "Últimos 30 días",
+      "listings_by_month": "Anuncios por Mes",
+      "general_distribution": "Distribución General",
+      "no_data": "No hay datos disponibles",
+      "users": "Usuarios",
+      "listings": "Anuncios",
+      "orders": "Pedidos"
     }
   },
   "auth": {

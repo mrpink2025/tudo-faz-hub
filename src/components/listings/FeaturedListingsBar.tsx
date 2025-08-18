@@ -120,7 +120,7 @@ const FeaturedListingsBar = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="container py-3 overflow-hidden">
-        <div className="relative bg-gradient-to-r from-muted/30 to-muted/20 rounded-lg p-3 md:p-4">
+        <div className="relative bg-gradient-to-r from-muted/30 to-muted/20 rounded-lg p-3 md:p-4 z-10">
           {/* Carousel container */}
           <div className="flex transition-transform duration-500 ease-in-out gap-2 md:gap-4" 
                style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)` }}>
