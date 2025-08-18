@@ -11,20 +11,34 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTableSkeleton } from "@/components/ui/loading-skeletons";
-import { queryConfigs, createQueryKey } from "@/utils/query-config";
-import { Search, Shield, ShieldCheck, Ban, User, Mail, Calendar, UserX } from "lucide-react";
+import { Search, Shield, ShieldCheck, User, Mail, Calendar, UserX } from "lucide-react";
+
+interface UserWithRoles {
+  id: string;
+  email: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  created_at: string;
+  updated_at: string;
+  last_sign_in_at: string | null;
+  email_confirmed_at: string | null;
+  user_roles: Array<{ role: string }>;
+}
+
+type UserRole = "admin" | "moderator" | "user";
 
 export default function UsersManagement() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const qc = useQueryClient();
+  const queryClient = useQueryClient();
   
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
-  const { data: users, isLoading, error } = useQuery({
-    queryKey: createQueryKey("admin-users", { search: searchTerm, role: roleFilter }),
-    queryFn: async () => {
+  // Fetch users with their roles
+  const { data: users, isLoading, error } = useQuery<UserWithRoles[]>({
+    queryKey: ["admin-users", { search: searchTerm, role: roleFilter }],
+    queryFn: async (): Promise<UserWithRoles[]> => {
       let query = supabase
         .from("profiles")
         .select(`
@@ -39,42 +53,58 @@ export default function UsersManagement() {
         `)
         .order("created_at", { ascending: false });
 
-      if (searchTerm) {
+      if (searchTerm.trim()) {
         query = query.or(`email.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`);
       }
 
       const { data: profilesData, error: profilesError } = await query;
       if (profilesError) throw profilesError;
 
-      // Buscar roles separadamente para cada usuário
-      const usersWithRoles = await Promise.all(
-        (profilesData || []).map(async (profile) => {
-          const { data: rolesData } = await supabase
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", profile.id);
-          
-          return {
-            ...profile,
-            user_roles: rolesData || []
-          };
-        })
-      );
+      if (!profilesData || profilesData.length === 0) {
+        return [];
+      }
 
-      return usersWithRoles;
+      // Fetch roles for all users in batch
+      const userIds = profilesData.map(profile => profile.id);
+      const { data: rolesData, error: rolesError } = await supabase
+        .from("user_roles")
+        .select("user_id, role")
+        .in("user_id", userIds);
+
+      if (rolesError) {
+        console.warn("Error fetching roles:", rolesError);
+      }
+
+      // Group roles by user_id
+      const rolesByUser = (rolesData || []).reduce((acc, role) => {
+        if (!acc[role.user_id]) {
+          acc[role.user_id] = [];
+        }
+        acc[role.user_id].push({ role: role.role });
+        return acc;
+      }, {} as Record<string, Array<{ role: string }>>);
+
+      // Combine profiles with their roles
+      return profilesData.map(profile => ({
+        ...profile,
+        user_roles: rolesByUser[profile.id] || []
+      }));
     },
-    ...queryConfigs.admin
+    staleTime: 1 * 60 * 1000, // 1 minute
+    refetchOnWindowFocus: true,
+    retry: 2,
   });
 
+  // Assign role mutation
   const assignRole = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: "admin" | "moderator" | "user" }) => {
-      // First check if role already exists
+    mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
+      // Check if role already exists
       const { data: existing } = await supabase
         .from("user_roles")
         .select("id")
         .eq("user_id", userId)
-        .eq("role", role as any)
-        .single();
+        .eq("role", role)
+        .maybeSingle();
 
       if (existing) {
         throw new Error(t("admin.users.role_exists"));
@@ -82,75 +112,132 @@ export default function UsersManagement() {
 
       const { error } = await supabase
         .from("user_roles")
-        .insert({ user_id: userId, role: role as any });
+        .insert({ user_id: userId, role });
 
       if (error) throw error;
     },
     onSuccess: () => {
       toast({ title: t("admin.users.role_added") });
-      qc.invalidateQueries({ queryKey: createQueryKey("admin-users") });
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     },
-    onError: (e: any) => toast({ 
-      title: t("admin.users.role_add_error"), 
-      description: e.message,
-      variant: "destructive"
-    }),
+    onError: (error: any) => {
+      toast({ 
+        title: t("admin.users.role_add_error"), 
+        description: error.message,
+        variant: "destructive"
+      });
+    },
   });
 
+  // Remove role mutation
   const removeRole = useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: "admin" | "moderator" | "user" }) => {
+    mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
         .from("user_roles")
         .delete()
         .eq("user_id", userId)
-        .eq("role", role as any);
+        .eq("role", role);
 
       if (error) throw error;
     },
     onSuccess: () => {
       toast({ title: t("admin.users.role_removed") });
-      qc.invalidateQueries({ queryKey: createQueryKey("admin-users") });
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     },
-    onError: (e: any) => toast({ 
-      title: t("admin.users.role_remove_error"), 
-      description: e.message,
-      variant: "destructive"
-    }),
+    onError: (error: any) => {
+      toast({ 
+        title: t("admin.users.role_remove_error"), 
+        description: error.message,
+        variant: "destructive"
+      });
+    },
   });
 
-  const getUserRoles = (user: any) => {
-    return user.user_roles?.map((r: any) => r.role) || [];
+  // Helper functions
+  const getUserRoles = (user: UserWithRoles): string[] => {
+    return user.user_roles?.map(r => r.role) || [];
   };
 
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'admin':
-        return <Badge variant="destructive" className="text-xs"><Shield className="w-3 h-3 mr-1" />{t("admin.users.role_admin", { defaultValue: "Admin" })}</Badge>;
+        return (
+          <Badge variant="destructive" className="text-xs">
+            <Shield className="w-3 h-3 mr-1" />
+            {t("admin.users.role_admin", { defaultValue: "Admin" })}
+          </Badge>
+        );
       case 'moderator':
-        return <Badge variant="secondary" className="text-xs"><ShieldCheck className="w-3 h-3 mr-1" />{t("admin.users.role_moderator", { defaultValue: "Moderador" })}</Badge>;
+        return (
+          <Badge variant="secondary" className="text-xs">
+            <ShieldCheck className="w-3 h-3 mr-1" />
+            {t("admin.users.role_moderator", { defaultValue: "Moderador" })}
+          </Badge>
+        );
       default:
-        return <Badge variant="outline" className="text-xs"><User className="w-3 h-3 mr-1" />{t("admin.users.role_user", { defaultValue: "Usuário" })}</Badge>;
+        return (
+          <Badge variant="outline" className="text-xs">
+            <User className="w-3 h-3 mr-1" />
+            {t("admin.users.role_user", { defaultValue: "Usuário" })}
+          </Badge>
+        );
     }
   };
 
-  const getInitials = (name: string | null, email: string | null) => {
-    if (name) {
+  const getInitials = (name: string | null, email: string | null): string => {
+    if (name && name.trim()) {
       return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
-    if (email) {
+    if (email && email.trim()) {
       return email.slice(0, 2).toUpperCase();
     }
     return 'U';
   };
 
-  const filteredUsers = users?.filter(user => {
+  // Filter users based on role filter
+  const filteredUsers = (users || []).filter(user => {
     if (roleFilter === "all") return true;
     const userRoles = getUserRoles(user);
-    if (roleFilter === "admin") return userRoles.includes("admin");
-    if (roleFilter === "moderator") return userRoles.includes("moderator");
-    if (roleFilter === "user") return userRoles.length === 0 || (!userRoles.includes("admin") && !userRoles.includes("moderator"));
-    return true;
+    
+    switch (roleFilter) {
+      case "admin":
+        return userRoles.includes("admin");
+      case "moderator":
+        return userRoles.includes("moderator");
+      case "user":
+        return userRoles.length === 0 || (!userRoles.includes("admin") && !userRoles.includes("moderator"));
+      default:
+        return true;
+    }
   });
+
+  if (isLoading) {
+    return (
+      <section className="space-y-6">
+        <header>
+          <h2 className="text-2xl font-bold">{t("admin.users.manage")}</h2>
+          <p className="text-muted-foreground">{t("admin.users.manage_desc")}</p>
+        </header>
+        <AdminTableSkeleton />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="space-y-6">
+        <header>
+          <h2 className="text-2xl font-bold">{t("admin.users.manage")}</h2>
+          <p className="text-muted-foreground">{t("admin.users.manage_desc")}</p>
+        </header>
+        <div className="text-center p-8">
+          <p className="text-muted-foreground">
+            {t("admin.users.error_prefix")} {error.message}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="space-y-6">
@@ -159,7 +246,7 @@ export default function UsersManagement() {
         <p className="text-muted-foreground">{t("admin.users.manage_desc")}</p>
       </header>
 
-      {/* Filtros */}
+      {/* Filters */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">{t("admin.users.filters")}</CardTitle>
@@ -184,7 +271,7 @@ export default function UsersManagement() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-popover z-50">
+              <SelectContent>
                 <SelectItem value="all">{t("admin.users.all_roles")}</SelectItem>
                 <SelectItem value="admin">{t("admin.users.admins")}</SelectItem>
                 <SelectItem value="moderator">{t("admin.users.moderators")}</SelectItem>
@@ -195,39 +282,50 @@ export default function UsersManagement() {
         </CardContent>
       </Card>
 
-      {/* Lista de usuários */}
-      {isLoading ? (
-        <AdminTableSkeleton />
-      ) : error ? (
-        <div className="text-center p-4">
-          <p className="text-muted-foreground">{t("admin.users.error_prefix")} {error.message}</p>
-        </div>
-      ) : filteredUsers && filteredUsers.length ? (
+      {/* Users List */}
+      {filteredUsers.length === 0 ? (
+        <Card>
+          <CardContent className="text-center py-8">
+            <p className="text-muted-foreground">{t("admin.users.no_users_found")}</p>
+          </CardContent>
+        </Card>
+      ) : (
         <div className="space-y-4">
-          {filteredUsers.map((user: any) => {
+          {filteredUsers.map((user) => {
             const userRoles = getUserRoles(user);
+            
             return (
               <Card key={user.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12">
-                        <AvatarImage src={user.avatar_url} />
+                        <AvatarImage src={user.avatar_url || undefined} alt={user.full_name || user.email || "User"} />
                         <AvatarFallback>{getInitials(user.full_name, user.email)}</AvatarFallback>
                       </Avatar>
                       
                       <div>
-                        <CardTitle className="text-lg">{user.full_name || t("admin.users.name_not_provided")}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {user.full_name || t("admin.users.name_not_provided")}
+                        </CardTitle>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Mail className="w-4 h-4" />
                           <span>{user.email}</span>
-                          {!user.email_confirmed_at && <Badge variant="outline" className="text-xs">{t("admin.users.email_not_confirmed")}</Badge>}
+                          {!user.email_confirmed_at && (
+                            <Badge variant="outline" className="text-xs">
+                              {t("admin.users.email_not_confirmed")}
+                            </Badge>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                           <Calendar className="w-3 h-3" />
-                          <span>{t("admin.users.registered_on")} {new Date(user.created_at).toLocaleDateString()}</span>
+                          <span>
+                            {t("admin.users.registered_on")} {new Date(user.created_at).toLocaleDateString()}
+                          </span>
                           {user.last_sign_in_at && (
-                            <span>• {t("admin.users.last_access")} {new Date(user.last_sign_in_at).toLocaleDateString()}</span>
+                            <span>
+                              • {t("admin.users.last_access")} {new Date(user.last_sign_in_at).toLocaleDateString()}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -251,7 +349,7 @@ export default function UsersManagement() {
                 
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
-                    {/* Atribuir função de Admin */}
+                    {/* Make Admin */}
                     {!userRoles.includes("admin") && (
                       <Button 
                         size="sm" 
@@ -264,7 +362,7 @@ export default function UsersManagement() {
                       </Button>
                     )}
 
-                    {/* Atribuir função de Moderador */}
+                    {/* Make Moderator */}
                     {!userRoles.includes("moderator") && !userRoles.includes("admin") && (
                       <Button 
                         size="sm" 
@@ -277,7 +375,7 @@ export default function UsersManagement() {
                       </Button>
                     )}
 
-                    {/* Remover função de Admin */}
+                    {/* Remove Admin */}
                     {userRoles.includes("admin") && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -306,7 +404,7 @@ export default function UsersManagement() {
                       </AlertDialog>
                     )}
 
-                    {/* Remover função de Moderador */}
+                    {/* Remove Moderator */}
                     {userRoles.includes("moderator") && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -339,12 +437,6 @@ export default function UsersManagement() {
             );
           })}
         </div>
-      ) : (
-        <Card>
-          <CardContent className="text-center py-8">
-            <p className="text-muted-foreground">{t("admin.users.no_users_found")}</p>
-          </CardContent>
-        </Card>
       )}
     </section>
   );
