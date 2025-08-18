@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - 首页", "explore": "探索", "messages": "消息", "login": "登录", "publish": "发布帖子", "publish_short": "发布" },
+  "nav": { "home_aria": "tudofaz - 首页", "explore": "探索", "messages": "消息", "login": "登录", "publish": "发布帖子", "publish_short": "发布", "affiliates": "联盟", "advertiser": "广告商", "orders": "订单" },
   "common": { "loading": "加载中..." },
   "home": { "tagline_small": "本地综合交易平台" },
   "promo": {
@@ -111,5 +111,69 @@
       "removeError": "移除出错",
       "none": "没有找到角色。"
     }
+  },
+  "auth": {
+    "login_required": "需要登录",
+    "login_required_desc": "请登录以将产品添加到购物车",
+    "product_unavailable": "产品不可用",
+    "out_of_stock": "此产品缺货"
+  },
+  "product": {
+    "for_sale": "待售",
+    "sold_out": "售完",
+    "stock": "库存",
+    "sold": "已售",
+    "unavailable": "不可用",
+    "reviews": "评论"
+  },
+  "password": {
+    "strength": "密码强度",
+    "weak": "弱",
+    "medium": "中等",
+    "strong": "强",
+    "min_8_chars": "至少8个字符",
+    "uppercase": "一个大写字母",
+    "lowercase": "一个小写字母",
+    "number": "一个数字",
+    "special_char": "一个特殊字符"
+  },
+  "categories": {
+    "empregos": "工作",
+    "imoveis": "房地产",
+    "servicos": "服务",
+    "veiculos": "车辆",
+    "vida-cotidiana": "日常生活",
+    "servicos-financeiros": "金融服务",
+    "eletronicos": "电子产品",
+    "outros": "其他",
+    "local": "本地",
+    "view_ads": "查看{{category}}广告",
+    "error_loading": "加载分类时出错。请稍后重试。"
+  },
+  "errors": {
+    "general": "发生错误。请稍后重试。",
+    "network": "连接错误。请检查您的网络。",
+    "not_found": "页面未找到",
+    "unauthorized": "未授权访问"
+  },
+  "currency": {
+    "brl": "雷亚尔 (BRL)",
+    "usd": "美元 (USD)",
+    "eur": "欧元 (EUR)"
+  },
+  "search": {
+    "search_placeholder": "搜索广告...",
+    "search_aria": "搜索字段",
+    "advanced": "高级搜索",
+    "term": "搜索词",
+    "term_placeholder": "输入您的搜索...",
+    "category": "分类",
+    "all_categories": "所有分类",
+    "min_price": "最低价格",
+    "max_price": "最高价格",
+    "location": "位置",
+    "location_placeholder": "输入城市或地区...",
+    "currency": "货币",
+    "search_button": "搜索"
   }
 }

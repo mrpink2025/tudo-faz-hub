@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - inicio", "explore": "Explorar", "messages": "Mensajes", "login": "Entrar", "publish": "Publicar anuncio", "publish_short": "Publicar" },
+  "nav": { "home_aria": "tudofaz - inicio", "explore": "Explorar", "messages": "Mensajes", "login": "Entrar", "publish": "Publicar anuncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos" },
   "common": { "loading": "Cargando..." },
   "home": { "tagline_small": "Tu mercado local completo" },
   "promo": {
@@ -111,5 +111,69 @@
       "removeError": "Error al eliminar",
       "none": "No se encontraron roles."
     }
+  },
+  "auth": {
+    "login_required": "Inicio de sesión requerido",
+    "login_required_desc": "Inicia sesión para agregar productos al carrito",
+    "product_unavailable": "Producto no disponible",
+    "out_of_stock": "Este producto está agotado"
+  },
+  "product": {
+    "for_sale": "En Venta",
+    "sold_out": "Agotado",
+    "stock": "Stock",
+    "sold": "Vendidos",
+    "unavailable": "No disponible",
+    "reviews": "reseñas"
+  },
+  "password": {
+    "strength": "Fuerza de la contraseña",
+    "weak": "Débil",
+    "medium": "Media",
+    "strong": "Fuerte",
+    "min_8_chars": "Al menos 8 caracteres",
+    "uppercase": "Una letra mayúscula",
+    "lowercase": "Una letra minúscula",
+    "number": "Un número",
+    "special_char": "Un carácter especial"
+  },
+  "categories": {
+    "empregos": "Empleos",
+    "imoveis": "Bienes Raíces",
+    "servicos": "Servicios",
+    "veiculos": "Vehículos",
+    "vida-cotidiana": "Vida Cotidiana",
+    "servicos-financeiros": "Servicios Financieros",
+    "eletronicos": "Electrónicos",
+    "outros": "Otros",
+    "local": "Local",
+    "view_ads": "Ver anuncios de {{category}}",
+    "error_loading": "Error al cargar categorías. Inténtalo de nuevo más tarde."
+  },
+  "errors": {
+    "general": "Ocurrió un error. Inténtalo de nuevo más tarde.",
+    "network": "Error de conexión. Verifica tu internet.",
+    "not_found": "Página no encontrada",
+    "unauthorized": "Acceso no autorizado"
+  },
+  "currency": {
+    "brl": "Real (BRL)",
+    "usd": "Dólar (USD)",
+    "eur": "Euro (EUR)"
+  },
+  "search": {
+    "search_placeholder": "Buscar anuncios...",
+    "search_aria": "Campo de búsqueda",
+    "advanced": "Búsqueda Avanzada",
+    "term": "Término de búsqueda",
+    "term_placeholder": "Escribe tu búsqueda...",
+    "category": "Categoría",
+    "all_categories": "Todas las categorías",
+    "min_price": "Precio mínimo",
+    "max_price": "Precio máximo",
+    "location": "Ubicación",
+    "location_placeholder": "Ingresa ciudad o región...",
+    "currency": "Moneda",
+    "search_button": "Buscar"
   }
 }

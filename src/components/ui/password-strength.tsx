@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface PasswordStrengthProps {
   password: string;
@@ -12,13 +13,13 @@ interface PasswordCriteria {
   met: boolean;
 }
 
-const calculatePasswordStrength = (password: string) => {
+const calculatePasswordStrength = (password: string, t: any) => {
   const criteria = [
-    { label: "Pelo menos 8 caracteres", met: password.length >= 8 },
-    { label: "Uma letra maiúscula", met: /[A-Z]/.test(password) },
-    { label: "Uma letra minúscula", met: /[a-z]/.test(password) },
-    { label: "Um número", met: /\d/.test(password) },
-    { label: "Um caractere especial", met: /[!@#$%^&*(),.?":{}|<>]/.test(password) }
+    { label: t("password.min_8_chars"), met: password.length >= 8 },
+    { label: t("password.uppercase"), met: /[A-Z]/.test(password) },
+    { label: t("password.lowercase"), met: /[a-z]/.test(password) },
+    { label: t("password.number"), met: /\d/.test(password) },
+    { label: t("password.special_char"), met: /[!@#$%^&*(),.?":{}|<>]/.test(password) }
   ];
 
   const metCount = criteria.filter(c => c.met).length;
@@ -33,28 +34,29 @@ const getStrengthColor = (strength: number) => {
   return "bg-green-500";
 };
 
-const getStrengthLabel = (strength: number) => {
-  if (strength < 40) return "Fraca";
-  if (strength < 70) return "Média";
-  return "Forte";
+const getStrengthLabel = (strength: number, t: any) => {
+  if (strength < 40) return t("password.weak");
+  if (strength < 70) return t("password.medium");
+  return t("password.strong");
 };
 
 export function PasswordStrength({ password, className }: PasswordStrengthProps) {
-  const { criteria, strength } = useMemo(() => calculatePasswordStrength(password), [password]);
+  const { t } = useTranslation();
+  const { criteria, strength } = useMemo(() => calculatePasswordStrength(password, t), [password, t]);
 
   // Sempre mostrar os critérios, mesmo com senha vazia
 
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground">Força da senha:</span>
+        <span className="text-muted-foreground">{t("password.strength")}:</span>
         <span className={cn(
           "font-medium",
           strength < 40 && "text-destructive",
           strength >= 40 && strength < 70 && "text-yellow-600",
           strength >= 70 && "text-green-600"
         )}>
-          {getStrengthLabel(strength)}
+          {getStrengthLabel(strength, t)}
         </span>
       </div>
       

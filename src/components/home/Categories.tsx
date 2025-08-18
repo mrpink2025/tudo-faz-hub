@@ -56,7 +56,7 @@ const Categories = () => {
       <section className="py-10 lg:py-14">
         <div className="container">
           <div className="text-center text-muted-foreground">
-            Erro ao carregar categorias. Tente novamente mais tarde.
+            {t("categories.error_loading")}
           </div>
         </div>
       </section>
@@ -104,7 +104,7 @@ const Categories = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    Ver anúncios de {category.name_pt.toLowerCase()}
+                    {t("categories.view_ads", { category: category.name_pt.toLowerCase() })}
                   </CardContent>
                 </Card>
               </Link>

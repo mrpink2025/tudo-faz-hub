@@ -34,17 +34,17 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <NavLink to="/afiliados" className="w-full flex items-center">
-            Afiliados
+            {t("nav.affiliates")}
           </NavLink>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <NavLink to="/anunciante" className="w-full flex items-center">
-            Anunciante
+            {t("nav.advertiser")}
           </NavLink>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <NavLink to="/pedidos" className="w-full flex items-center">
-            Pedidos
+            {t("nav.orders")}
           </NavLink>
         </DropdownMenuItem>
       </DropdownMenuContent>

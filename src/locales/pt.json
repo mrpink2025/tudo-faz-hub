@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar" },
+  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos" },
   "common": { 
     "loading": "Carregando...", 
     "error": "Erro", 
@@ -335,6 +335,70 @@
       "upload_error_hero": "Erro ao fazer upload da imagem hero",
       "upload_error_favicon": "Erro ao fazer upload do favicon"
     }
+  },
+  "auth": {
+    "login_required": "Login necessário",
+    "login_required_desc": "Faça login para adicionar produtos ao carrinho",
+    "product_unavailable": "Produto indisponível",
+    "out_of_stock": "Este produto está fora de estoque"
+  },
+  "product": {
+    "for_sale": "À Venda",
+    "sold_out": "Esgotado",
+    "stock": "Estoque",
+    "sold": "Vendidos",
+    "unavailable": "Indisponível",
+    "reviews": "avaliações"
+  },
+  "password": {
+    "strength": "Força da senha",
+    "weak": "Fraca",
+    "medium": "Média",
+    "strong": "Forte",
+    "min_8_chars": "Pelo menos 8 caracteres",
+    "uppercase": "Uma letra maiúscula",
+    "lowercase": "Uma letra minúscula",
+    "number": "Um número",
+    "special_char": "Um caractere especial"
+  },
+  "categories": {
+    "empregos": "Empregos",
+    "imoveis": "Imóveis",
+    "servicos": "Serviços",
+    "veiculos": "Veículos",
+    "vida-cotidiana": "Vida Cotidiana",
+    "servicos-financeiros": "Serviços Financeiros",
+    "eletronicos": "Eletrônicos",
+    "outros": "Outros",
+    "local": "Local",
+    "view_ads": "Ver anúncios de {{category}}",
+    "error_loading": "Erro ao carregar categorias. Tente novamente mais tarde."
+  },
+  "errors": {
+    "general": "Ocorreu um erro. Tente novamente mais tarde.",
+    "network": "Erro de conexão. Verifique sua internet.",
+    "not_found": "Página não encontrada",
+    "unauthorized": "Acesso não autorizado"
+  },
+  "currency": {
+    "brl": "Real (BRL)",
+    "usd": "Dólar (USD)",
+    "eur": "Euro (EUR)"
+  },
+  "search": {
+    "search_placeholder": "Buscar anúncios...",
+    "search_aria": "Campo de busca",
+    "advanced": "Busca Avançada",
+    "term": "Termo de busca",
+    "term_placeholder": "Digite sua busca...",
+    "category": "Categoria",
+    "all_categories": "Todas as categorias",
+    "min_price": "Preço mínimo",
+    "max_price": "Preço máximo",
+    "location": "Localização",
+    "location_placeholder": "Digite a cidade ou região...",
+    "currency": "Moeda",
+    "search_button": "Buscar"
   }
 }
 

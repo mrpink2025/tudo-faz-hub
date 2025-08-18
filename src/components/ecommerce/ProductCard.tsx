@@ -9,6 +9,7 @@ import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { BuyNowButton } from "./BuyNowButton";
+import { useTranslation } from "react-i18next";
 
 interface ProductCardProps {
   listing: {
@@ -30,12 +31,13 @@ export function ProductCard({ listing }: ProductCardProps) {
   const { addToCart } = useShoppingCart();
   const { rating } = useProductReviews(listing.id);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleAddToCart = async () => {
     if (!user) {
       toast({
-        title: "Login necessário",
-        description: "Faça login para adicionar produtos ao carrinho",
+        title: t("auth.login_required"),
+        description: t("auth.login_required_desc"),
         variant: "destructive",
       });
       return;
@@ -43,8 +45,8 @@ export function ProductCard({ listing }: ProductCardProps) {
 
     if (listing.inventory_count <= 0) {
       toast({
-        title: "Produto indisponível",
-        description: "Este produto está fora de estoque",
+        title: t("auth.product_unavailable"),
+        description: t("auth.out_of_stock"),
         variant: "destructive",
       });
       return;
@@ -78,14 +80,14 @@ export function ProductCard({ listing }: ProductCardProps) {
         {listing.sellable && (
           <div className="absolute top-2 left-2">
             <Badge variant="secondary" className="bg-green-100 text-green-800">
-              À Venda
+              {t("product.for_sale")}
             </Badge>
           </div>
         )}
 
         {listing.inventory_count <= 0 && listing.sellable && (
           <div className="absolute top-2 right-2">
-            <Badge variant="destructive">Esgotado</Badge>
+            <Badge variant="destructive">{t("product.sold_out")}</Badge>
           </div>
         )}
       </div>
@@ -111,7 +113,7 @@ export function ProductCard({ listing }: ProductCardProps) {
             ))}
           </div>
           <span className="text-sm text-muted-foreground">
-            ({reviewCount})
+            ({reviewCount} {t("product.reviews")})
           </span>
         </div>
 
@@ -128,8 +130,8 @@ export function ProductCard({ listing }: ProductCardProps) {
 
         {listing.sellable && (
           <div className="mt-2 text-sm text-muted-foreground">
-            <div>Estoque: {listing.inventory_count}</div>
-            <div>Vendidos: {listing.sold_count}</div>
+            <div>{t("product.stock")}: {listing.inventory_count}</div>
+            <div>{t("product.sold")}: {listing.sold_count}</div>
           </div>
         )}
       </CardContent>
@@ -141,7 +143,7 @@ export function ProductCard({ listing }: ProductCardProps) {
           ) : (
             <Button disabled className="w-full" variant="secondary">
               <ShoppingCart className="h-4 w-4 mr-2" />
-              Indisponível
+              {t("product.unavailable")}
             </Button>
           )}
         </CardFooter>

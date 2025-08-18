@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - home", "explore": "Explore", "messages": "Messages", "login": "Sign in", "publish": "Post listing", "publish_short": "Post" },
+  "nav": { "home_aria": "tudofaz - home", "explore": "Explore", "messages": "Messages", "login": "Sign in", "publish": "Post listing", "publish_short": "Post", "affiliates": "Affiliates", "advertiser": "Advertiser", "orders": "Orders" },
   "common": { "loading": "Loading..." },
   "home": { "tagline_small": "Your complete local marketplace" },
   "promo": {
@@ -128,6 +128,70 @@
     "cancelTitle": "Payment canceled",
     "cancelDescription": "No charge was made. You can try again anytime.",
     "verified": "Credits added"
+  },
+  "auth": {
+    "login_required": "Login required",
+    "login_required_desc": "Please log in to add products to cart",
+    "product_unavailable": "Product unavailable",
+    "out_of_stock": "This product is out of stock"
+  },
+  "product": {
+    "for_sale": "For Sale",
+    "sold_out": "Sold Out",
+    "stock": "Stock",
+    "sold": "Sold",
+    "unavailable": "Unavailable",
+    "reviews": "reviews"
+  },
+  "password": {
+    "strength": "Password strength",
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong",
+    "min_8_chars": "At least 8 characters",
+    "uppercase": "One uppercase letter",
+    "lowercase": "One lowercase letter",
+    "number": "One number",
+    "special_char": "One special character"
+  },
+  "categories": {
+    "empregos": "Jobs",
+    "imoveis": "Real Estate",
+    "servicos": "Services",
+    "veiculos": "Vehicles",
+    "vida-cotidiana": "Daily Life",
+    "servicos-financeiros": "Financial Services",
+    "eletronicos": "Electronics",
+    "outros": "Others",
+    "local": "Local",
+    "view_ads": "View {{category}} ads",
+    "error_loading": "Error loading categories. Please try again later."
+  },
+  "errors": {
+    "general": "An error occurred. Please try again later.",
+    "network": "Connection error. Check your internet.",
+    "not_found": "Page not found",
+    "unauthorized": "Unauthorized access"
+  },
+  "currency": {
+    "brl": "Real (BRL)",
+    "usd": "Dollar (USD)",
+    "eur": "Euro (EUR)"
+  },
+  "search": {
+    "search_placeholder": "Search listings...",
+    "search_aria": "Search field",
+    "advanced": "Advanced Search",
+    "term": "Search term",
+    "term_placeholder": "Type your search...",
+    "category": "Category",
+    "all_categories": "All categories",
+    "min_price": "Minimum price",
+    "max_price": "Maximum price",
+    "location": "Location",
+    "location_placeholder": "Enter city or region...",
+    "currency": "Currency",
+    "search_button": "Search"
   }
 }
 
