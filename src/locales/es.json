@@ -108,7 +108,7 @@
   },
   "admin": {
     "layoutTitle": "Panel de administración",
-    "sidebar": { "dashboard": "Dashboard", "listings": "Anuncios", "users": "Usuarios", "settings": "Configuraciones" },
+    "sidebar": { "dashboard": "Dashboard", "listings": "Anuncios", "users": "Usuarios", "sales": "Reportes de Ventas", "monitoring": "Monitoreo", "seo": "SEO & PWA", "settings": "Configuraciones" },
     "overview": { "pending": "Anuncios pendientes", "totalListings": "Total de anuncios", "orders": "Pedidos", "useMenu": "Usa el menú lateral para navegar." },
     "users": {
       "manage": "Gestionar usuarios",

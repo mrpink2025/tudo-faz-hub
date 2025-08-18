@@ -108,7 +108,7 @@
   },
   "admin": {
     "layoutTitle": "管理后台",
-    "sidebar": { "dashboard": "控制台", "listings": "帖子", "users": "用户", "settings": "设置" },
+    "sidebar": { "dashboard": "控制台", "listings": "帖子", "users": "用户", "sales": "销售报告", "monitoring": "监控", "seo": "SEO & PWA", "settings": "设置" },
     "overview": { "pending": "待审核帖子", "totalListings": "帖子总数", "orders": "订单", "useMenu": "使用侧边菜单进行导航。" },
     "users": {
       "manage": "管理用户",

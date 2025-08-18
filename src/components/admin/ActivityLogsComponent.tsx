@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,7 @@ interface ActivityLog {
 }
 
 export function ActivityLogsComponent() {
+  const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<string>("all");
 
   // Buscar logs de atividade
@@ -104,17 +106,17 @@ export function ActivityLogsComponent() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Logs de Atividade</h2>
+        <h2 className="text-2xl font-bold">{t("admin.activity.title")}</h2>
       </div>
 
       <Tabs value={selectedType} onValueChange={setSelectedType}>
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="email_notification_affiliate_sale_confirmed">Vendas</TabsTrigger>
-          <TabsTrigger value="email_notification_affiliate_request_new">Solicitações</TabsTrigger>
-          <TabsTrigger value="affiliate_commission_earned">Comissões</TabsTrigger>
-          <TabsTrigger value="withdrawal_requested">Saques</TabsTrigger>
-          <TabsTrigger value="email_notification_error">Erros</TabsTrigger>
+          <TabsTrigger value="all">{t("admin.activity.all")}</TabsTrigger>
+          <TabsTrigger value="email_notification_affiliate_sale_confirmed">{t("admin.activity.sales")}</TabsTrigger>
+          <TabsTrigger value="email_notification_affiliate_request_new">{t("admin.activity.requests")}</TabsTrigger>
+          <TabsTrigger value="affiliate_commission_earned">{t("admin.activity.commissions")}</TabsTrigger>
+          <TabsTrigger value="withdrawal_requested">{t("admin.activity.withdrawals")}</TabsTrigger>
+          <TabsTrigger value="email_notification_error">{t("admin.activity.errors")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value={selectedType} className="space-y-4">
@@ -132,8 +134,8 @@ export function ActivityLogsComponent() {
                           <div className="flex items-center gap-2 mb-1">
                             <h4 className="font-medium">{formatActivityType(log.activity_type)}</h4>
                             <Badge variant={getBadgeVariant(log.activity_type)}>
-                              {log.activity_type.includes('error') ? 'Erro' : 
-                               log.activity_type.includes('success') ? 'Sucesso' : 'Info'}
+                              {log.activity_type.includes('error') ? t("admin.activity.error_label") : 
+                               log.activity_type.includes('success') ? t("admin.activity.success_label") : t("admin.activity.info_label")}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground mb-2">
@@ -147,7 +149,7 @@ export function ActivityLogsComponent() {
                           {log.metadata && Object.keys(log.metadata).length > 0 && (
                             <details className="mt-2">
                               <summary className="text-xs cursor-pointer text-blue-600 hover:text-blue-800">
-                                Ver detalhes
+                                {t("admin.activity.view_details")}
                               </summary>
                               <div className="mt-2 p-2 bg-muted rounded text-xs">
                                 <pre className="whitespace-pre-wrap">
@@ -168,7 +170,7 @@ export function ActivityLogsComponent() {
                   <CardContent className="p-8 text-center">
                     <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">
-                      Nenhuma atividade registrada para este filtro.
+                      {t("admin.activity.no_activity")}
                     </p>
                   </CardContent>
                 </Card>

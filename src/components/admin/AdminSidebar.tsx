@@ -16,15 +16,15 @@ const items = [{
   url: "/admin/users",
   icon: Users
 }, {
-  titleKey: "Relatórios de Vendas",
+  titleKey: "admin.sidebar.sales",
   url: "/admin/sales",
   icon: TrendingUp
 }, {
-  titleKey: "Monitoramento",
+  titleKey: "admin.sidebar.monitoring",
   url: "/admin/monitoring",
   icon: Activity
 }, {
-  titleKey: "SEO & PWA",
+  titleKey: "admin.sidebar.seo",
   url: "/admin/seo",
   icon: Search
 }, {
