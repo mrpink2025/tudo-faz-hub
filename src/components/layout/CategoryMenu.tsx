@@ -19,8 +19,16 @@ const CategoryMenu = () => {
 
   const labelFor = (cat: any) => {
     const lang = (i18n.language || "pt").split("-")[0];
-    if (lang === "zh") return cat.name_zh || cat.name_pt || cat.slug;
-    return cat.name_pt || cat.slug;
+    switch (lang) {
+      case 'en':
+        return cat.name_en || cat.name_pt || cat.slug;
+      case 'es':
+        return cat.name_es || cat.name_pt || cat.slug;
+      case 'zh':
+        return cat.name_zh || cat.name_pt || cat.slug;
+      default:
+        return cat.name_pt || cat.slug;
+    }
   };
 
   const [active, setActive] = useState<string | null>(null);

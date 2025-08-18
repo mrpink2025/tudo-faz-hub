@@ -212,5 +212,35 @@
     "no_notifications_desc": "¡Estás al día con todo!",
     "mark_read": "Marcar como leída",
     "remove": "Eliminar"
+  },
+  "listing_card": {
+    "view_listing": "Ver anuncio {{title}}",
+    "listing_image": "Imagen del anuncio: {{title}}",
+    "for_sale": "En Venta",
+    "stock": "Stock: {{count}}",
+    "buy": "Comprar",
+    "loading": "...",
+    "login_required": "Inicio de sesión requerido",
+    "login_required_desc": "Inicia sesión para agregar productos al carrito",
+    "product_unavailable": "Producto no disponible",
+    "out_of_stock": "Este producto está agotado"
+  },
+  "explore_page": {
+    "results_for": "Resultados para \"{{query}}\"",
+    "results_found": "{{count}} resultados encontrados",
+    "filters": "Filtros",
+    "featured_listings": "Anuncios destacados"
+  },
+  "ui": {
+    "filters": "Filtros",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "showing": "Mostrando",
+    "of": "de",
+    "results": "resultados",
+    "page": "Página",
+    "per_page": "Por página",
+    "go_to_page": "Ir a página",
+    "select_page_size": "Seleccionar tamaño de página"
   }
 }

@@ -22,9 +22,24 @@ const iconMap: Record<string, any> = {
   local: MapPin,
 };
 
+// Traduções dinâmicas para categorias
+const getCategoryName = (category: any, language: string) => {
+  switch (language) {
+    case 'en':
+      return category.name_en || category.name_pt;
+    case 'es': 
+      return category.name_es || category.name_pt;
+    case 'zh':
+      return category.name_zh || category.name_pt;
+    default:
+      return category.name_pt;
+  }
+};
+
 const Categories = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: categories, isLoading, error } = useCategories();
+  const currentLang = (i18n.language || "pt").split("-")[0];
 
   if (isLoading) {
     return (
@@ -92,19 +107,20 @@ const Categories = () => {
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {mainCategories.map((category) => {
             const Icon = iconMap[category.slug] || Package;
+            const categoryName = getCategoryName(category, currentLang);
             return (
-              <Link key={category.id} to={`/explorar?categoria=${category.slug}`} aria-label={`Explorar ${category.name_pt}`}>
+              <Link key={category.id} to={`/explorar?categoria=${category.slug}`} aria-label={`Explorar ${categoryName}`}>
                 <Card className="hover:shadow-md transition-shadow group">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3">
                       <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] group-hover:bg-[hsl(var(--muted))] transition-colors">
                         <Icon className="" />
                       </span>
-                      {category.name_pt}
+                      {categoryName}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    {t("categories.view_ads", { category: category.name_pt.toLowerCase() })}
+                    {t("categories.view_ads", { category: categoryName.toLowerCase() })}
                   </CardContent>
                 </Card>
               </Link>

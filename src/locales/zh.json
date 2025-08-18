@@ -212,5 +212,35 @@
     "no_notifications_desc": "您已查看所有内容！",
     "mark_read": "标记为已读",
     "remove": "移除"
+  },
+  "listing_card": {
+    "view_listing": "查看广告 {{title}}",
+    "listing_image": "广告图片：{{title}}",
+    "for_sale": "待售",
+    "stock": "库存：{{count}}",
+    "buy": "购买",
+    "loading": "...",
+    "login_required": "需要登录",
+    "login_required_desc": "请登录以将产品添加到购物车",
+    "product_unavailable": "产品不可用",
+    "out_of_stock": "此产品缺货"
+  },
+  "explore_page": {
+    "results_for": "\"{{query}}\" 的搜索结果",
+    "results_found": "找到 {{count}} 个结果",
+    "filters": "筛选",
+    "featured_listings": "精选广告"
+  },
+  "ui": {
+    "filters": "筛选",
+    "previous": "上一页",
+    "next": "下一页",
+    "showing": "显示",
+    "of": "的",
+    "results": "结果",
+    "page": "页面",
+    "per_page": "每页",
+    "go_to_page": "转到页面",
+    "select_page_size": "选择页面大小"
   }
 }

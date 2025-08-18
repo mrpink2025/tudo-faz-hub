@@ -57,8 +57,8 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
     
     if (!user) {
       toast({
-        title: "Login necessário",
-        description: "Faça login para adicionar produtos ao carrinho",
+        title: t("listing_card.login_required"),
+        description: t("listing_card.login_required_desc"),
         variant: "destructive",
       });
       return;
@@ -66,8 +66,8 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
 
     if (!listing.inventory_count || listing.inventory_count <= 0) {
       toast({
-        title: "Produto indisponível",
-        description: "Este produto está fora de estoque",
+        title: t("listing_card.product_unavailable"),
+        description: t("listing_card.out_of_stock"),
         variant: "destructive",
       });
       return;
@@ -79,13 +79,13 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
   const averageRating = (rating as any)?.average_rating || 0;
   const reviewCount = (rating as any)?.review_count || 0;
   return (
-    <Link to={`/anuncio/${listing.id}`} aria-label={`Ver anúncio ${listing.title}`}>
+    <Link to={`/anuncio/${listing.id}`} aria-label={t("listing_card.view_listing", { title: listing.title })}>
       <Card className="h-full overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.35)] hover:ring-1 hover:ring-primary/30 hover:border-primary/40">
         <div className="bg-muted relative">
           <AspectRatio ratio={16 / 9}>
             <LazyImage
               src={imgSrc}
-              alt={`Imagem do anúncio: ${listing.title}`}
+              alt={t("listing_card.listing_image", { title: listing.title })}
               className="h-full w-full"
               fallback="/placeholder.svg"
             />
@@ -141,11 +141,11 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
             <div className="flex items-center justify-between pt-2">
               <div className="flex gap-2">
                 <Badge variant="secondary" className="text-xs">
-                  À Venda
+                  {t("listing_card.for_sale")}
                 </Badge>
                 {listing.inventory_count && listing.inventory_count > 0 && (
                   <Badge variant="outline" className="text-xs">
-                    Estoque: {listing.inventory_count}
+                    {t("listing_card.stock", { count: listing.inventory_count })}
                   </Badge>
                 )}
               </div>
@@ -156,7 +156,7 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
                 className="h-8"
               >
                 <ShoppingCart className="h-3 w-3 mr-1" />
-                {addToCart.isPending ? "..." : "Comprar"}
+                {addToCart.isPending ? t("listing_card.loading") : t("listing_card.buy")}
               </Button>
             </div>
           )}

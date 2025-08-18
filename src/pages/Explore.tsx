@@ -18,7 +18,22 @@ const Explore = () => {
   const selectedSlug = searchParams.get("categoria") ?? undefined;
   const searchQuery = searchParams.get("q") ?? undefined;
   const { data: categories, isLoading: loadingCats, error: catsError } = useCategories();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  // Função para obter nome da categoria no idioma atual
+  const getCategoryName = (category: any) => {
+    const lang = (i18n.language || "pt").split("-")[0];
+    switch (lang) {
+      case 'en':
+        return category.name_en || category.name_pt;
+      case 'es':
+        return category.name_es || category.name_pt;
+      case 'zh':
+        return category.name_zh || category.name_pt;
+      default:
+        return category.name_pt;
+    }
+  };
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1', 10));
@@ -78,8 +93,9 @@ const Explore = () => {
   };
 
   useEffect(() => {
+    const categoryName = rootCategory ? getCategoryName(rootCategory) : null;
     const title = rootCategory
-      ? t("explore.titleCat", { name: rootCategory.name_pt })
+      ? t("explore.titleCat", { name: categoryName })
       : t("explore.titleBase");
     document.title = `${title} - tudofaz.com`;
 
@@ -92,7 +108,7 @@ const Explore = () => {
     meta.setAttribute(
       "content",
       rootCategory
-        ? t("explore.descCat", { name: rootCategory.name_pt })
+        ? t("explore.descCat", { name: categoryName })
         : t("explore.descBase")
     );
 
@@ -103,7 +119,7 @@ const Explore = () => {
       document.head.appendChild(canonical);
     }
     canonical.setAttribute("href", window.location.href);
-  }, [rootCategory, t]);
+  }, [rootCategory, t, i18n.language]);
 
   return (
     <main className="container py-10">
@@ -111,12 +127,12 @@ const Explore = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-3xl">
-              {searchQuery ? `Resultados para "${searchQuery}"` : 
-               rootCategory ? t("explore.headerCat", { name: rootCategory.name_pt }) : 
+              {searchQuery ? t("explore_page.results_for", { query: searchQuery }) : 
+               rootCategory ? t("explore.headerCat", { name: getCategoryName(rootCategory) }) : 
                t("explore.headerBase")}
             </h1>
             <p className="text-muted-foreground">
-              {searchQuery ? `${totalCount || 0} resultados encontrados` : t("explore.useSearch")}
+              {searchQuery ? t("explore_page.results_found", { count: totalCount || 0 }) : t("explore.useSearch")}
             </p>
           </div>
           <Button 
@@ -125,7 +141,7 @@ const Explore = () => {
             className="gap-2"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Filtros
+            {t("ui.filters")}
           </Button>
         </div>
         
@@ -144,7 +160,7 @@ const Explore = () => {
       )}
 
       <section className="mb-8">
-        <FeaturedListingsSection title="Anúncios em destaque" limit={3} />
+        <FeaturedListingsSection title={t("explore_page.featured_listings")} limit={3} />
       </section>
 
       <section className="mb-8">
@@ -160,9 +176,9 @@ const Explore = () => {
                 key={sc.id}
                 to={`/explorar?categoria=${sc.slug}`}
                 className="inline-flex items-center rounded-md border px-3 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
-                aria-label={`${t("explore.ariaExplore")} ${sc.name_pt}`}
+                aria-label={`${t("explore.ariaExplore")} ${getCategoryName(sc)}`}
               >
-                {sc.name_pt}
+                {getCategoryName(sc)}
               </Link>
             ))}
           </nav>
