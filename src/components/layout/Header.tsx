@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
@@ -25,10 +25,15 @@ import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
 const Header = () => {
   const { user } = useSupabaseAuth();
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
   };
+
+  // Get current search query to preserve in explore link
+  const currentSearch = searchParams.get('q');
+  const exploreLink = currentSearch ? `/explorar?q=${encodeURIComponent(currentSearch)}` : '/explorar';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-black to-[hsl(var(--brand))] backdrop-blur">
@@ -56,7 +61,7 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
+          <NavLink to={exploreLink} className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.explore")}</NavLink>
           <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
           <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
           <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
@@ -99,7 +104,7 @@ const Header = () => {
         <SearchBar />
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-3 overflow-x-auto text-sm">
-            <NavLink to="/explorar" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("nav.explore")}</NavLink>
+            <NavLink to={exploreLink} className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80 whitespace-nowrap"}>{t("nav.explore")}</NavLink>
             {user ? (
               <MobileMenuDropdown user={user} />
             ) : (
