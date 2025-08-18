@@ -18,8 +18,7 @@ import {
 import FeaturedListingsBar from "@/components/listings/FeaturedListingsBar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { NotificationCenter } from "@/components/NotificationCenter";
-import { OrderNotifications } from "@/components/notifications/OrderNotifications";
+import { UnifiedNotifications } from "@/components/notifications/UnifiedNotifications";
 import { MobileMenuDropdown } from "./MobileMenuDropdown";
 import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
 
@@ -62,12 +61,7 @@ const Header = () => {
           <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Afiliados</NavLink>
           <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Anunciante</NavLink>
           <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>Pedidos</NavLink>
-           {user && (
-             <div className="flex items-center gap-2">
-               <OrderNotifications />
-               <NotificationCenter />
-             </div>
-           )}
+           {user && <UnifiedNotifications />}
           {!user ? (
             <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>
           ) : (

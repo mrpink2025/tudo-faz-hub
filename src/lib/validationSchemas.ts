@@ -64,7 +64,7 @@ export const profileUpdateSchema = z.object({
 
 // Search schemas
 export const searchSchema = z.object({
-  query: z.string().max(100, "Busca deve ter no máximo 100 caracteres"),
+  query: z.string().min(1, "Digite alguma coisa para buscar").max(100, "Busca deve ter no máximo 100 caracteres"),
   category: z.string().optional(),
   location: z.string().optional(),
   min_price: z.number().min(0).optional(),
