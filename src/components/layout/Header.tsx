@@ -23,9 +23,12 @@ import { UnifiedNotifications } from "@/components/notifications/UnifiedNotifica
 import { MobileMenuDropdown } from "./MobileMenuDropdown";
 import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
 import { useSearch } from "@/contexts/SearchContext";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith('/admin');
   const { isAdmin } = useIsAdmin();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -132,7 +135,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <FeaturedListingsBar />
+      {!isAdminPage && <FeaturedListingsBar />}
     </header>
   );
 };
