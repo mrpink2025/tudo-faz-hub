@@ -137,19 +137,6 @@
     "number": "一个数字",
     "special_char": "一个特殊字符"
   },
-  "categories": {
-    "empregos": "工作",
-    "imoveis": "房地产",
-    "servicos": "服务",
-    "veiculos": "车辆",
-    "vida-cotidiana": "日常生活",
-    "servicos-financeiros": "金融服务",
-    "eletronicos": "电子产品",
-    "outros": "其他",
-    "local": "本地",
-    "view_ads": "查看{{category}}广告",
-    "error_loading": "加载分类时出错。请稍后重试。"
-  },
   "errors": {
     "general": "发生错误。请稍后重试。",
     "network": "连接错误。请检查您的网络。",

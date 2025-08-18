@@ -31,7 +31,18 @@
     "error": "Error al cargar categorías",
     "view_all": "Ver todo en {{name}}",
     "no_children": "Sin subcategorías",
-    "none": "No hay categorías disponibles"
+    "none": "No hay categorías disponibles",
+    "empregos": "Empleos",
+    "imoveis": "Bienes Raíces",
+    "servicos": "Servicios",
+    "veiculos": "Vehículos",
+    "vida-cotidiana": "Vida Cotidiana",
+    "servicos-financeiros": "Servicios Financieros",
+    "eletronicos": "Electrónicos",
+    "outros": "Otros",
+    "local": "Local",
+    "view_ads": "Ver anuncios de {{category}}",
+    "error_loading": "Error al cargar categorías. Inténtalo de nuevo más tarde."
   },
   "explore": {
     "titleBase": "Explorar anuncios",
@@ -136,19 +147,6 @@
     "lowercase": "Una letra minúscula",
     "number": "Un número",
     "special_char": "Un carácter especial"
-  },
-  "categories": {
-    "empregos": "Empleos",
-    "imoveis": "Bienes Raíces",
-    "servicos": "Servicios",
-    "veiculos": "Vehículos",
-    "vida-cotidiana": "Vida Cotidiana",
-    "servicos-financeiros": "Servicios Financieros",
-    "eletronicos": "Electrónicos",
-    "outros": "Otros",
-    "local": "Local",
-    "view_ads": "Ver anuncios de {{category}}",
-    "error_loading": "Error al cargar categorías. Inténtalo de nuevo más tarde."
   },
   "errors": {
     "general": "Ocurrió un error. Inténtalo de nuevo más tarde.",

@@ -154,19 +154,6 @@
     "number": "One number",
     "special_char": "One special character"
   },
-  "categories": {
-    "empregos": "Jobs",
-    "imoveis": "Real Estate",
-    "servicos": "Services",
-    "veiculos": "Vehicles",
-    "vida-cotidiana": "Daily Life",
-    "servicos-financeiros": "Financial Services",
-    "eletronicos": "Electronics",
-    "outros": "Others",
-    "local": "Local",
-    "view_ads": "View {{category}} ads",
-    "error_loading": "Error loading categories. Please try again later."
-  },
   "errors": {
     "general": "An error occurred. Please try again later.",
     "network": "Connection error. Check your internet.",
