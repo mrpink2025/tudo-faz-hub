@@ -419,6 +419,43 @@
     "profile_updated": "Profile updated successfully!",
     "request_sent": "Request sent successfully!",
     "link_created": "Affiliate link created successfully!"
+  },
+  "admin": {
+    "users": {
+      "manage": "Manage users",
+      "manage_desc": "Manage users and their permissions in the system",
+      "filters": "Filters",
+      "search_user": "Search user",
+      "search_placeholder": "Search by name or email...",
+      "role_filter": "Filter by role",
+      "all_roles": "All roles",
+      "admins": "Administrators",
+      "moderators": "Moderators",
+      "regular_users": "Regular users",
+      "no_users_found": "No users found",
+      "name_not_provided": "Name not provided",
+      "email_not_confirmed": "Email not confirmed",
+      "registered_on": "Registered on",
+      "last_access": "Last access",
+      "role_admin": "Admin",
+      "role_moderator": "Moderator",
+      "role_user": "User",
+      "make_admin": "Make Admin",
+      "make_moderator": "Make Moderator",
+      "remove_admin": "Remove Admin",
+      "remove_moderator": "Remove Moderator",
+      "remove_admin_title": "Remove administrator privileges",
+      "remove_admin_desc": "Are you sure you want to remove administrator privileges from",
+      "remove_moderator_title": "Remove moderator privileges",
+      "remove_moderator_desc": "Are you sure you want to remove moderator privileges from",
+      "cancel": "Cancel",
+      "role_added": "Role assigned successfully",
+      "role_removed": "Role removed successfully",
+      "role_add_error": "Error assigning role",
+      "role_remove_error": "Error removing role",
+      "role_exists": "User already has this role",
+      "error_prefix": "Error loading users:"
+    }
   }
 }
 

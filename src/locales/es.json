@@ -399,5 +399,42 @@
     "profile_updated": "¡Perfil actualizado exitosamente!",
     "request_sent": "¡Solicitud enviada exitosamente!",
     "link_created": "¡Enlace de afiliado creado exitosamente!"
+  },
+  "admin": {
+    "users": {
+      "manage": "Gestionar usuarios",
+      "manage_desc": "Gestiona usuarios y sus permisos en el sistema",
+      "filters": "Filtros",
+      "search_user": "Buscar usuario",
+      "search_placeholder": "Buscar por nombre o email...",
+      "role_filter": "Filtrar por rol",
+      "all_roles": "Todos los roles",
+      "admins": "Administradores",
+      "moderators": "Moderadores",
+      "regular_users": "Usuarios regulares",
+      "no_users_found": "No se encontraron usuarios",
+      "name_not_provided": "Nombre no proporcionado",
+      "email_not_confirmed": "Email no confirmado",
+      "registered_on": "Registrado el",
+      "last_access": "Último acceso",
+      "role_admin": "Admin",
+      "role_moderator": "Moderador",
+      "role_user": "Usuario",
+      "make_admin": "Hacer Admin",
+      "make_moderator": "Hacer Moderador",
+      "remove_admin": "Quitar Admin",
+      "remove_moderator": "Quitar Moderador",
+      "remove_admin_title": "Quitar privilegios de administrador",
+      "remove_admin_desc": "¿Estás seguro de que quieres quitar los privilegios de administrador a",
+      "remove_moderator_title": "Quitar privilegios de moderador",
+      "remove_moderator_desc": "¿Estás seguro de que quieres quitar los privilegios de moderador a",
+      "cancel": "Cancelar",
+      "role_added": "Rol asignado exitosamente",
+      "role_removed": "Rol removido exitosamente",
+      "role_add_error": "Error al asignar rol",
+      "role_remove_error": "Error al remover rol",
+      "role_exists": "El usuario ya tiene este rol",
+      "error_prefix": "Error al cargar usuarios:"
+    }
   }
 }

@@ -399,5 +399,42 @@
     "profile_updated": "档案更新成功！",
     "request_sent": "申请发送成功！",
     "link_created": "联盟链接创建成功！"
+  },
+  "admin": {
+    "users": {
+      "manage": "管理用户",
+      "manage_desc": "管理系统中的用户及其权限",
+      "filters": "筛选器",
+      "search_user": "搜索用户",
+      "search_placeholder": "按姓名或邮箱搜索...",
+      "role_filter": "按角色筛选",
+      "all_roles": "所有角色",
+      "admins": "管理员",
+      "moderators": "版主",
+      "regular_users": "普通用户",
+      "no_users_found": "未找到用户",
+      "name_not_provided": "未提供姓名",
+      "email_not_confirmed": "邮箱未确认",
+      "registered_on": "注册于",
+      "last_access": "最后访问",
+      "role_admin": "管理员",
+      "role_moderator": "版主",
+      "role_user": "用户",
+      "make_admin": "设为管理员",
+      "make_moderator": "设为版主",
+      "remove_admin": "移除管理员",
+      "remove_moderator": "移除版主",
+      "remove_admin_title": "移除管理员权限",
+      "remove_admin_desc": "您确定要移除管理员权限吗",
+      "remove_moderator_title": "移除版主权限",
+      "remove_moderator_desc": "您确定要移除版主权限吗",
+      "cancel": "取消",
+      "role_added": "角色分配成功",
+      "role_removed": "角色移除成功",
+      "role_add_error": "分配角色时出错",
+      "role_remove_error": "移除角色时出错",
+      "role_exists": "用户已拥有此角色",
+      "error_prefix": "加载用户时出错："
+    }
   }
 }
