@@ -175,5 +175,42 @@
     "location_placeholder": "Ingresa ciudad o región...",
     "currency": "Moneda",
     "search_button": "Buscar"
+  },
+  "form": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar Contraseña",
+    "email_placeholder": "tu@correo.com",
+    "password_placeholder": "••••••••",
+    "password_signup_placeholder": "Ingresa tu contraseña",
+    "password_confirm_placeholder": "Ingresa la contraseña nuevamente",
+    "required": "Requerido",
+    "optional": "Opcional"
+  },
+  "auth_page": {
+    "title": "Iniciar sesión o crear cuenta",
+    "subtitle": "Accede a tu cuenta para publicar y gestionar anuncios.",
+    "login_tab": "Iniciar sesión",
+    "signup_tab": "Registrarse",
+    "login_button": "Iniciar sesión",
+    "signup_button": "Crear cuenta",
+    "welcome": "Bienvenido",
+    "login_success": "Inicio de sesión exitoso.",
+    "verify_email": "Verifica tu correo",
+    "verify_email_desc": "Enviamos un enlace de confirmación para activar tu cuenta.",
+    "login_error": "Error al iniciar sesión",
+    "signup_error": "Error al registrarse",
+    "general_error": "Error",
+    "unexpected_login": "Error inesperado al iniciar sesión",
+    "unexpected_signup": "Error inesperado al crear cuenta",
+    "password_requirements": "Tu contraseña debe contener:"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "mark_all_read": "Marcar todas como leídas",
+    "no_notifications": "Sin notificaciones",
+    "no_notifications_desc": "¡Estás al día con todo!",
+    "mark_read": "Marcar como leída",
+    "remove": "Eliminar"
   }
 }

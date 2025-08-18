@@ -175,5 +175,42 @@
     "location_placeholder": "输入城市或地区...",
     "currency": "货币",
     "search_button": "搜索"
+  },
+  "form": {
+    "email": "邮箱",
+    "password": "密码",
+    "confirm_password": "确认密码",
+    "email_placeholder": "your@email.com",
+    "password_placeholder": "••••••••",
+    "password_signup_placeholder": "输入您的密码",
+    "password_confirm_placeholder": "再次输入密码",
+    "required": "必填",
+    "optional": "可选"
+  },
+  "auth_page": {
+    "title": "登录或创建账户",
+    "subtitle": "访问您的账户以发布和管理广告。",
+    "login_tab": "登录",
+    "signup_tab": "注册",
+    "login_button": "登录",
+    "signup_button": "创建账户",
+    "welcome": "欢迎",
+    "login_success": "登录成功。",
+    "verify_email": "检查您的邮箱",
+    "verify_email_desc": "我们发送了一个确认链接来激活您的账户。",
+    "login_error": "登录错误",
+    "signup_error": "注册错误",
+    "general_error": "错误",
+    "unexpected_login": "登录时发生意外错误",
+    "unexpected_signup": "创建账户时发生意外错误",
+    "password_requirements": "您的密码必须包含："
+  },
+  "notifications": {
+    "title": "通知",
+    "mark_all_read": "全部标记为已读",
+    "no_notifications": "无通知",
+    "no_notifications_desc": "您已查看所有内容！",
+    "mark_read": "标记为已读",
+    "remove": "移除"
   }
 }

@@ -192,6 +192,43 @@
     "location_placeholder": "Enter city or region...",
     "currency": "Currency",
     "search_button": "Search"
+  },
+  "form": {
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "email_placeholder": "your@email.com",
+    "password_placeholder": "••••••••",
+    "password_signup_placeholder": "Enter your password",
+    "password_confirm_placeholder": "Enter password again",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "auth_page": {
+    "title": "Sign in or create account",
+    "subtitle": "Access your account to post and manage listings.",
+    "login_tab": "Sign in",
+    "signup_tab": "Sign up",
+    "login_button": "Sign in",
+    "signup_button": "Create account",
+    "welcome": "Welcome",
+    "login_success": "Login successful.",
+    "verify_email": "Check your email",
+    "verify_email_desc": "We sent a confirmation link to activate your account.",
+    "login_error": "Login error",
+    "signup_error": "Signup error",
+    "general_error": "Error",
+    "unexpected_login": "Unexpected error during login",
+    "unexpected_signup": "Unexpected error creating account",
+    "password_requirements": "Your password must contain:"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_all_read": "Mark all as read",
+    "no_notifications": "No notifications",
+    "no_notifications_desc": "You're all caught up!",
+    "mark_read": "Mark as read",
+    "remove": "Remove"
   }
 }
 

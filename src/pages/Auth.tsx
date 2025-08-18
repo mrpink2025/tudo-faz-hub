@@ -15,6 +15,8 @@ import { useRateLimit } from "@/hooks/useRateLimit";
 import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/lib/validationSchemas";
 import { logger } from "@/utils/logger";
 import { PasswordStrength } from "@/components/ui/password-strength";
+import { useTranslation } from "react-i18next";
+
 const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -22,12 +24,13 @@ const Auth = () => {
   const { session } = useSupabaseAuth();
   const { isAdmin, loading: loadingRole } = useIsAdmin();
   const { checkRateLimit } = useRateLimit();
+  const { t } = useTranslation();
   const [tab, setTab] = useState<"entrar" | "cadastrar">("entrar");
 
   useEffect(() => {
-    document.title = "Entrar ou Criar Conta - tudofaz";
+    document.title = t("auth_page.title") + " - tudofaz";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Faça login ou crie sua conta no tudofaz para publicar e gerenciar anúncios.");
+    if (meta) meta.setAttribute("content", t("auth_page.subtitle"));
     const link = document.querySelector('link[rel="canonical"]') || document.createElement('link');
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', window.location.href);
@@ -54,16 +57,16 @@ const Auth = () => {
       
       if (error) {
         logger.error("Login failed", { error: error.message, email: values.email });
-        toast({ title: "Erro ao entrar", description: error.message });
+        toast({ title: t("auth_page.login_error"), description: error.message });
         return;
       }
       
       logger.info("User logged in successfully", { email: values.email });
-      toast({ title: "Bem-vindo", description: "Login realizado com sucesso." });
+      toast({ title: t("auth_page.welcome"), description: t("auth_page.login_success") });
       // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
     } catch (err) {
       logger.error("Unexpected login error", { error: err, email: values.email });
-      toast({ title: "Erro", description: "Erro inesperado ao fazer login" });
+      toast({ title: t("auth_page.general_error"), description: t("auth_page.unexpected_login") });
     }
   };
 
@@ -80,34 +83,34 @@ const Auth = () => {
       
       if (error) {
         logger.error("Signup failed", { error: error.message, email: values.email });
-        toast({ title: "Erro ao cadastrar", description: error.message });
+        toast({ title: t("auth_page.signup_error"), description: error.message });
         return;
       }
       
       logger.info("User signed up successfully", { email: values.email });
       toast({ 
-        title: "Verifique seu e-mail", 
-        description: "Enviamos um link de confirmação para ativar sua conta." 
+        title: t("auth_page.verify_email"), 
+        description: t("auth_page.verify_email_desc")
       });
       setTab("entrar");
     } catch (err) {
       logger.error("Unexpected signup error", { error: err, email: values.email });
-      toast({ title: "Erro", description: "Erro inesperado ao criar conta" });
+      toast({ title: t("auth_page.general_error"), description: t("auth_page.unexpected_signup") });
     }
   };
 
   return (
     <main className="container py-10">
       <header className="mb-6">
-        <h1 className="font-display text-3xl">Entrar ou criar conta</h1>
-        <p className="text-muted-foreground">Acesse sua conta para publicar e gerenciar anúncios.</p>
+        <h1 className="font-display text-3xl">{t("auth_page.title")}</h1>
+        <p className="text-muted-foreground">{t("auth_page.subtitle")}</p>
       </header>
 
       <section className="max-w-md">
         <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
           <TabsList className="grid grid-cols-2 w-full">
-            <TabsTrigger value="entrar">Entrar</TabsTrigger>
-            <TabsTrigger value="cadastrar">Cadastrar</TabsTrigger>
+            <TabsTrigger value="entrar">{t("auth_page.login_tab")}</TabsTrigger>
+            <TabsTrigger value="cadastrar">{t("auth_page.signup_tab")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="entrar" className="mt-6">
@@ -115,23 +118,23 @@ const Auth = () => {
               <form onSubmit={loginForm.handleSubmit(handleLogin)} className="grid gap-4">
                 <FormField name="email" control={loginForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>{t("form.email")}</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="seu@email.com" {...field} />
+                      <Input type="email" placeholder={t("form.email_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField name="password" control={loginForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Senha</FormLabel>
+                    <FormLabel>{t("form.password")}</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input type="password" placeholder={t("form.password_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
-                <Button type="submit">Entrar</Button>
+                <Button type="submit">{t("auth_page.login_button")}</Button>
               </form>
             </Form>
           </TabsContent>
@@ -141,21 +144,21 @@ const Auth = () => {
               <form onSubmit={signupForm.handleSubmit(handleSignup)} className="grid gap-4">
                 <FormField name="email" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>{t("form.email")}</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="seu@email.com" {...field} />
+                      <Input type="email" placeholder={t("form.email_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField name="password" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Senha *</FormLabel>
+                    <FormLabel>{t("form.password")} *</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Digite sua senha" {...field} />
+                      <Input type="password" placeholder={t("form.password_signup_placeholder")} {...field} />
                     </FormControl>
                     <div className="text-xs text-muted-foreground mt-1 space-y-1">
-                      <p>Sua senha deve conter:</p>
+                      <p>{t("auth_page.password_requirements")}</p>
                       <PasswordStrength password={field.value || ""} />
                     </div>
                     <FormMessage />
@@ -163,14 +166,14 @@ const Auth = () => {
                 )} />
                 <FormField name="confirmPassword" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Confirmar Senha *</FormLabel>
+                    <FormLabel>{t("form.confirm_password")} *</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Digite a senha novamente" {...field} />
+                      <Input type="password" placeholder={t("form.password_confirm_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
-                <Button type="submit">Criar conta</Button>
+                <Button type="submit">{t("auth_page.signup_button")}</Button>
               </form>
             </Form>
           </TabsContent>

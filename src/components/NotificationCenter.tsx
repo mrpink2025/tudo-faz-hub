@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useTranslation } from "react-i18next";
 
 interface Notification {
   id: string;
@@ -15,6 +16,7 @@ interface Notification {
 }
 
 export const NotificationCenter = () => {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -126,11 +128,11 @@ export const NotificationCenter = () => {
         <Card className="border-0 shadow-lg">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Notificações</CardTitle>
+              <CardTitle className="text-lg">{t("notifications.title")}</CardTitle>
               {unreadCount > 0 && (
                 <Button variant="ghost" size="sm" onClick={markAllAsRead}>
                   <Check className="h-4 w-4 mr-1" />
-                  Marcar todas
+                  {t("notifications.mark_all_read")}
                 </Button>
               )}
             </div>
@@ -139,7 +141,7 @@ export const NotificationCenter = () => {
             {notifications.length === 0 ? (
               <div className="p-4 text-center text-muted-foreground">
                 <Mail className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p>Nenhuma notificação</p>
+                <p>{t("notifications.no_notifications")}</p>
               </div>
             ) : (
               <div className="max-h-96 overflow-y-auto">
