@@ -210,6 +210,20 @@
       "users": "用户",
       "listings": "帖子",
       "orders": "订单"
+    },
+    "monitoring": {
+      "title": "监控与安全",
+      "dashboard_title": "监控仪表板",
+      "dashboard_subtitle": "应用程序性能和使用情况概览",
+      "refresh": "刷新",
+      "page_views": "页面浏览量（7天）",
+      "user_actions": "用户操作",
+      "page_views_growth": "比上周增长+12%",
+      "user_actions_growth": "比上周增长+8%",
+      "views_by_day": "每日浏览量",
+      "top_pages": "热门页面",
+      "frequent_actions": "最频繁操作",
+      "performance_metrics": "性能指标"
     }
   },
   "auth": {

@@ -210,6 +210,20 @@
       "users": "Users",
       "listings": "Listings",
       "orders": "Orders"
+    },
+    "monitoring": {
+      "title": "Monitoring & Security",
+      "dashboard_title": "Monitoring Dashboard",
+      "dashboard_subtitle": "Overview of application performance and usage",
+      "refresh": "Refresh",
+      "page_views": "Page Views (7d)",
+      "user_actions": "User Actions",
+      "page_views_growth": "+12% from last week",
+      "user_actions_growth": "+8% from last week",
+      "views_by_day": "Views by Day",
+      "top_pages": "Top Pages",
+      "frequent_actions": "Most Frequent Actions",
+      "performance_metrics": "Performance Metrics"
     }
   },
   "credits": {

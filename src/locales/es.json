@@ -210,6 +210,20 @@
       "users": "Usuarios",
       "listings": "Anuncios",
       "orders": "Pedidos"
+    },
+    "monitoring": {
+      "title": "Monitoreo y Seguridad",
+      "dashboard_title": "Panel de Monitoreo",
+      "dashboard_subtitle": "Visión general del rendimiento y uso de la aplicación",
+      "refresh": "Actualizar",
+      "page_views": "Visualizaciones (7d)",
+      "user_actions": "Acciones del Usuario",
+      "page_views_growth": "+12% desde la semana pasada",
+      "user_actions_growth": "+8% desde la semana pasada",
+      "views_by_day": "Visualizaciones por Día",
+      "top_pages": "Páginas Más Visitadas",
+      "frequent_actions": "Acciones Más Frecuentes",
+      "performance_metrics": "Métricas de Rendimiento"
     }
   },
   "auth": {

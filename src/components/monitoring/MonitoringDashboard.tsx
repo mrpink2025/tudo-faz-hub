@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HealthCheckWidget } from '@/components/monitoring/HealthCheckWidget';
 import { supabase } from '@/integrations/supabase/client';
@@ -17,6 +18,7 @@ interface AnalyticsData {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 export const MonitoringDashboard = () => {
+  const { t } = useTranslation();
   const [analytics, setAnalytics] = useState<AnalyticsData>({
     pageViews: [],
     topPages: [],
@@ -133,14 +135,14 @@ export const MonitoringDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard de Monitoramento</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t("admin.monitoring.dashboard_title")}</h1>
           <p className="text-muted-foreground">
-            Visão geral da performance e uso da aplicação
+            {t("admin.monitoring.dashboard_subtitle")}
           </p>
         </div>
         <Button onClick={loadAnalytics} disabled={loading} variant="outline">
           <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          Atualizar
+          {t("admin.monitoring.refresh")}
         </Button>
       </div>
 
@@ -150,7 +152,7 @@ export const MonitoringDashboard = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Visualizações (7d)</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("admin.monitoring.page_views")}</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -158,14 +160,14 @@ export const MonitoringDashboard = () => {
               {analytics.pageViews.reduce((sum, day) => sum + day.views, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
-              +12% desde a semana passada
+              {t("admin.monitoring.page_views_growth")}
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ações do Usuário</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("admin.monitoring.user_actions")}</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -173,7 +175,7 @@ export const MonitoringDashboard = () => {
               {analytics.userActions.reduce((sum, action) => sum + action.count, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
-              +8% desde a semana passada
+              {t("admin.monitoring.user_actions_growth")}
             </p>
           </CardContent>
         </Card>
@@ -183,7 +185,7 @@ export const MonitoringDashboard = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Visualizações por Dia</CardTitle>
+            <CardTitle>{t("admin.monitoring.views_by_day")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -200,7 +202,7 @@ export const MonitoringDashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Páginas Mais Visitadas</CardTitle>
+            <CardTitle>{t("admin.monitoring.top_pages")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -219,7 +221,7 @@ export const MonitoringDashboard = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Ações Mais Frequentes</CardTitle>
+            <CardTitle>{t("admin.monitoring.frequent_actions")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -246,7 +248,7 @@ export const MonitoringDashboard = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Métricas de Performance</CardTitle>
+            <CardTitle>{t("admin.monitoring.performance_metrics")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
