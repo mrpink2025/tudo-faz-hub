@@ -1,7 +1,7 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
@@ -12,6 +12,7 @@ interface MobileMenuDropdownProps {
 export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
   const { t } = useTranslation();
   const { isAdmin } = useIsAdmin();
+  const navigate = useNavigate();
 
   if (!user) return null;
 
@@ -25,10 +26,8 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover text-foreground z-50">
         {isAdmin && (
-          <DropdownMenuItem asChild>
-            <NavLink to="/admin" className="w-full flex items-center">
-              {t("nav.admin_panel")}
-            </NavLink>
+          <DropdownMenuItem onClick={() => navigate('/admin')}>
+            {t("nav.admin_panel")}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem asChild>

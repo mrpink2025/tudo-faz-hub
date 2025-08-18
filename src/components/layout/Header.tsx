@@ -1,4 +1,4 @@
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
@@ -28,6 +28,7 @@ const Header = () => {
   const { user } = useSupabaseAuth();
   const { isAdmin } = useIsAdmin();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { currentSearchValue } = useSearch();
 
@@ -84,8 +85,8 @@ const Header = () => {
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {isAdmin && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin">{t("nav.admin_panel")}</Link>
+                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    {t("nav.admin_panel")}
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem asChild>
