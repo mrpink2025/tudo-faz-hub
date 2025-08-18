@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 
 export function useAffiliates() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -13,8 +15,12 @@ export function useAffiliates() {
       const { data, error } = await supabase
         .from("affiliates")
         .select("*")
+        .limit(1)
         .maybeSingle();
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching affiliate profile:", error);
+        return null;
+      }
       return data;
     },
   });
@@ -22,28 +28,59 @@ export function useAffiliates() {
   // Hook para criar perfil de afiliado
   const createAffiliate = useMutation({
     mutationFn: async (data: { pix_key?: string; bank_account?: any }) => {
-      // Gerar código único
-      const { data: codeData, error: codeError } = await supabase.rpc('generate_affiliate_code');
-      if (codeError) throw codeError;
+      try {
+        // Verificar se já existe um perfil de afiliado
+        const { data: existingAffiliate } = await supabase
+          .from("affiliates")
+          .select("id")
+          .limit(1)
+          .maybeSingle();
+          
+        if (existingAffiliate) {
+          throw new Error("Você já possui um perfil de afiliado");
+        }
 
-      const { data: result, error } = await supabase
-        .from("affiliates")
-        .insert({
-          user_id: (await supabase.auth.getUser()).data.user?.id,
-          affiliate_code: codeData,
-          pix_key: data.pix_key,
-          bank_account: data.bank_account,
-        })
-        .select()
-        .single();
-      if (error) throw error;
-      return result;
+        // Gerar código único
+        const { data: codeData, error: codeError } = await supabase.rpc('generate_affiliate_code');
+        if (codeError) {
+          console.error("Error generating affiliate code:", codeError);
+          throw new Error("Erro ao gerar código de afiliado");
+        }
+
+        const { data: user } = await supabase.auth.getUser();
+        if (!user.user?.id) {
+          throw new Error("Usuário não autenticado");
+        }
+
+        const { data: result, error } = await supabase
+          .from("affiliates")
+          .insert({
+            user_id: user.user.id,
+            affiliate_code: codeData,
+            pix_key: data.pix_key || "",
+            bank_account: data.bank_account,
+            status: 'active'
+          })
+          .select()
+          .single();
+          
+        if (error) {
+          console.error("Error creating affiliate:", error);
+          throw new Error("Erro ao criar perfil de afiliado: " + error.message);
+        }
+        
+        return result;
+      } catch (err) {
+        console.error("Affiliate creation error:", err);
+        throw err;
+      }
     },
     onSuccess: () => {
-      toast({ title: "Perfil de afiliado criado com sucesso!" });
+      toast({ title: t("affiliate.profile_created") });
       queryClient.invalidateQueries({ queryKey: ["affiliate-profile"] });
     },
     onError: (error: any) => {
+      console.error("Create affiliate error:", error);
       toast({ 
         title: "Erro ao criar perfil de afiliado", 
         description: error.message,
@@ -96,8 +133,7 @@ export function useAffiliateListings() {
         .from("listings")
         .select(`
           id, title, price, currency, cover_image, 
-          affiliate_enabled, affiliate_commission_rate,
-          profiles!listings_user_id_fkey(full_name, email)
+          affiliate_enabled, affiliate_commission_rate
         `)
         .eq("affiliate_enabled", true)
         .eq("approved", true)
@@ -266,32 +302,44 @@ export function useAffiliateCommissions() {
   const { data: stats } = useQuery({
     queryKey: ["affiliate-stats"],
     queryFn: async () => {
-      const { data: affiliate } = await supabase
+      const { data: affiliate, error: affiliateError } = await supabase
         .from("affiliates")
-        .select("total_earnings, available_balance, withdrawn_balance")
-        .single();
+        .select("id, total_earnings, available_balance, withdrawn_balance")
+        .maybeSingle();
+      
+      if (affiliateError) {
+        console.error("Error fetching affiliate stats:", affiliateError);
+        return null;
+      }
       
       if (!affiliate) return null;
 
-      // Contar cliques totais
-      const { count: totalClicks } = await supabase
-        .from("affiliate_clicks")
-        .select("*", { count: "exact", head: true })
-        .in("affiliate_link_id", 
-          await supabase
-            .from("affiliate_links")
-            .select("id")
-            .then(res => res.data?.map(l => l.id) || [])
-        );
+      // Contar cliques totais para este afiliado
+      const { data: affiliateLinks } = await supabase
+        .from("affiliate_links")
+        .select("id")
+        .eq("affiliate_id", affiliate.id);
+        
+      const linkIds = affiliateLinks?.map(l => l.id) || [];
+      
+      let totalClicks = 0;
+      if (linkIds.length > 0) {
+        const { count } = await supabase
+          .from("affiliate_clicks")
+          .select("*", { count: "exact", head: true })
+          .in("affiliate_link_id", linkIds);
+        totalClicks = count || 0;
+      }
 
-      // Contar vendas convertidas
+      // Contar vendas convertidas para este afiliado
       const { count: totalSales } = await supabase
         .from("affiliate_commissions")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("affiliate_id", affiliate.id);
 
       return {
         ...affiliate,
-        totalClicks: totalClicks || 0,
+        totalClicks,
         totalSales: totalSales || 0,
       };
     },
