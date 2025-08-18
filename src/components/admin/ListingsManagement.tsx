@@ -71,11 +71,11 @@ export default function ListingsManagement() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Anúncio rejeitado" });
+      toast({ title: t("admin.moderate.rejected") });
       qc.invalidateQueries({ queryKey: createQueryKey("admin-listings") });
     },
     onError: (e: any) => toast({ 
-      title: "Erro ao rejeitar", 
+      title: t("admin.moderate.reject_error"), 
       description: e.message,
       variant: "destructive"
     }),
@@ -112,42 +112,42 @@ export default function ListingsManagement() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast({ title: "Anúncio excluído com sucesso" });
+      toast({ title: t("admin.listings.deleted_success") });
       qc.invalidateQueries({ queryKey: createQueryKey("admin-listings") });
     },
     onError: (e: any) => toast({ 
-      title: "Erro ao excluir anúncio", 
+      title: t("admin.listings.delete_error"), 
       description: e.message,
       variant: "destructive"
     }),
   });
 
   const getStatusBadge = (status: string, approved: boolean) => {
-    if (!approved) return <Badge variant="destructive">Pendente</Badge>;
-    if (status === "published") return <Badge variant="default">Publicado</Badge>;
-    if (status === "draft") return <Badge variant="secondary">Rascunho</Badge>;
+    if (!approved) return <Badge variant="destructive">{t("admin.listings.pending")}</Badge>;
+    if (status === "published") return <Badge variant="default">{t("admin.listings.published")}</Badge>;
+    if (status === "draft") return <Badge variant="secondary">{t("admin.listings.draft")}</Badge>;
     return <Badge variant="outline">{status}</Badge>;
   };
 
   return (
     <section className="space-y-6">
       <header>
-        <h2 className="text-2xl font-bold">Gerenciar Anúncios</h2>
-        <p className="text-muted-foreground">Edite, aprove, destaque ou exclua anúncios</p>
+        <h2 className="text-2xl font-bold">{t("admin.listings.manage")}</h2>
+        <p className="text-muted-foreground">{t("admin.listings.manage_desc")}</p>
       </header>
 
       {/* Filtros */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Filtros</CardTitle>
+          <CardTitle className="text-lg">{t("admin.listings.filters")}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Buscar por título</label>
+            <label className="text-sm font-medium">{t("admin.listings.search_title")}</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Digite o título..."
+                placeholder={t("admin.listings.search_placeholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"

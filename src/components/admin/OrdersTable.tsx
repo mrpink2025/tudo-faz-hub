@@ -64,9 +64,9 @@ export default function OrdersTable() {
                     {o.currency ?? "BRL"} {o.amount ?? 0} • {t('admin.orders.user')}: {o.user_id?.slice(0, 8)} • {t('admin.orders.listing')}: {o.listing_id?.slice(0, 8)}
                   </div>
                   {o.affiliate_id && (
-                    <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                      🎯 Afiliado: {o.affiliates?.affiliate_code} • Comissão: {o.affiliate_commission || 0} centavos
-                    </div>
+                     <div className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                       🎯 {t("admin.orders.affiliate")}: {o.affiliates?.affiliate_code} • {t("admin.orders.commission")}: {o.affiliate_commission || 0} centavos
+                     </div>
                   )}
                 </div>
                 <Select value={o.status ?? "pending"} onValueChange={(v) => updateStatus.mutate({ id: o.id, status: v })}>

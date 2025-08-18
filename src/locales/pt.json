@@ -314,7 +314,21 @@
       "add_highlight": "Destacar",
       "approve": "Aprovar",
       "no_pending": "Não há anúncios pendentes.",
-      "highlight_updated": "Destaque atualizado"
+      "highlight_updated": "Destaque atualizado",
+      "rejected": "Anúncio rejeitado",
+      "reject_error": "Erro ao rejeitar"
+    },
+    "listings": {
+      "manage": "Gerenciar Anúncios",
+      "manage_desc": "Edite, aprove, destaque ou exclua anúncios",
+      "filters": "Filtros",
+      "search_title": "Buscar por título",
+      "search_placeholder": "Digite o título...",
+      "deleted_success": "Anúncio excluído com sucesso",
+      "delete_error": "Erro ao excluir anúncio",
+      "pending": "Pendente",
+      "published": "Publicado",
+      "draft": "Rascunho"
     },
     "stats": {
       "total_users": "Total de Usuários",
@@ -323,7 +337,7 @@
       "growth_rate": "Taxa de Crescimento",
       "registered_users": "Usuários registrados",
       "published_listings": "Anúncios publicados",
-      "completed_orders": "Pedidos realizados",
+      "completed_orders": "Pedidos completados",
       "last_30_days": "Últimos 30 dias",
       "listings_by_month": "Anúncios por Mês",
       "general_distribution": "Distribuição Geral",
@@ -340,7 +354,9 @@
       "listing": "anúncio",
       "status_updated": "Status atualizado",
       "status_error": "Erro ao atualizar status",
-      "no_orders": "Nenhum pedido encontrado"
+      "no_orders": "Nenhum pedido encontrado",
+      "affiliate": "Afiliado",
+      "commission": "Comissão"
     },
     "settings": {
       "title": "Configurações",
