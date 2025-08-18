@@ -7,6 +7,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 
+const LanguageSwitcher = () => {
+  const { t, i18n } = useTranslation();
+
 const langs = [
   { code: "pt", label: "Português" },
   { code: "en", label: "English" },
@@ -14,8 +17,6 @@ const langs = [
   { code: "zh", label: "中文" },
 ];
 
-const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
   const currentLang = (i18n.language || "pt").split("-")[0];
   const current = currentLang === "pt" ? "BR" : currentLang.toUpperCase();
 
@@ -27,7 +28,7 @@ const LanguageSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" aria-label="Selecionar idioma" className="font-medium">
+        <Button variant="ghost" size="sm" aria-label={t("ui.language_selector")} className="font-medium">
           {current}
         </Button>
       </DropdownMenuTrigger>

@@ -11,8 +11,10 @@ import { Link, Copy, DollarSign, MousePointer, TrendingUp, Wallet, Target, Eye }
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { WithdrawalModal } from "@/components/affiliate/WithdrawalModal";
+import { useTranslation } from "react-i18next";
 
 export default function AffiliateCenter() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const { affiliateProfile, profileLoading, createAffiliate, updateAffiliate } = useAffiliates();
   const { availableListings, isLoading: listingsLoading } = useAffiliateListings();
@@ -28,7 +30,7 @@ export default function AffiliateCenter() {
   const copyAffiliateLink = (trackingCode: string, listingId: string) => {
     const affiliateUrl = `${window.location.origin}/listing/${listingId}?ref=${trackingCode}`;
     navigator.clipboard.writeText(affiliateUrl);
-    toast({ title: "Link copiado para a área de transferência!" });
+    toast({ title: t("affiliate.copy_link_success") });
   };
 
   // Função para formatar valores em reais
@@ -58,20 +60,19 @@ export default function AffiliateCenter() {
       <div className="container mx-auto p-6 max-w-2xl">
         <Card>
           <CardHeader>
-            <CardTitle>Torne-se um Afiliado</CardTitle>
+            <CardTitle>{t("affiliate.become_affiliate")}</CardTitle>
             <CardDescription>
-              Ganhe comissões divulgando produtos do nosso marketplace. 
-              Crie seu perfil de afiliado para começar.
+              {t("affiliate.become_affiliate_desc")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="pix">Chave PIX (opcional)</Label>
+              <Label htmlFor="pix">{t("affiliate.pix_key")}</Label>
               <Input
                 id="pix"
                 value={pixKey}
                 onChange={(e) => setPixKey(e.target.value)}
-                placeholder="Sua chave PIX para receber comissões"
+                placeholder={t("affiliate.pix_placeholder")}
               />
             </div>
             <Button 
@@ -79,7 +80,7 @@ export default function AffiliateCenter() {
               disabled={createAffiliate.isPending}
               className="w-full"
             >
-              {createAffiliate.isPending ? "Criando..." : "Criar Perfil de Afiliado"}
+              {createAffiliate.isPending ? t("affiliate.creating") : t("affiliate.create_profile")}
             </Button>
           </CardContent>
         </Card>
@@ -90,9 +91,9 @@ export default function AffiliateCenter() {
   return (
     <div className="container mx-auto p-6">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Central do Afiliado</h1>
+        <h1 className="text-3xl font-bold mb-2">{t("affiliate.center_title")}</h1>
         <p className="text-muted-foreground">
-          Seu código de afiliado: <code className="font-mono bg-muted px-2 py-1 rounded">{affiliateProfile.affiliate_code}</code>
+          {t("affiliate.affiliate_code")} <code className="font-mono bg-muted px-2 py-1 rounded">{affiliateProfile.affiliate_code}</code>
         </p>
       </header>
 
@@ -102,7 +103,7 @@ export default function AffiliateCenter() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Saldo Disponível</p>
+                <p className="text-sm text-muted-foreground">{t("affiliate.available_balance")}</p>
                 <p className="text-2xl font-bold text-green-600">
                   {formatCurrency(stats?.available_balance || 0)}
                 </p>
@@ -123,7 +124,7 @@ export default function AffiliateCenter() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total de Ganhos</p>
+                <p className="text-sm text-muted-foreground">{t("affiliate.total_earnings")}</p>
                 <p className="text-2xl font-bold">
                   {formatCurrency(stats?.total_earnings || 0)}
                 </p>
@@ -137,7 +138,7 @@ export default function AffiliateCenter() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total de Cliques</p>
+                <p className="text-sm text-muted-foreground">{t("affiliate.total_clicks")}</p>
                 <p className="text-2xl font-bold">{stats?.totalClicks || 0}</p>
               </div>
               <MousePointer className="h-8 w-8 text-purple-600" />
@@ -149,7 +150,7 @@ export default function AffiliateCenter() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Vendas Geradas</p>
+                <p className="text-sm text-muted-foreground">{t("affiliate.generated_sales")}</p>
                 <p className="text-2xl font-bold">{stats?.totalSales || 0}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-orange-600" />
@@ -162,15 +163,15 @@ export default function AffiliateCenter() {
       <div className="w-full mb-6">
         <Select defaultValue="dashboard" onValueChange={(value) => setSelectedTab(value)}>
           <SelectTrigger className="w-full sm:w-64">
-            <SelectValue placeholder="Selecione uma opção" />
+            <SelectValue placeholder={t("affiliate.dashboard")} />
           </SelectTrigger>
           <SelectContent className="bg-background border shadow-lg">
-            <SelectItem value="dashboard">📊 Dashboard</SelectItem>
-            <SelectItem value="products">🛍️ Produtos</SelectItem>
-            <SelectItem value="requests">📋 Solicitações</SelectItem>
-            <SelectItem value="links">🔗 Meus Links</SelectItem>
-            <SelectItem value="commissions">💰 Comissões</SelectItem>
-            <SelectItem value="profile">👤 Perfil</SelectItem>
+            <SelectItem value="dashboard">{t("affiliate.dashboard")}</SelectItem>
+            <SelectItem value="products">{t("affiliate.products")}</SelectItem>
+            <SelectItem value="requests">{t("affiliate.requests")}</SelectItem>
+            <SelectItem value="links">{t("affiliate.links")}</SelectItem>
+            <SelectItem value="commissions">{t("affiliate.commissions")}</SelectItem>
+            <SelectItem value="profile">{t("affiliate.profile")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
