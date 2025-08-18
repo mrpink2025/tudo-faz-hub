@@ -537,7 +537,9 @@
     "page": "Página",
     "per_page": "Por página",
     "go_to_page": "Ir para página",
-    "select_page_size": "Selecionar tamanho da página"
+    "select_page_size": "Selecionar tamanho da página",
+    "open_menu": "Abrir menu",
+    "close": "Fechar"
   }
 }
 

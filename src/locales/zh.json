@@ -241,6 +241,8 @@
     "page": "页面",
     "per_page": "每页",
     "go_to_page": "转到页面",
-    "select_page_size": "选择页面大小"
+    "select_page_size": "选择页面大小",
+    "open_menu": "打开菜单",
+    "close": "关闭"
   }
 }

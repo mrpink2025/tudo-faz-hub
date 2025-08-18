@@ -258,7 +258,9 @@
     "page": "Page",
     "per_page": "Per page",
     "go_to_page": "Go to page",
-    "select_page_size": "Select page size"
+    "select_page_size": "Select page size",
+    "open_menu": "Open menu",
+    "close": "Close"
   }
 }
 

@@ -241,6 +241,8 @@
     "page": "Página",
     "per_page": "Por página",
     "go_to_page": "Ir a página",
-    "select_page_size": "Seleccionar tamaño de página"
+    "select_page_size": "Seleccionar tamaño de página",
+    "open_menu": "Abrir menú",
+    "close": "Cerrar"
   }
 }
