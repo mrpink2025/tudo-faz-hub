@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useNavigate } from "react-router-dom";
+import ContactSellerButton from "@/components/chat/ContactSellerButton";
 
 interface BuyNowButtonProps {
   listing: {
@@ -79,6 +80,12 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
         <CreditCard className="mr-2 h-4 w-4" />
         {isLoading ? "Processando..." : "Comprar Agora"}
       </Button>
+      
+      <ContactSellerButton 
+        sellerId={listing.user_id}
+        sellerName="Vendedor"
+        listingTitle={listing.title}
+      />
       
       <Button
         onClick={handleAddToCart}

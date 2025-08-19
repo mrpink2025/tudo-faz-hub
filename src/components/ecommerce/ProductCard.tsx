@@ -170,12 +170,6 @@ export function ProductCard({ listing }: ProductCardProps) {
             </Button>
           )}
           
-          {/* Contact seller button */}
-          <ContactSellerButton 
-            sellerId={listing.user_id}
-            sellerName="Vendedor"
-            listingTitle={listing.title}
-          />
         </CardFooter>
       )}
     </Card>
