@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSalesReports } from "@/hooks/useSalesReports";
+import { useSalesReports, SalesAnalytics } from "@/hooks/useSalesReports";
+import { SaleDetailModal } from "./SaleDetailModal";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -16,7 +17,8 @@ import {
   Calendar,
   Users,
   Download,
-  Filter
+  Filter,
+  Eye
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
@@ -29,8 +31,10 @@ export const SalesReportsPanel = () => {
     new Date().toISOString().split('T')[0]
   );
   const [selectedSeller, setSelectedSeller] = useState<string>("");
+  const [selectedSale, setSelectedSale] = useState<SalesAnalytics | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-  const { metrics, analytics, isLoading } = useSalesReports(
+  const { metrics, analytics, isLoading, error } = useSalesReports(
     startDate,
     endDate,
     selectedSeller || undefined
@@ -75,8 +79,33 @@ export const SalesReportsPanel = () => {
     };
   });
 
+  const openSaleDetail = (sale: SalesAnalytics) => {
+    setSelectedSale(sale);
+    setIsDetailModalOpen(true);
+  };
+
   if (isLoading) {
-    return <div>{t("admin.sales.loading")}</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>{t("admin.sales.loading")}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p className="text-destructive mb-4">Erro ao carregar dados de vendas</p>
+          <Button onClick={() => window.location.reload()}>
+            Tentar novamente
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -244,39 +273,108 @@ export const SalesReportsPanel = () => {
           <Card>
             <CardHeader>
               <CardTitle>{t("admin.sales.sales_history")}</CardTitle>
+              <div className="text-sm text-muted-foreground">
+                {analytics.length > 0 ? `${analytics.length} transações encontradas` : 'Nenhuma transação encontrada'}
+              </div>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t("admin.sales.date")}</TableHead>
-                    <TableHead>{t("admin.sales.order")}</TableHead>
-                    <TableHead>{t("admin.sales.buyer")}</TableHead>
-                    <TableHead>{t("admin.sales.seller")}</TableHead>
-                    <TableHead>{t("admin.sales.value")}</TableHead>
-                    <TableHead>{t("admin.sales.status")}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {analytics.slice(0, 10).map((sale) => (
-                    <TableRow key={sale.order_id}>
-                      <TableCell>{formatDate(sale.created_at)}</TableCell>
-                      <TableCell>#{sale.order_id.slice(0, 8)}</TableCell>
-                      <TableCell>{sale.buyer_name || sale.buyer_email}</TableCell>
-                      <TableCell>{sale.seller_name || sale.seller_email}</TableCell>
-                      <TableCell>{formatPrice(sale.amount / 100)}</TableCell>
-                      <TableCell>
-                        <Badge variant={sale.status === 'delivered' ? 'default' : 'secondary'}>
-                          {sale.status === 'pending' ? t("admin.sales.pending") :
-                           sale.status === 'confirmed' ? t("admin.sales.confirmed") :
-                           sale.status === 'shipped' ? t("admin.sales.shipped") :
-                           sale.status === 'delivered' ? t("admin.sales.delivered") : t("admin.sales.cancelled")}
-                        </Badge>
-                      </TableCell>
+              {analytics.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground mb-4">Nenhuma venda encontrada no período selecionado</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setStartDate(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+                      setEndDate(new Date().toISOString().split('T')[0]);
+                    }}
+                  >
+                    Expandir para últimos 90 dias
+                  </Button>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t("admin.sales.date")}</TableHead>
+                      <TableHead>{t("admin.sales.order")}</TableHead>
+                      <TableHead>{t("admin.sales.buyer")}</TableHead>
+                      <TableHead>{t("admin.sales.seller")}</TableHead>
+                      <TableHead>{t("admin.sales.value")}</TableHead>
+                      <TableHead>{t("admin.sales.status")}</TableHead>
+                      <TableHead>Detalhes</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {analytics.slice(0, 50).map((sale) => (
+                      <TableRow key={sale.order_id}>
+                        <TableCell className="font-mono text-xs">
+                          {formatDate(sale.created_at)}
+                          <br />
+                          <span className="text-muted-foreground">
+                            {new Date(sale.created_at).toLocaleTimeString('pt-BR', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                        </TableCell>
+                        <TableCell className="font-mono">
+                          <div className="flex flex-col">
+                            <span className="font-semibold">#{sale.order_id.slice(0, 8)}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {sale.total_items} {sale.total_items === 1 ? 'item' : 'itens'}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{sale.buyer_name || 'N/A'}</span>
+                            <span className="text-xs text-muted-foreground">{sale.buyer_email}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{sale.seller_name || 'N/A'}</span>
+                            <span className="text-xs text-muted-foreground">{sale.seller_email}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-semibold">{formatPrice(sale.amount / 100)}</span>
+                            {sale.affiliate_commission > 0 && (
+                              <span className="text-xs text-orange-600">
+                                Comissão: {formatPrice(sale.affiliate_commission / 100)}
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={
+                            sale.status === 'delivered' ? 'default' : 
+                            sale.status === 'confirmed' ? 'secondary' :
+                            sale.status === 'shipped' ? 'outline' : 'destructive'
+                          }>
+                            {sale.status === 'pending' ? t("admin.sales.pending") :
+                             sale.status === 'confirmed' ? t("admin.sales.confirmed") :
+                             sale.status === 'shipped' ? t("admin.sales.shipped") :
+                             sale.status === 'delivered' ? t("admin.sales.delivered") : 
+                             sale.status === 'cancelled' ? t("admin.sales.cancelled") : sale.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => openSaleDetail(sale)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -329,6 +427,12 @@ export const SalesReportsPanel = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      <SaleDetailModal
+        sale={selectedSale}
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+      />
     </div>
   );
 };
