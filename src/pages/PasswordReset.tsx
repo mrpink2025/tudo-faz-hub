@@ -46,8 +46,8 @@ const PasswordReset = () => {
       
       console.log('🔄 Iniciando processo de redefinição de senha para:', values.email);
       
-      // Usar URL de produção (tudofaz.com) para garantir que o link funcione
-      const redirectUrl = "https://tudofaz.com/nova-senha";
+      // Usar URL do ambiente atual para garantir funcionamento
+      const redirectUrl = `${window.location.origin}/nova-senha`;
       
       console.log('🔗 URL de redirecionamento:', redirectUrl);
       

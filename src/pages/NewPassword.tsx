@@ -164,11 +164,36 @@ const NewPassword = () => {
     setIsLoading(true);
     
     try {
+      // Verificar se ainda temos uma sessão válida antes de atualizar
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session || !session.access_token) {
+        toast({
+          title: "Sessão expirada",
+          description: "Sua sessão de redefinição expirou. Solicite um novo link.",
+          variant: "destructive",
+        });
+        navigate("/esqueceu-senha");
+        return;
+      }
+
+      console.log('🔄 Atualizando senha com sessão válida');
+
       const { error } = await supabase.auth.updateUser({
         password: values.password,
       });
 
       if (error) {
+        if (error.message.includes('session_not_found') || error.message.includes('expired')) {
+          toast({
+            title: "Sessão expirada",
+            description: "O token de redefinição expirou. Solicite um novo link.",
+            variant: "destructive",
+          });
+          navigate("/esqueceu-senha");
+          return;
+        }
+        
         toast({
           title: "Erro ao atualizar senha",
           description: error.message,
@@ -176,6 +201,8 @@ const NewPassword = () => {
         });
         return;
       }
+
+      console.log('✅ Senha atualizada com sucesso');
 
       toast({
         title: "Senha atualizada!",
@@ -188,9 +215,10 @@ const NewPassword = () => {
         navigate("/entrar");
       }, 2000);
     } catch (error: any) {
+      console.error('💥 Erro ao atualizar senha:', error);
       toast({
         title: "Erro inesperado",
-        description: "Tente novamente mais tarde.",
+        description: "Tente novamente ou solicite um novo link de redefinição.",
         variant: "destructive",
       });
     } finally {
