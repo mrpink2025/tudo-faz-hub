@@ -93,12 +93,6 @@ export const useRealTimeChat = (recipientId?: string) => {
 
       if (error) throw error;
       
-      // Refetch messages immediately to show the new message
-      await fetchMessages(toUserId);
-      
-      // Atualizar lista de conversas
-      await fetchConversations();
-      
       toast.success('Mensagem enviada!');
     } catch (error) {
       logger.error('Erro ao enviar mensagem', { error, toUserId, content });
@@ -106,14 +100,14 @@ export const useRealTimeChat = (recipientId?: string) => {
     } finally {
       setSending(false);
     }
-  }, [user, fetchConversations, fetchMessages]);
+  }, [user]);
 
   // Configurar realtime para mensagens
   useEffect(() => {
     if (!user) return;
-
+    
     const channel = supabase
-      .channel(`messages-realtime-${user.id}`)
+      .channel(`messages-${user.id}`)
       .on(
         'postgres_changes',
         {
@@ -123,16 +117,19 @@ export const useRealTimeChat = (recipientId?: string) => {
         },
         (payload) => {
           const newMessage = payload.new as Message;
-          console.log('Nova mensagem recebida:', newMessage);
           
-          // Verificar se a mensagem é para ou do usuário atual
+          // Verificar se a mensagem é relevante para o usuário atual
           const isRelevantMessage = newMessage.sender_id === user.id || newMessage.recipient_id === user.id;
           
-          if (isRelevantMessage) {
-            // Se estamos na conversa ativa, adicionar a mensagem
-            if (recipientId && 
-                ((newMessage.sender_id === user.id && newMessage.recipient_id === recipientId) ||
-                 (newMessage.sender_id === recipientId && newMessage.recipient_id === user.id))) {
+          if (!isRelevantMessage) return;
+          
+          // Se estamos na conversa ativa, adicionar a mensagem
+          if (recipientId) {
+            const isFromCurrentConversation = 
+              (newMessage.sender_id === user.id && newMessage.recipient_id === recipientId) ||
+              (newMessage.sender_id === recipientId && newMessage.recipient_id === user.id);
+              
+            if (isFromCurrentConversation) {
               setMessages(prev => {
                 // Evitar duplicatas
                 const exists = prev.some(msg => msg.id === newMessage.id);
@@ -147,10 +144,10 @@ export const useRealTimeChat = (recipientId?: string) => {
                 });
               }
             }
-            
-            // Atualizar lista de conversas
-            fetchConversations();
           }
+          
+          // Sempre atualizar lista de conversas
+          fetchConversations();
         }
       )
       .subscribe();

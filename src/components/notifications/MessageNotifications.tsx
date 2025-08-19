@@ -24,7 +24,7 @@ export function MessageNotifications() {
 
     // Configurar realtime subscription para novas mensagens
     const subscription = supabase
-      .channel('new-messages')
+      .channel(`new-messages-notifications-${user.id}`)
       .on(
         'postgres_changes',
         {
@@ -40,19 +40,23 @@ export function MessageNotifications() {
           if (lastMessageId === newMessage.id) return;
           setLastMessageId(newMessage.id);
 
-          // Mostrar toast de notificação
-          toast({
-            title: t("notifications.new_message"),
-            description: newMessage.content.length > 50 
-              ? `${newMessage.content.substring(0, 50)}...` 
-              : newMessage.content,
-            action: (
-              <div className="flex items-center gap-2 text-primary">
-                <MessageCircle className="w-4 h-4" />
-                <span>{t("notifications.view")}</span>
-              </div>
-            ),
-          });
+          // Mostrar toast de notificação apenas se o usuário não estiver na página de mensagens
+          const isOnMessagesPage = window.location.pathname.includes('/mensagens');
+          
+          if (!isOnMessagesPage) {
+            toast({
+              title: t("notifications.new_message"),
+              description: newMessage.content.length > 50 
+                ? `${newMessage.content.substring(0, 50)}...` 
+                : newMessage.content,
+              action: (
+                <div className="flex items-center gap-2 text-primary">
+                  <MessageCircle className="w-4 h-4" />
+                  <span>{t("notifications.view")}</span>
+                </div>
+              ),
+            });
+          }
         }
       )
       .subscribe();
