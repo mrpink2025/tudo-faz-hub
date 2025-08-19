@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -158,6 +158,16 @@ const Auth = () => {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
+                <div className="flex items-center justify-between">
+                  <Link 
+                    to="/esqueceu-senha" 
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+                </div>
+                
                 <Button type="submit">{t("auth_page.login_button")}</Button>
               </form>
             </Form>

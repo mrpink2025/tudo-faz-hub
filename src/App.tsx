@@ -42,6 +42,8 @@ import Checkout from "./pages/Checkout";
 import CreateListing from "./pages/CreateListing";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
+import PasswordReset from "./pages/PasswordReset";
+import NewPassword from "./pages/NewPassword";
 import NotFound from "./pages/NotFound";
 import ListingDetail from "./pages/ListingDetail";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -112,6 +114,8 @@ const App = () => (
             <Route path="/pagamento-sucesso" element={<PaymentSuccess />} />
             <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />
             <Route path="/entrar" element={<Auth />} />
+            <Route path="/esqueceu-senha" element={<PasswordReset />} />
+            <Route path="/redefinir-senha" element={<NewPassword />} />
             <Route path="/confirmar-email" element={<EmailConfirmation />} />
             <Route path="/termos" element={<Terms />} />
             <Route path="/privacidade" element={<Privacy />} />
