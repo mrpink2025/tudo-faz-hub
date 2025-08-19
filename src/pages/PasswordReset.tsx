@@ -40,29 +40,38 @@ const PasswordReset = () => {
     try {
       const redirectUrl = `${window.location.origin}/nova-senha`;
       
-      // Usar APENAS o edge function personalizado que gera tokens válidos
-      const { data, error } = await supabase.functions.invoke('send-password-reset', {
-        body: {
-          email: values.email,
-          redirectUrl: redirectUrl,
-        },
+      // Usar APENAS o Supabase nativo que gera tokens válidos
+      const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
+        redirectTo: redirectUrl,
       });
 
       if (error) {
         toast({
           title: "Erro ao enviar email",
-          description: error.message || "Falha ao enviar email de redefinição",
+          description: error.message,
           variant: "destructive",
         });
         return;
       }
 
-      console.log("Password reset email sent successfully:", data);
+      // Nota: O Supabase já enviou o email com token válido
+      // Agora vamos tentar enviar nosso email bonito também, mas como backup
+      try {
+        await supabase.functions.invoke('send-password-reset', {
+          body: {
+            email: values.email,
+            redirectUrl: redirectUrl,
+          },
+        });
+        console.log("Email bonito enviado como backup");
+      } catch (customEmailError) {
+        console.warn("Email personalizado falhou, mas o nativo do Supabase funcionou:", customEmailError);
+      }
 
       setEmailSent(true);
       toast({
         title: "Email enviado!",
-        description: "Verifique sua caixa de entrada para redefinir sua senha. O link é único e expira em 1 hora.",
+        description: "Verifique sua caixa de entrada para redefinir sua senha. Use o email oficial do Supabase.",
       });
     } catch (error: any) {
       console.error("Password reset error:", error);

@@ -49,7 +49,7 @@ const NewPassword = () => {
         console.log('📍 URL atual:', window.location.href);
         console.log('🔗 SearchParams:', Object.fromEntries(searchParams.entries()));
         
-        // Verificar se há parâmetros de auth na URL
+        // Verificar se há parâmetros de auth na URL (do email do Supabase)
         const accessToken = searchParams.get('access_token');
         const refreshToken = searchParams.get('refresh_token');
         const type = searchParams.get('type');
@@ -69,7 +69,7 @@ const NewPassword = () => {
             console.error('❌ Erro ao estabelecer sessão:', error);
             toast({
               title: "Link inválido",
-              description: "Não foi possível validar o link de redefinição. Solicite um novo.",
+              description: "Token de redefinição inválido ou expirado. Solicite um novo link de redefinição.",
               variant: "destructive",
             });
             navigate("/esqueceu-senha");
@@ -106,10 +106,10 @@ const NewPassword = () => {
           console.log('✅ Sessão válida encontrada');
           setIsValidSession(true);
         } else {
-          console.log('❌ Sessão inválida ou expirada');
+          console.log('❌ Nenhuma sessão válida encontrada');
           toast({
-            title: "Link expirado",
-            description: "Link de redefinição de senha expirado ou inválido. Solicite um novo link.",
+            title: "Acesso negado",
+            description: "Use o link de redefinição enviado por email para acessar esta página.",
             variant: "destructive",
           });
           navigate("/esqueceu-senha");
