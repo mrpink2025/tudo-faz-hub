@@ -12,10 +12,46 @@ export const signupSchema = z.object({
     .regex(/[A-Z]/, "Senha deve conter pelo menos uma letra maiúscula")
     .regex(/[a-z]/, "Senha deve conter pelo menos uma letra minúscula")
     .regex(/[0-9]/, "Senha deve conter pelo menos um número"),
-  confirmPassword: z.string()
+  confirmPassword: z.string(),
+  firstName: z.string()
+    .min(2, "Nome deve ter pelo menos 2 caracteres")
+    .max(50, "Nome deve ter no máximo 50 caracteres")
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/, "Nome deve conter apenas letras"),
+  lastName: z.string()
+    .min(2, "Sobrenome deve ter pelo menos 2 caracteres")  
+    .max(50, "Sobrenome deve ter no máximo 50 caracteres")
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/, "Sobrenome deve conter apenas letras"),
+  cpf: z.string()
+    .length(11, "CPF deve ter exatamente 11 dígitos")
+    .regex(/^\d{11}$/, "CPF deve conter apenas números")
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não coincidem",
   path: ["confirmPassword"]
+}).refine((data) => {
+  // Validação básica de CPF
+  const cpf = data.cpf;
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+  let remainder = 11 - (sum % 11);
+  if (remainder === 10 || remainder === 11) remainder = 0;
+  if (remainder !== parseInt(cpf.charAt(9))) return false;
+  
+  sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+  remainder = 11 - (sum % 11);
+  if (remainder === 10 || remainder === 11) remainder = 0;
+  if (remainder !== parseInt(cpf.charAt(10))) return false;
+  
+  return true;
+}, {
+  message: "CPF inválido",
+  path: ["cpf"]
 });
 
 // Listing schemas

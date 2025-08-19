@@ -85,7 +85,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           </AvatarFallback>
         </Avatar>
         <div>
-          <h3 className="font-medium">{recipientName || recipientEmail}</h3>
+          <h3 className="font-medium">
+            {recipientName && recipientName !== recipientEmail ? recipientName : recipientEmail}
+          </h3>
           <p className="text-sm text-muted-foreground">Online</p>
         </div>
       </div>

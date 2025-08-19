@@ -43,7 +43,7 @@ const ContactSellerButton: React.FC<ContactSellerButtonProps> = ({
     navigate('/mensagens', { 
       state: { 
         selectedUserId: sellerId,
-        selectedUserName: sellerName,
+        selectedUserName: sellerName || sellerEmail, // Usar nome se disponível, senão email
         selectedUserEmail: sellerEmail,
         initialMessage: listingTitle ? `Olá! Tenho interesse no anúncio: ${listingTitle}` : undefined
       }

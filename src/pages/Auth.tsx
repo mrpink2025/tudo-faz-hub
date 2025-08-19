@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { loginSchema, signupSchema, type LoginInput, type SignupInput } from "@/lib/validationSchemas";
 import { logger } from "@/utils/logger";
@@ -35,7 +34,7 @@ const Auth = () => {
     link.setAttribute('rel', 'canonical');
     link.setAttribute('href', window.location.href);
     if (!link.parentNode) document.head.appendChild(link);
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!session || loadingRole) return;
@@ -43,8 +42,22 @@ const Auth = () => {
     navigate(isAdmin ? "/admin" : from, { replace: true });
   }, [session, isAdmin, loadingRole, navigate, location.state]);
 
-  const loginForm = useForm<LoginInput>({ resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "" } });
-  const signupForm = useForm<SignupInput>({ resolver: zodResolver(signupSchema), defaultValues: { email: "", password: "", confirmPassword: "" } });
+  const loginForm = useForm<LoginInput>({ 
+    resolver: zodResolver(loginSchema), 
+    defaultValues: { email: "", password: "" } 
+  });
+  
+  const signupForm = useForm<SignupInput>({ 
+    resolver: zodResolver(signupSchema), 
+    defaultValues: { 
+      email: "", 
+      password: "", 
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+      cpf: ""
+    } 
+  });
 
   const handleLogin = async (values: LoginInput) => {
     if (checkRateLimit('auth', values.email)) return;
@@ -63,7 +76,6 @@ const Auth = () => {
       
       logger.info("User logged in successfully", { email: values.email });
       toast({ title: t("auth_page.welcome"), description: t("auth_page.login_success") });
-      // Redirecionamento ocorrerá pelo efeito que verifica a role de admin
     } catch (err) {
       logger.error("Unexpected login error", { error: err, email: values.email });
       toast({ title: t("auth_page.general_error"), description: t("auth_page.unexpected_login") });
@@ -78,12 +90,24 @@ const Auth = () => {
       const { error } = await supabase.auth.signUp({
         email: values.email,
         password: values.password,
-        options: { emailRedirectTo: redirectUrl },
+        options: { 
+          emailRedirectTo: redirectUrl,
+          data: {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            cpf: values.cpf,
+            full_name: `${values.firstName} ${values.lastName}`
+          }
+        },
       });
       
       if (error) {
         logger.error("Signup failed", { error: error.message, email: values.email });
-        toast({ title: t("auth_page.signup_error"), description: error.message });
+        if (error.message?.includes('cpf')) {
+          toast({ title: t("auth_page.signup_error"), description: "CPF já está em uso" });
+        } else {
+          toast({ title: t("auth_page.signup_error"), description: error.message });
+        }
         return;
       }
       
@@ -142,15 +166,52 @@ const Auth = () => {
           <TabsContent value="cadastrar" className="mt-6">
             <Form {...signupForm}>
               <form onSubmit={signupForm.handleSubmit(handleSignup)} className="grid gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField name="firstName" control={signupForm.control} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.first_name")} *</FormLabel>
+                      <FormControl>
+                        <Input type="text" placeholder={t("form.first_name_placeholder")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <FormField name="lastName" control={signupForm.control} render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.last_name")} *</FormLabel>
+                      <FormControl>
+                        <Input type="text" placeholder={t("form.last_name_placeholder")} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                </div>
+                
+                <FormField name="cpf" control={signupForm.control} render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("form.cpf")} *</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="text" 
+                        placeholder={t("form.cpf_placeholder")} 
+                        maxLength={11}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                
                 <FormField name="email" control={signupForm.control} render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.email")}</FormLabel>
+                    <FormLabel>{t("form.email")} *</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder={t("form.email_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <FormField name="password" control={signupForm.control} render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("form.password")} *</FormLabel>
@@ -164,6 +225,7 @@ const Auth = () => {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <FormField name="confirmPassword" control={signupForm.control} render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("form.confirm_password")} *</FormLabel>
@@ -173,6 +235,7 @@ const Auth = () => {
                     <FormMessage />
                   </FormItem>
                 )} />
+                
                 <Button type="submit">{t("auth_page.signup_button")}</Button>
               </form>
             </Form>
