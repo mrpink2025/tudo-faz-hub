@@ -113,34 +113,44 @@ export const useRealTimeChat = (recipientId?: string) => {
     if (!user) return;
 
     const channel = supabase
-      .channel('messages-realtime')
+      .channel(`messages-realtime-${user.id}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'messages',
-          filter: `or(sender_id.eq.${user.id},recipient_id.eq.${user.id})`
+          table: 'messages'
         },
         (payload) => {
           const newMessage = payload.new as Message;
+          console.log('Nova mensagem recebida:', newMessage);
           
-          // Se estamos na conversa ativa, adicionar a mensagem
-          if (recipientId && 
-              ((newMessage.sender_id === user.id && newMessage.recipient_id === recipientId) ||
-               (newMessage.sender_id === recipientId && newMessage.recipient_id === user.id))) {
-            setMessages(prev => [...prev, newMessage]);
-            
-            // Marcar como lida se foi recebida
-            if (newMessage.sender_id === recipientId) {
-              supabase.rpc('mark_messages_as_read', {
-                conversation_user: recipientId
+          // Verificar se a mensagem é para ou do usuário atual
+          const isRelevantMessage = newMessage.sender_id === user.id || newMessage.recipient_id === user.id;
+          
+          if (isRelevantMessage) {
+            // Se estamos na conversa ativa, adicionar a mensagem
+            if (recipientId && 
+                ((newMessage.sender_id === user.id && newMessage.recipient_id === recipientId) ||
+                 (newMessage.sender_id === recipientId && newMessage.recipient_id === user.id))) {
+              setMessages(prev => {
+                // Evitar duplicatas
+                const exists = prev.some(msg => msg.id === newMessage.id);
+                if (exists) return prev;
+                return [...prev, newMessage];
               });
+              
+              // Marcar como lida se foi recebida
+              if (newMessage.sender_id === recipientId) {
+                supabase.rpc('mark_messages_as_read', {
+                  conversation_user: recipientId
+                });
+              }
             }
+            
+            // Atualizar lista de conversas
+            fetchConversations();
           }
-          
-          // Atualizar lista de conversas
-          fetchConversations();
         }
       )
       .subscribe();
