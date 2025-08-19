@@ -123,10 +123,28 @@ export const AdvancedSearch = () => {
           </div>
         </div>
         
-        <Button onClick={handleSearch} className="w-full" variant="hero">
-          <Search className="w-4 h-4 mr-2" />
-          {t("search.search_button")}
-        </Button>
+        <div className="flex gap-2 pt-4 border-t">
+          <Button onClick={handleSearch} className="flex-1" size="lg" variant="default">
+            <Search className="w-4 h-4 mr-2" />
+            {t("search.search_button")}
+          </Button>
+          <Button 
+            onClick={() => {
+              setFilters({
+                q: '',
+                category: '',
+                minPrice: '',
+                maxPrice: '',
+                location: '',
+                currency: 'BRL'
+              });
+            }} 
+            variant="outline" 
+            size="lg"
+          >
+            Limpar
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
