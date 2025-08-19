@@ -37,13 +37,6 @@
     "technical_details": "Detalhes técnicos",
     "reload_page": "Recarregar página"
   },
-  "categories": {
-    "title": "Categorias em destaque",
-    "subtitle": "Encontre o que procura por categoria",
-    "view_all": "Ver todas",
-    "no_categories": "Nenhuma categoria encontrada",
-    "error_loading": "Erro ao carregar categorias"
-  },
   "map": {
     "find_location": "Minha localização",
     "search_radius": "Raio de busca",
@@ -118,6 +111,10 @@
     "view_all": "Ver todos em {{name}}",
     "no_children": "Sem subcategorias",
     "none": "Nenhuma categoria disponível",
+    "title": "Categorias em destaque",
+    "subtitle": "Encontre o que procura por categoria",
+    "view_ads": "Ver anúncios de {{category}}",
+    "error_loading": "Erro ao carregar categorias. Tente novamente mais tarde.",
     "veiculos": "Veículos e Transportes",
     "imoveis": "Imóveis",
     "empregos": "Empregos e Carreiras", 
@@ -127,9 +124,7 @@
     "esportes-lazer": "Esportes e Lazer",
     "servicos": "Serviços",
     "animais-pets": "Animais e Pets",
-    "outros": "Outros",
-    "view_ads": "Ver anúncios de {{category}}",
-    "error_loading": "Erro ao carregar categorias. Tente novamente mais tarde."
+    "outros": "Outros"
   },
   "search": {
     "advanced": "Busca Avançada",

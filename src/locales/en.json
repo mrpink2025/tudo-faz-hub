@@ -32,6 +32,10 @@
     "view_all": "View all in {{name}}",
     "no_children": "No subcategories",
     "none": "No categories available",
+    "title": "Featured Categories",
+    "subtitle": "Find what you need",
+    "view_ads": "View {{category}} ads",
+    "error_loading": "Error loading categories. Please try again later.",
     "veiculos": "Vehicles & Transportation",
     "imoveis": "Real Estate",
     "empregos": "Jobs & Careers",
@@ -41,9 +45,7 @@
     "esportes-lazer": "Sports & Leisure",
     "servicos": "Services",
     "animais-pets": "Animals & Pets",
-    "outros": "Others",
-    "view_ads": "View {{category}} ads",
-    "error_loading": "Error loading categories. Please try again later."
+    "outros": "Others"
   },
   "explore": {
     "titleBase": "Explore listings",

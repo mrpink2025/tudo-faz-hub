@@ -29,9 +29,13 @@
   "categories": {
     "menu": "分类",
     "error": "加载分类时出错",
-    "view_all": "查看 {{name}} 的全部",
+    "view_all": "查看{{name}}中的所有内容",
     "no_children": "无子分类",
-    "none": "暂无分类",
+    "none": "无可用分类",
+    "title": "精选分类",
+    "subtitle": "找到您需要的",
+    "view_ads": "查看{{category}}广告",
+    "error_loading": "加载分类时出错。请稍后再试。",
     "veiculos": "车辆与交通",
     "imoveis": "房地产", 
     "empregos": "工作与职业",
@@ -41,9 +45,7 @@
     "esportes-lazer": "体育与休闲",
     "servicos": "服务",
     "animais-pets": "动物与宠物",
-    "outros": "其他",
-    "view_ads": "查看{{category}}广告",
-    "error_loading": "加载分类时出错。请稍后重试。"
+    "outros": "其他"
   },
   "explore": {
     "titleBase": "浏览帖子",

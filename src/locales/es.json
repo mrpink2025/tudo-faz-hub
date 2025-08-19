@@ -29,9 +29,13 @@
   "categories": {
     "menu": "Categorías",
     "error": "Error al cargar categorías",
-    "view_all": "Ver todo en {{name}}",
+    "view_all": "Ver todas en {{name}}",
     "no_children": "Sin subcategorías",
     "none": "No hay categorías disponibles",
+    "title": "Categorías destacadas",
+    "subtitle": "Encuentra lo que necesitas",
+    "view_ads": "Ver anuncios de {{category}}",
+    "error_loading": "Error al cargar categorías. Inténtalo de nuevo más tarde.",
     "veiculos": "Vehículos y Transporte",
     "imoveis": "Bienes Raíces",
     "empregos": "Empleos y Carreras",
@@ -41,9 +45,7 @@
     "esportes-lazer": "Deportes y Ocio",
     "servicos": "Servicios",
     "animais-pets": "Animales y Mascotas",
-    "outros": "Otros",
-    "view_ads": "Ver anuncios de {{category}}",
-    "error_loading": "Error al cargar categorías. Inténtalo de nuevo más tarde."
+    "outros": "Otros"
   },
   "explore": {
     "titleBase": "Explorar anuncios",
