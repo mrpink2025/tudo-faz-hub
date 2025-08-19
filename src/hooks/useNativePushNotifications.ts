@@ -60,70 +60,73 @@ export const useNativePushNotifications = () => {
       }
     };
 
-    initializePushNotifications();
+    // Só executar se estamos em plataforma nativa
+    if (Capacitor.isNativePlatform()) {
+      initializePushNotifications();
 
-    // Listeners para eventos de push notification
-    const addListeners = () => {
-      // Quando o registro for bem-sucedido
-      PushNotifications.addListener('registration', async (token) => {
-        console.log('Push registration success, token: ' + token.value);
-        setToken(token.value);
-        
-        // Salvar token no Supabase para o usuário atual
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase
-            .from('push_subscriptions')
-            .upsert({
-              user_id: user.id,
-              subscription: { endpoint: token.value, platform: 'mobile' },
-              active: true
-            });
-        }
-      });
-
-      // Quando houver erro no registro
-      PushNotifications.addListener('registrationError', (error) => {
-        console.error('Error on registration: ' + JSON.stringify(error));
-        toast({
-          title: 'Erro no registro',
-          description: 'Falha ao registrar para notificações',
-          variant: 'destructive'
+      // Listeners para eventos de push notification
+      const addListeners = () => {
+        // Quando o registro for bem-sucedido
+        PushNotifications.addListener('registration', async (token) => {
+          console.log('Push registration success, token: ' + token.value);
+          setToken(token.value);
+          
+          // Salvar token no Supabase para o usuário atual
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            await supabase
+              .from('push_subscriptions')
+              .upsert({
+                user_id: user.id,
+                subscription: { endpoint: token.value, platform: 'mobile' },
+                active: true
+              });
+          }
         });
-      });
 
-      // Quando uma notificação for recebida
-      PushNotifications.addListener('pushNotificationReceived', (notification) => {
-        console.log('Push notification received: ', notification);
-        
-        // Mostrar toast para notificação recebida em primeiro plano
-        toast({
-          title: notification.title || 'Nova notificação',
-          description: notification.body || 'Você tem uma nova mensagem',
+        // Quando houver erro no registro
+        PushNotifications.addListener('registrationError', (error) => {
+          console.error('Error on registration: ' + JSON.stringify(error));
+          toast({
+            title: 'Erro no registro',
+            description: 'Falha ao registrar para notificações',
+            variant: 'destructive'
+          });
         });
-      });
 
-      // Quando uma notificação for tocada/aberta
-      PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-        console.log('Push notification action performed', notification.actionId, notification.inputValue);
-        
-        // Aqui você pode navegar para uma tela específica baseado na notificação
-        const data = notification.notification.data;
-        if (data?.type === 'order') {
-          // Navegar para tela de pedidos
-          window.location.href = '/pedidos';
-        } else if (data?.type === 'message') {
-          // Navegar para tela de mensagens  
-          window.location.href = '/mensagens';
-        }
-      });
-    };
+        // Quando uma notificação for recebida
+        PushNotifications.addListener('pushNotificationReceived', (notification) => {
+          console.log('Push notification received: ', notification);
+          
+          // Mostrar toast para notificação recebida em primeiro plano
+          toast({
+            title: notification.title || 'Nova notificação',
+            description: notification.body || 'Você tem uma nova mensagem',
+          });
+        });
 
-    addListeners();
+        // Quando uma notificação for tocada/aberta
+        PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+          console.log('Push notification action performed', notification.actionId, notification.inputValue);
+          
+          // Aqui você pode navegar para uma tela específica baseado na notificação
+          const data = notification.notification.data;
+          if (data?.type === 'order') {
+            // Navegar para tela de pedidos
+            window.location.href = '/pedidos';
+          } else if (data?.type === 'message') {
+            // Navegar para tela de mensagens  
+            window.location.href = '/mensagens';
+          }
+        });
+      };
 
-    return () => {
-      PushNotifications.removeAllListeners();
-    };
+      addListeners();
+
+      return () => {
+        PushNotifications.removeAllListeners();
+      };
+    }
   }, [toast]);
 
   return {

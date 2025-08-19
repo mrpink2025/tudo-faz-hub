@@ -44,13 +44,53 @@ const NewPassword = () => {
   useEffect(() => {
     // Verificar se há uma sessão de redefinição de senha válida
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setIsValidSession(true);
-      } else {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        console.log('Verificando sessão para redefinição de senha:', { session, error });
+        
+        if (error) {
+          console.error('Erro ao verificar sessão:', error);
+          toast({
+            title: "Erro na sessão",
+            description: "Não foi possível verificar a sessão. Tente novamente.",
+            variant: "destructive",
+          });
+          navigate("/esqueceu-senha");
+          return;
+        }
+
+        // Verificar se há uma sessão ativa E se é uma sessão de recuperação
+        if (session && session.user) {
+          // Verificar se a sessão tem metadados de reset de senha
+          const isPasswordResetSession = session.user.app_metadata?.provider === 'email' || 
+                                       session.access_token; // Token válido indica sessão de reset
+          
+          console.log('Sessão de reset válida:', isPasswordResetSession);
+          
+          if (isPasswordResetSession) {
+            setIsValidSession(true);
+          } else {
+            toast({
+              title: "Sessão inválida",
+              description: "Esta não é uma sessão de redefinição de senha válida.",
+              variant: "destructive",
+            });
+            navigate("/esqueceu-senha");
+          }
+        } else {
+          toast({
+            title: "Link expirado",
+            description: "Link de redefinição de senha expirado ou inválido. Solicite um novo link.",
+            variant: "destructive",
+          });
+          navigate("/esqueceu-senha");
+        }
+      } catch (error) {
+        console.error('Erro inesperado ao verificar sessão:', error);
         toast({
-          title: "Sessão inválida",
-          description: "Link de redefinição de senha expirado ou inválido. Solicite um novo link.",
+          title: "Erro inesperado",
+          description: "Tente novamente mais tarde.",
           variant: "destructive",
         });
         navigate("/esqueceu-senha");
@@ -79,11 +119,12 @@ const NewPassword = () => {
 
       toast({
         title: "Senha atualizada!",
-        description: "Sua senha foi redefinida com sucesso.",
+        description: "Sua senha foi redefinida com sucesso. Você será redirecionado para fazer login.",
       });
 
-      // Aguardar um pouco e redirecionar
-      setTimeout(() => {
+      // Fazer logout da sessão de reset e redirecionar para login
+      setTimeout(async () => {
+        await supabase.auth.signOut();
         navigate("/entrar");
       }, 2000);
     } catch (error: any) {
