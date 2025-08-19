@@ -66,6 +66,7 @@ const CreateListing = () => {
   const [stateUf, setStateUf] = useState("");
   // Size settings
   const [sizeRequired, setSizeRequired] = useState(false);
+  const [selectedSizes, setSelectedSizes] = useState<{ sizeId: string; stockQuantity: number }[]>([]);
 
   const subcategories = useMemo(
     () => (categories ?? []).filter((c: any) => c.parent_id === rootId),
@@ -188,6 +189,10 @@ const CreateListing = () => {
       
       if (editId) {
         // Update existing listing
+        const totalInventory = sizeRequired && selectedSizes.length > 0
+          ? selectedSizes.reduce((total, size) => total + size.stockQuantity, 0)
+          : parseInt(inventoryCount) || 0;
+
         const { error } = await supabase
           .from("listings")
           .update({
@@ -200,7 +205,7 @@ const CreateListing = () => {
             affiliate_enabled: affiliateEnabled,
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
             sellable,
-            inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
+            inventory_count: sellable ? totalInventory : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
             size_required: sizeRequired,
           })
@@ -209,6 +214,10 @@ const CreateListing = () => {
         if (error) throw error;
       } else {
         // Create new listing
+        const totalInventory = sizeRequired && selectedSizes.length > 0
+          ? selectedSizes.reduce((total, size) => total + size.stockQuantity, 0)
+          : parseInt(inventoryCount) || 0;
+
         const { data, error } = await supabase
           .from("listings")
           .insert({
@@ -224,7 +233,7 @@ const CreateListing = () => {
             affiliate_enabled: affiliateEnabled,
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
             sellable,
-            inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
+            inventory_count: sellable ? totalInventory : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
             size_required: sizeRequired,
           })
@@ -293,6 +302,31 @@ const CreateListing = () => {
           );
           // Set cover image if available
           await supabase.from("listings").update({ cover_image: uploadedUrls[0] }).eq("id", listingId);
+        }
+      }
+
+      // Save sizes if required
+      if (listingId) {
+        // Delete existing sizes first (for both create and edit)
+        await supabase
+          .from("listing_sizes")
+          .delete()
+          .eq("listing_id", listingId);
+
+        // Insert new sizes if required
+        if (sizeRequired && selectedSizes.length > 0) {
+          const { error: sizesError } = await supabase
+            .from("listing_sizes")
+            .insert(
+              selectedSizes.map(size => ({
+                listing_id: listingId,
+                size_id: size.sizeId,
+                stock_quantity: size.stockQuantity,
+              }))
+            );
+          if (sizesError) {
+            logger.error("Error saving sizes", { error: sizesError, listingId });
+          }
         }
       }
 
@@ -580,24 +614,39 @@ const CreateListing = () => {
               
               {sellable && (
                 <div className="space-y-4 animate-fade-in">
-                  <div className="space-y-2">
-                    <Label htmlFor="inventory" className="text-sm font-medium flex items-center gap-2">
-                      <Package className="h-4 w-4" />
-                      Quantidade em Estoque
-                    </Label>
-                    <Input 
-                      id="inventory" 
-                      type="number" 
-                      min="0" 
-                      value={inventoryCount} 
-                      onChange={(e) => setInventoryCount(e.target.value)} 
-                      placeholder="Ex: 10, 50, 100"
-                      className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Quantidade de produtos disponíveis para venda online
-                    </p>
-                  </div>
+                  {/* Só mostra estoque geral se não for produto com tamanhos */}
+                  {!sizeRequired && (
+                    <div className="space-y-2">
+                      <Label htmlFor="inventory" className="text-sm font-medium flex items-center gap-2">
+                        <Package className="h-4 w-4" />
+                        Quantidade em Estoque
+                      </Label>
+                      <Input 
+                        id="inventory" 
+                        type="number" 
+                        min="0" 
+                        value={inventoryCount} 
+                        onChange={(e) => setInventoryCount(e.target.value)} 
+                        placeholder="Ex: 10, 50, 100"
+                        className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Quantidade de produtos disponíveis para venda online
+                      </p>
+                    </div>
+                  )}
+                  
+                  {/* Alerta quando produto tem tamanhos */}
+                  {sizeRequired && (
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-sm text-blue-900 font-medium">
+                        📏 Estoque gerenciado por tamanhos
+                      </p>
+                      <p className="text-xs text-blue-700 mt-1">
+                        Configure o estoque individual de cada tamanho na seção "Gerenciamento de Tamanhos"
+                      </p>
+                    </div>
+                  )}
                   
                   <div className="space-y-2">
                     <Label htmlFor="maxQuantity" className="text-sm font-medium flex items-center gap-2">
@@ -628,6 +677,7 @@ const CreateListing = () => {
               listingId={editId || undefined}
               categoryType={categoryType}
               onSizeRequiredChange={setSizeRequired}
+              onSizesChange={setSelectedSizes}
               sizeRequired={sizeRequired}
             />
           )}
