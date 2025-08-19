@@ -54,6 +54,7 @@ const NewPassword = () => {
         const refreshToken = searchParams.get('refresh_token');
         const type = searchParams.get('type');
         const error = searchParams.get('error');
+        const errorCode = searchParams.get('error_code');
         const errorDescription = searchParams.get('error_description');
         
         console.log('🎫 Dados da URL:', { 
@@ -61,15 +62,23 @@ const NewPassword = () => {
           refreshToken: !!refreshToken, 
           type, 
           error,
+          errorCode,
           errorDescription 
         });
         
-        // Verificar se há erro na URL
-        if (error) {
-          console.error('❌ Erro na URL:', error, errorDescription);
+        // Verificar se há erro na URL (token expirado, etc.)
+        if (error || errorCode) {
+          console.error('❌ Erro detectado na URL:', { error, errorCode, errorDescription });
+          
+          let userMessage = "Link de redefinição inválido ou expirado.";
+          
+          if (errorCode === 'otp_expired' || error === 'access_denied') {
+            userMessage = "O link de redefinição expirou. Os links têm validade de apenas alguns minutos por segurança.";
+          }
+          
           toast({
-            title: "Link inválido",
-            description: errorDescription || "Link de redefinição inválido ou expirado. Solicite um novo link.",
+            title: "Link Expirado",
+            description: `${userMessage} Solicite um novo link de redefinição.`,
             variant: "destructive",
           });
           navigate("/esqueceu-senha");
@@ -88,8 +97,8 @@ const NewPassword = () => {
           if (error) {
             console.error('❌ Erro ao estabelecer sessão:', error);
             toast({
-              title: "Link expirado",
-              description: "Token de redefinição expirado. Solicite um novo link de redefinição.",
+              title: "Token Inválido",
+              description: "Token de redefinição inválido. Solicite um novo link.",
               variant: "destructive",
             });
             navigate("/esqueceu-senha");

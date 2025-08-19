@@ -38,6 +38,14 @@ const PasswordReset = () => {
     setIsLoading(true);
     
     try {
+      // Primeiro, fazer logout de qualquer sessão existente para garantir token limpo
+      await supabase.auth.signOut();
+      
+      // Aguardar um momento para garantir que o logout foi processado
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      console.log('🔄 Iniciando processo de redefinição de senha para:', values.email);
+      
       const redirectUrl = `${window.location.origin}/nova-senha`;
       
       // Usar APENAS o Supabase nativo que gera tokens válidos
@@ -46,6 +54,7 @@ const PasswordReset = () => {
       });
 
       if (error) {
+        console.error('❌ Erro do Supabase:', error);
         toast({
           title: "Erro ao enviar email",
           description: error.message,
@@ -54,7 +63,9 @@ const PasswordReset = () => {
         return;
       }
 
-      // Enviar email bonito via send-notification
+      console.log('✅ Email de redefinição enviado pelo Supabase');
+
+      // Enviar email bonito via send-notification como backup/notificação
       try {
         await supabase.functions.invoke('send-notification', {
           body: {
@@ -64,7 +75,7 @@ const PasswordReset = () => {
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                 <div style="text-align: center; margin-bottom: 30px;">
                   <h1 style="color: #1a365d; margin-bottom: 10px;">🔑 Redefinir Senha</h1>
-                  <p style="color: #4a5568; font-size: 16px;">Recebemos uma solicitação para redefinir sua senha</p>
+                  <p style="color: #4a5568; font-size: 16px;">Solicitação de redefinição de senha recebida</p>
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin: 20px 0;">
@@ -74,7 +85,13 @@ const PasswordReset = () => {
                 
                 <div style="background: #f7fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #4299e1;">
                   <p style="margin: 0; color: #2d3748; font-size: 14px;">
-                    <strong>📧 Importante:</strong> Use o link do email oficial do Supabase (não de resposta) para redefinir sua senha com segurança.
+                    <strong>⚡ Importante:</strong> O link tem validade de apenas 10 minutos por segurança. Use-o imediatamente após receber.
+                  </p>
+                </div>
+                
+                <div style="background: #fffaf0; padding: 20px; border-radius: 8px; border-left: 4px solid #ed8936; margin-top: 15px;">
+                  <p style="margin: 0; color: #744210; font-size: 14px;">
+                    <strong>🚨 Dica:</strong> Se o link expirar, solicite um novo. Cada solicitação cancela o link anterior.
                   </p>
                 </div>
                 
@@ -88,18 +105,18 @@ const PasswordReset = () => {
             type: 'info'
           }
         });
-        console.log("Email bonito enviado com sucesso");
+        console.log("✅ Email bonito enviado como notificação");
       } catch (customEmailError) {
-        console.warn("Email personalizado falhou, mas o nativo do Supabase funcionou:", customEmailError);
+        console.warn("⚠️ Email personalizado falhou, mas o nativo do Supabase funcionou:", customEmailError);
       }
 
       setEmailSent(true);
       toast({
         title: "Email enviado!",
-        description: "Verifique sua caixa de entrada para redefinir sua senha. Use o email oficial do Supabase.",
+        description: "Verifique sua caixa de entrada. O link expira em 10 minutos.",
       });
     } catch (error: any) {
-      console.error("Password reset error:", error);
+      console.error("💥 Erro inesperado no reset:", error);
       toast({
         title: "Erro inesperado",
         description: "Tente novamente mais tarde.",
