@@ -30,13 +30,14 @@ const MobileMenu = () => {
   const getCategoryName = (category: any) => {
     const lang = (i18n.language || "pt").split("-")[0];
     
-    // Traduções estáticas para categorias principais
+    // Traduções estáticas para todas as categorias e subcategorias
     const staticTranslations: Record<string, Record<string, string>> = {
-      'empregos': {
-        'en': 'Jobs',
-        'es': 'Empleos', 
-        'zh': '工作',
-        'pt': 'Empregos'
+      // Categorias principais
+      'veiculos': {
+        'en': 'Vehicles & Transportation',
+        'es': 'Vehículos y Transporte', 
+        'zh': '车辆与交通',
+        'pt': 'Veículos e Transportes'
       },
       'imoveis': {
         'en': 'Real Estate',
@@ -44,42 +45,98 @@ const MobileMenu = () => {
         'zh': '房地产',
         'pt': 'Imóveis'
       },
+      'empregos': {
+        'en': 'Jobs & Careers',
+        'es': 'Empleos y Carreras',
+        'zh': '工作与职业',
+        'pt': 'Empregos e Carreiras'
+      },
+      'eletronicos': {
+        'en': 'Electronics & Technology',
+        'es': 'Electrónicos y Tecnología',
+        'zh': '电子产品与技术',
+        'pt': 'Eletrônicos e Tecnologia'
+      },
+      'casa-decoracao': {
+        'en': 'Home & Decoration',
+        'es': 'Casa y Decoración',
+        'zh': '家居与装饰',
+        'pt': 'Casa e Decoração'
+      },
+      'moda-beleza': {
+        'en': 'Fashion & Beauty',
+        'es': 'Moda y Belleza',
+        'zh': '时尚与美容',
+        'pt': 'Moda e Beleza'
+      },
+      'esportes-lazer': {
+        'en': 'Sports & Leisure',
+        'es': 'Deportes y Ocio',
+        'zh': '体育与休闲',
+        'pt': 'Esportes e Lazer'
+      },
       'servicos': {
         'en': 'Services',
         'es': 'Servicios',
         'zh': '服务',
         'pt': 'Serviços'
       },
-      'veiculos': {
-        'en': 'Vehicles',
-        'es': 'Vehículos',
-        'zh': '车辆',
-        'pt': 'Veículos'
-      },
-      'vida-cotidiana': {
-        'en': 'Daily Life',
-        'es': 'Vida Cotidiana',
-        'zh': '日常生活',
-        'pt': 'Vida Cotidiana'
-      },
-      'servicos-financeiros': {
-        'en': 'Financial Services',
-        'es': 'Servicios Financieros',
-        'zh': '金融服务',
-        'pt': 'Serviços Financeiros'
-      },
-      'eletronicos': {
-        'en': 'Electronics',
-        'es': 'Electrónicos',
-        'zh': '电子产品',
-        'pt': 'Eletrônicos'
+      'animais-pets': {
+        'en': 'Animals & Pets',
+        'es': 'Animales y Mascotas',
+        'zh': '动物与宠物',
+        'pt': 'Animais e Pets'
       },
       'outros': {
         'en': 'Others',
         'es': 'Otros',
         'zh': '其他',
         'pt': 'Outros'
-      }
+      },
+      // Todas as subcategorias com traduções completas
+      'carros': { 'en': 'Cars', 'es': 'Coches', 'zh': '汽车', 'pt': 'Carros' },
+      'motos': { 'en': 'Motorcycles & Scooters', 'es': 'Motos y Scooters', 'zh': '摩托车与踏板车', 'pt': 'Motos e Scooters' },
+      'caminhoes': { 'en': 'Trucks & Commercial', 'es': 'Camiones y Comerciales', 'zh': '卡车与商用车', 'pt': 'Caminhões e Comerciais' },
+      'barcos': { 'en': 'Boats & Nautical', 'es': 'Barcos y Náutica', 'zh': '船只与航海', 'pt': 'Barcos e Náutica' },
+      'bicicletas': { 'en': 'Bicycles', 'es': 'Bicicletas', 'zh': '自行车', 'pt': 'Bicicletas' },
+      'pecas-auto': { 'en': 'Parts & Accessories', 'es': 'Piezas y Accesorios', 'zh': '配件与零件', 'pt': 'Peças e Acessórios' },
+      'apartamentos-venda': { 'en': 'Apartments for Sale', 'es': 'Apartamentos en Venta', 'zh': '出售公寓', 'pt': 'Apartamentos à Venda' },
+      'casas-venda': { 'en': 'Houses for Sale', 'es': 'Casas en Venta', 'zh': '出售房屋', 'pt': 'Casas à Venda' },
+      'apartamentos-aluguel': { 'en': 'Apartments for Rent', 'es': 'Apartamentos en Alquiler', 'zh': '出租公寓', 'pt': 'Apartamentos para Alugar' },
+      'casas-aluguel': { 'en': 'Houses for Rent', 'es': 'Casas en Alquiler', 'zh': '出租房屋', 'pt': 'Casas para Alugar' },
+      'terrenos': { 'en': 'Land & Lots', 'es': 'Terrenos y Lotes', 'zh': '土地与地块', 'pt': 'Terrenos e Lotes' },
+      'comerciais': { 'en': 'Commercial Properties', 'es': 'Propiedades Comerciales', 'zh': '商业地产', 'pt': 'Imóveis Comerciais' },
+      'tempo-integral': { 'en': 'Full Time', 'es': 'Tiempo Completo', 'zh': '全职', 'pt': 'Tempo Integral' },
+      'meio-periodo': { 'en': 'Part Time', 'es': 'Medio Tiempo', 'zh': '兼职', 'pt': 'Meio Período' },
+      'freelancer': { 'en': 'Freelancer', 'es': 'Freelancer', 'zh': '自由职业', 'pt': 'Freelancer' },
+      'tecnologia': { 'en': 'Technology & IT', 'es': 'Tecnología y TI', 'zh': '技术与IT', 'pt': 'Tecnologia e TI' },
+      'vendas': { 'en': 'Sales & Commerce', 'es': 'Ventas y Comercio', 'zh': '销售与商业', 'pt': 'Vendas e Comércio' },
+      'celulares': { 'en': 'Phones & Smartphones', 'es': 'Teléfonos y Smartphones', 'zh': '手机与智能手机', 'pt': 'Celulares e Smartphones' },
+      'computadores': { 'en': 'Computers & Laptops', 'es': 'Computadoras y Laptops', 'zh': '电脑与笔记本', 'pt': 'Computadores e Notebooks' },
+      'tvs': { 'en': 'TVs & Home Theater', 'es': 'TVs y Home Theater', 'zh': '电视与家庭影院', 'pt': 'TVs e Home Theater' },
+      'cameras': { 'en': 'Cameras & Camcorders', 'es': 'Cámaras y Filmadoras', 'zh': '相机与摄像机', 'pt': 'Câmeras e Filmadoras' },
+      'games': { 'en': 'Games & Consoles', 'es': 'Juegos y Consolas', 'zh': '游戏与主机', 'pt': 'Games e Consoles' },
+      'acessorios': { 'en': 'Accessories', 'es': 'Accesorios', 'zh': '配件', 'pt': 'Acessórios' },
+      'acessorios-pets': { 'en': 'Pet Accessories', 'es': 'Accesorios para Mascotas', 'zh': '宠物配件', 'pt': 'Acessórios para Pets' },
+      'aves': { 'en': 'Birds', 'es': 'Aves', 'zh': '鸟类', 'pt': 'Aves' },
+      'beleza': { 'en': 'Beauty & Care', 'es': 'Belleza y Cuidados', 'zh': '美容护理', 'pt': 'Beleza e Cuidados' },
+      'beleza-servicos': { 'en': 'Beauty & Aesthetics', 'es': 'Belleza y Estética', 'zh': '美容美学', 'pt': 'Beleza e Estética' },
+      'caes': { 'en': 'Dogs', 'es': 'Perros', 'zh': '狗', 'pt': 'Cães' },
+      'calcados': { 'en': 'Shoes', 'es': 'Calzado', 'zh': '鞋类', 'pt': 'Calçados' },
+      'ciclismo': { 'en': 'Cycling & Running', 'es': 'Ciclismo y Carreras', 'zh': '骑行与跑步', 'pt': 'Ciclismo e Corrida' },
+      'decoracao': { 'en': 'Decoration', 'es': 'Decoración', 'zh': '装饰', 'pt': 'Decoração' },
+      'eletrodomesticos': { 'en': 'Home Appliances', 'es': 'Electrodomésticos', 'zh': '家用电器', 'pt': 'Eletrodomésticos' },
+      'eventos': { 'en': 'Events & Parties', 'es': 'Eventos y Fiestas', 'zh': '活动与聚会', 'pt': 'Eventos e Festas' },
+      'fitness': { 'en': 'Fitness & Gym', 'es': 'Fitness y Gimnasio', 'zh': '健身与健身房', 'pt': 'Fitness e Academia' },
+      'futebol': { 'en': 'Football', 'es': 'Fútbol', 'zh': '足球', 'pt': 'Futebol' },
+      'gatos': { 'en': 'Cats', 'es': 'Gatos', 'zh': '猫', 'pt': 'Gatos' },
+      'jardim': { 'en': 'Garden & Outdoor', 'es': 'Jardín y Exterior', 'zh': '花园与户外', 'pt': 'Jardim e Exterior' },
+      'limpeza': { 'en': 'Cleaning & Organization', 'es': 'Limpieza y Organización', 'zh': '清洁与整理', 'pt': 'Limpeza e Organização' },
+      'moveis': { 'en': 'Furniture', 'es': 'Muebles', 'zh': '家具', 'pt': 'Móveis' },
+      'natacao': { 'en': 'Swimming & Water Sports', 'es': 'Natación y Deportes Acuáticos', 'zh': '游泳与水上运动', 'pt': 'Natação e Esportes Aquáticos' },
+      'reformas': { 'en': 'Renovations & Construction', 'es': 'Reformas y Construcción', 'zh': '装修与建筑', 'pt': 'Reformas e Construção' },
+      'roupas-femininas': { 'en': 'Women\'s Clothing', 'es': 'Ropa Femenina', 'zh': '女装', 'pt': 'Roupas Femininas' },
+      'roupas-masculinas': { 'en': 'Men\'s Clothing', 'es': 'Ropa Masculina', 'zh': '男装', 'pt': 'Roupas Masculinas' }
     };
 
     // Primeiro tenta usar tradução estática baseada no slug

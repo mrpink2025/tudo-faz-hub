@@ -38,68 +38,22 @@ const iconMap: Record<string, any> = {
 
 // Traduções dinâmicas para categorias
 const getCategoryName = (category: any, language: string) => {
-  // Traduções estáticas para categorias principais
+  // Traduções estáticas para todas as categorias
   const staticTranslations: Record<string, Record<string, string>> = {
-    'veiculos': {
-      'en': 'Vehicles & Transportation',
-      'es': 'Vehículos y Transporte', 
-      'zh': '车辆与交通',
-      'pt': 'Veículos e Transportes'
-    },
-    'imoveis': {
-      'en': 'Real Estate',
-      'es': 'Bienes Raíces',
-      'zh': '房地产',
-      'pt': 'Imóveis'
-    },
-    'empregos': {
-      'en': 'Jobs & Careers',
-      'es': 'Empleos y Carreras',
-      'zh': '工作与职业',
-      'pt': 'Empregos e Carreiras'
-    },
-    'eletronicos': {
-      'en': 'Electronics & Technology',
-      'es': 'Electrónicos y Tecnología',
-      'zh': '电子产品与技术',
-      'pt': 'Eletrônicos e Tecnologia'
-    },
-    'casa-decoracao': {
-      'en': 'Home & Decoration',
-      'es': 'Casa y Decoración',
-      'zh': '家居与装饰',
-      'pt': 'Casa e Decoração'
-    },
-    'moda-beleza': {
-      'en': 'Fashion & Beauty',
-      'es': 'Moda y Belleza',
-      'zh': '时尚与美容',
-      'pt': 'Moda e Beleza'
-    },
-    'esportes-lazer': {
-      'en': 'Sports & Leisure',
-      'es': 'Deportes y Ocio',
-      'zh': '体育与休闲',
-      'pt': 'Esportes e Lazer'
-    },
-    'servicos': {
-      'en': 'Services',
-      'es': 'Servicios',
-      'zh': '服务',
-      'pt': 'Serviços'
-    },
-    'animais-pets': {
-      'en': 'Animals & Pets',
-      'es': 'Animales y Mascotas',
-      'zh': '动物与宠物',
-      'pt': 'Animais e Pets'
-    },
-    'outros': {
-      'en': 'Others',
-      'es': 'Otros',
-      'zh': '其他',
-      'pt': 'Outros'
-    }
+    // Categorias principais
+    'veiculos': { 'en': 'Vehicles & Transportation', 'es': 'Vehículos y Transporte', 'zh': '车辆与交通', 'pt': 'Veículos e Transportes' },
+    'imoveis': { 'en': 'Real Estate', 'es': 'Bienes Raíces', 'zh': '房地产', 'pt': 'Imóveis' },
+    'empregos': { 'en': 'Jobs & Careers', 'es': 'Empleos y Carreras', 'zh': '工作与职业', 'pt': 'Empregos e Carreiras' },
+    'eletronicos': { 'en': 'Electronics & Technology', 'es': 'Electrónicos y Tecnología', 'zh': '电子产品与技术', 'pt': 'Eletrônicos e Tecnologia' },
+    'casa-decoracao': { 'en': 'Home & Decoration', 'es': 'Casa y Decoración', 'zh': '家居与装饰', 'pt': 'Casa e Decoração' },
+    'moda-beleza': { 'en': 'Fashion & Beauty', 'es': 'Moda y Belleza', 'zh': '时尚与美容', 'pt': 'Moda e Beleza' },
+    'esportes-lazer': { 'en': 'Sports & Leisure', 'es': 'Deportes y Ocio', 'zh': '体育与休闲', 'pt': 'Esportes e Lazer' },
+    'servicos': { 'en': 'Services', 'es': 'Servicios', 'zh': '服务', 'pt': 'Serviços' },
+    'animais-pets': { 'en': 'Animals & Pets', 'es': 'Animales y Mascotas', 'zh': '动物与宠物', 'pt': 'Animais e Pets' },
+    'outros': { 'en': 'Others', 'es': 'Otros', 'zh': '其他', 'pt': 'Outros' },
+    // Para compatibilidade com categorias legadas
+    'vida-cotidiana': { 'en': 'Daily Life', 'es': 'Vida Cotidiana', 'zh': '日常生活', 'pt': 'Vida Cotidiana' },
+    'servicos-financeiros': { 'en': 'Financial Services', 'es': 'Servicios Financieros', 'zh': '金融服务', 'pt': 'Serviços Financeiros' }
   };
 
   // Primeiro tenta usar tradução estática baseada no slug
