@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Send, ArrowLeft } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Send, ArrowLeft, Trash2, MoreVertical } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useRealTimeChat } from '@/hooks/useRealTimeChat';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { format, isToday, isYesterday } from 'date-fns';
@@ -26,7 +28,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
 }) => {
   const { user } = useSupabaseAuth();
   const { validate } = useValidation();
-  const { messages, loading, sending, sendMessage } = useRealTimeChat(recipientId);
+  const { messages, loading, sending, sendMessage, deleteConversation } = useRealTimeChat(recipientId);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -64,6 +66,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
     }
   };
 
+  const handleDeleteConversation = async () => {
+    await deleteConversation(recipientId);
+    onBack(); // Voltar para lista de conversas após deletar
+  };
+
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -75,21 +82,59 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b bg-card p-4">
-        <Button variant="ghost" size="sm" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <Avatar className="h-8 w-8">
-          <AvatarFallback>
-            {recipientName?.[0]?.toUpperCase() || recipientEmail?.[0]?.toUpperCase() || 'U'}
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <h3 className="font-medium">
-            {recipientName && recipientName !== recipientEmail ? recipientName : recipientEmail}
-          </h3>
-          <p className="text-sm text-muted-foreground">Online</p>
+      <div className="flex items-center justify-between gap-3 border-b bg-card p-4">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm" onClick={onBack}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <Avatar className="h-8 w-8">
+            <AvatarFallback>
+              {recipientName?.[0]?.toUpperCase() || recipientEmail?.[0]?.toUpperCase() || 'U'}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <h3 className="font-medium">
+              {recipientName && recipientName !== recipientEmail ? recipientName : recipientEmail}
+            </h3>
+            <p className="text-sm text-muted-foreground">Online</p>
+          </div>
         </div>
+
+        {/* Menu de opções */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Apagar conversa
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Apagar conversa</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja apagar toda esta conversa? Esta ação não pode ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={handleDeleteConversation}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Apagar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Messages */}

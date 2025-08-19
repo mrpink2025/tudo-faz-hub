@@ -102,6 +102,39 @@ export const useRealTimeChat = (recipientId?: string) => {
     }
   }, [user]);
 
+  // Apagar conversa
+  const deleteConversation = useCallback(async (otherUserId: string) => {
+    if (!user) return;
+
+    try {
+      // Deletar todas as mensagens entre os dois usuários
+      const { error } = await supabase
+        .from('messages')
+        .delete()
+        .or(`and(sender_id.eq.${user.id},recipient_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},recipient_id.eq.${user.id})`);
+
+      if (error) throw error;
+
+      // Deletar registros de leitura
+      await supabase
+        .from('user_message_reads')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('conversation_user_id', otherUserId);
+
+      // Limpar mensagens locais se estiver na conversa ativa
+      setMessages([]);
+      
+      // Atualizar lista de conversas
+      await fetchConversations();
+      
+      toast.success('Conversa apagada com sucesso!');
+    } catch (error) {
+      logger.error('Erro ao apagar conversa', { error, otherUserId });
+      toast.error('Erro ao apagar conversa');
+    }
+  }, [user, fetchConversations]);
+
   // Configurar realtime para mensagens
   useEffect(() => {
     if (!user) return;
@@ -178,6 +211,7 @@ export const useRealTimeChat = (recipientId?: string) => {
     sending,
     sendMessage,
     fetchMessages,
-    fetchConversations
+    fetchConversations,
+    deleteConversation
   };
 };
