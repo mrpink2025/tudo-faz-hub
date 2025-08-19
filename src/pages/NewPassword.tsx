@@ -47,75 +47,104 @@ const NewPassword = () => {
       try {
         console.log('🔍 Verificando sessão para redefinição de senha...');
         console.log('📍 URL atual:', window.location.href);
-        console.log('🔗 SearchParams:', Object.fromEntries(searchParams.entries()));
         
-        // Verificar se há parâmetros de auth na URL (do email do Supabase)
-        const accessToken = searchParams.get('access_token');
-        const refreshToken = searchParams.get('refresh_token');
-        const type = searchParams.get('type');
-        const error = searchParams.get('error');
-        const errorCode = searchParams.get('error_code');
-        const errorDescription = searchParams.get('error_description');
+        // Verificar se a URL veio com erro (token expirado)
+        const hash = window.location.hash;
+        const urlParams = new URLSearchParams(hash.substring(1)); // Remove o #
+        const searchParams = new URLSearchParams(window.location.search);
+        
+        // Verificar erros tanto no hash quanto nos query params
+        const error = urlParams.get('error') || searchParams.get('error');
+        const errorCode = urlParams.get('error_code') || searchParams.get('error_code');
+        const errorDescription = urlParams.get('error_description') || searchParams.get('error_description');
         
         console.log('🎫 Dados da URL:', { 
-          accessToken: !!accessToken, 
-          refreshToken: !!refreshToken, 
-          type, 
+          hash,
           error,
           errorCode,
-          errorDescription 
+          errorDescription,
+          searchParamsEntries: Object.fromEntries(searchParams.entries()),
+          hashParamsEntries: Object.fromEntries(urlParams.entries())
         });
         
-        // Verificar se há erro na URL (token expirado, etc.)
+        // Se há erro na URL (token expirado, etc.)
         if (error || errorCode) {
           console.error('❌ Erro detectado na URL:', { error, errorCode, errorDescription });
+          
+          // Limpar a URL do erro
+          window.history.replaceState({}, document.title, '/nova-senha');
           
           let userMessage = "Link de redefinição inválido ou expirado.";
           
           if (errorCode === 'otp_expired' || error === 'access_denied') {
-            userMessage = "O link de redefinição expirou. Os links têm validade de apenas alguns minutos por segurança.";
+            userMessage = "O link de redefinição expirou rapidamente. Este é um problema conhecido do Supabase.";
           }
           
           toast({
-            title: "Link Expirado",
-            description: `${userMessage} Solicite um novo link de redefinição.`,
+            title: "Token Expirado",
+            description: `${userMessage} Solicite um novo link e tente usar mais rapidamente.`,
             variant: "destructive",
           });
-          navigate("/esqueceu-senha");
+          
+          // Aguardar um pouco antes de redirecionar para que o usuário veja a mensagem
+          setTimeout(() => {
+            navigate("/esqueceu-senha");
+          }, 3000);
           return;
         }
         
-        // Se há tokens na URL e é para redefinição de senha
+        // Verificar tokens válidos na URL
+        const accessToken = urlParams.get('access_token') || searchParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token') || searchParams.get('refresh_token');
+        const type = urlParams.get('type') || searchParams.get('type');
+        
+        console.log('🔑 Tokens encontrados:', { 
+          hasAccessToken: !!accessToken, 
+          hasRefreshToken: !!refreshToken, 
+          type 
+        });
+        
+        // Se há tokens na URL, tentar estabelecer sessão
         if (accessToken && refreshToken && (type === 'recovery' || type === 'magiclink')) {
           console.log('🔄 Estabelecendo sessão com tokens da URL...');
           
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken
-          });
-          
-          if (error) {
-            console.error('❌ Erro ao estabelecer sessão:', error);
+          try {
+            const { data, error: sessionError } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken
+            });
+            
+            if (sessionError) {
+              console.error('❌ Erro ao estabelecer sessão:', sessionError);
+              throw sessionError;
+            }
+            
+            console.log('✅ Sessão estabelecida com sucesso:', !!data.session);
+            
+            // Limpar tokens da URL por segurança
+            window.history.replaceState({}, document.title, '/nova-senha');
+            
+            setIsValidSession(true);
+            return;
+          } catch (sessionError) {
+            console.error('💥 Falha ao estabelecer sessão:', sessionError);
             toast({
               title: "Token Inválido",
-              description: "Token de redefinição inválido. Solicite um novo link.",
+              description: "Não foi possível validar o token. Solicite um novo link.",
               variant: "destructive",
             });
             navigate("/esqueceu-senha");
             return;
           }
-          
-          console.log('✅ Sessão estabelecida com sucesso:', !!data.session);
-          setIsValidSession(true);
-          return;
         }
         
         // Caso contrário, verificar sessão existente
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        console.log('📋 Dados da sessão existente:', { 
+        console.log('📋 Verificando sessão existente:', { 
           hasSession: !!session, 
           hasUser: !!session?.user,
+          hasAccessToken: !!session?.access_token,
           error: sessionError?.message 
         });
         
@@ -123,7 +152,7 @@ const NewPassword = () => {
           console.error('❌ Erro ao verificar sessão:', sessionError);
           toast({
             title: "Erro na sessão",
-            description: "Não foi possível verificar a sessão. Tente novamente.",
+            description: "Erro ao verificar sessão. Use o link do email.",
             variant: "destructive",
           });
           navigate("/esqueceu-senha");
@@ -135,10 +164,10 @@ const NewPassword = () => {
           console.log('✅ Sessão válida encontrada');
           setIsValidSession(true);
         } else {
-          console.log('❌ Nenhuma sessão válida encontrada - redirecionando');
+          console.log('❌ Nenhuma sessão válida - redirecionando');
           toast({
-            title: "Acesso não autorizado",
-            description: "Use o link do email para redefinir sua senha. Se o link expirou, solicite um novo.",
+            title: "Acesso Negado",
+            description: "Use o link do email de redefinição para acessar esta página.",
             variant: "destructive",
           });
           navigate("/esqueceu-senha");
@@ -147,15 +176,15 @@ const NewPassword = () => {
         console.error('💥 Erro inesperado ao verificar sessão:', error);
         toast({
           title: "Erro inesperado",
-          description: "Tente novamente mais tarde.",
+          description: "Tente novamente ou solicite um novo link.",
           variant: "destructive",
         });
         navigate("/esqueceu-senha");
       }
     };
 
-    // Adicionar delay para garantir que os parâmetros da URL sejam processados
-    const timer = setTimeout(checkSession, 100);
+    // Pequeno delay para garantir que a URL seja processada
+    const timer = setTimeout(checkSession, 200);
     
     return () => clearTimeout(timer);
   }, [navigate, toast, searchParams]);
