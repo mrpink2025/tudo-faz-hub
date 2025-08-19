@@ -85,6 +85,9 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
         sellerId={listing.user_id}
         sellerName="Vendedor"
         listingTitle={listing.title}
+        variant="outline"
+        size="lg"
+        className="w-full"
       />
       
       <Button
