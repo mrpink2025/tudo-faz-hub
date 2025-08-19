@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -229,10 +230,12 @@ export default function ListingsManagement() {
                   <Button 
                     size="sm" 
                     variant="outline"
-                    onClick={() => window.open(`/anuncio/${listing.id}`, '_blank')}
+                    asChild
                   >
-                    <Eye className="w-4 h-4 mr-1" />
-                    Ver
+                    <Link to={`/anuncio/${listing.id}`} target="_blank" rel="noopener noreferrer">
+                      <Eye className="w-4 h-4 mr-1" />
+                      Ver
+                    </Link>
                   </Button>
 
                   {/* Editar */}
