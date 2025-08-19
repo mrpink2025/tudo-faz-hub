@@ -9,6 +9,7 @@ import { ProductCard } from "@/components/ecommerce/ProductCard";
 import { ProductReviews } from "@/components/ecommerce/ProductReviews";
 import ContactSellerButton from "@/components/chat/ContactSellerButton";
 import { ProductSizeDisplay } from "@/components/ecommerce/ProductSizeDisplay";
+import { ProductVoltageDisplay } from "@/components/ecommerce/ProductVoltageDisplay";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -202,6 +203,11 @@ const ListingDetail = () => {
             {/* Size Selection for products that require size */}
             {listing.sellable && listing.size_required && (
               <ProductSizeDisplay listingId={listing.id} />
+            )}
+
+            {/* Voltage Selection for products that require voltage */}
+            {listing.sellable && listing.voltage_required && (
+              <ProductVoltageDisplay listingId={listing.id} />
             )}
 
             {listing.sellable ? (

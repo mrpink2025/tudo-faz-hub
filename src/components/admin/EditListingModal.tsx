@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCategories } from "@/hooks/useCategories";
 import { useSizes, useUpdateListingSizes } from "@/hooks/useSizes";
+import { useUpdateListingVoltages } from "@/hooks/useVoltages";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { SizeSelector } from "@/components/listings/SizeSelector";
+import { VoltageSelector } from "@/components/listings/VoltageSelector";
 import { Badge } from "@/components/ui/badge";
 import { X, Upload, Save } from "lucide-react";
 
@@ -38,6 +40,7 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
   const queryClient = useQueryClient();
   const { data: categories = [] } = useCategories();
   const updateListingSizes = useUpdateListingSizes();
+  const updateListingVoltages = useUpdateListingVoltages();
 
   // States for form data
   const [formData, setFormData] = useState({
@@ -50,6 +53,7 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
     status: "published",
     sellable: false,
     size_required: false,
+    voltage_required: false,
     affiliate_enabled: false,
     affiliate_commission_rate: "",
     inventory_count: "",
@@ -57,6 +61,7 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
   });
 
   const [selectedSizes, setSelectedSizes] = useState<{ sizeId: string; stockQuantity: number }[]>([]);
+  const [selectedVoltages, setSelectedVoltages] = useState<{ voltageId: string; stockQuantity: number }[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<any[]>([]);
 
@@ -107,6 +112,7 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
         status: listing.status || "published",
         sellable: listing.sellable || false,
         size_required: listing.size_required || false,
+        voltage_required: listing.voltage_required || false,
         affiliate_enabled: listing.affiliate_enabled || false,
         affiliate_commission_rate: listing.affiliate_commission_rate?.toString() || "",
         inventory_count: listing.inventory_count?.toString() || "",
@@ -148,6 +154,7 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
         status: data.status,
         sellable: data.sellable,
         size_required: data.size_required,
+        voltage_required: data.voltage_required,
         affiliate_enabled: data.affiliate_enabled,
         affiliate_commission_rate: data.affiliate_commission_rate ? parseInt(data.affiliate_commission_rate) : 0,
         inventory_count: data.inventory_count ? parseInt(data.inventory_count) : 0,
@@ -197,6 +204,14 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
         await updateListingSizes.mutateAsync({
           listingId: listingId,
           sizes: selectedSizes,
+        });
+      }
+
+      // Update voltages if applicable
+      if (data.voltage_required && selectedVoltages.length > 0) {
+        await updateListingVoltages.mutateAsync({
+          listingId: listingId,
+          voltages: selectedVoltages,
         });
       }
 
@@ -424,6 +439,25 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
                       readonly={false}
                       onSizeRequiredChange={(required) => handleInputChange("size_required", required)}
                       onSizesChange={setSelectedSizes}
+                    />
+                  )}
+
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="voltage_required"
+                      checked={formData.voltage_required}
+                      onCheckedChange={(checked) => handleInputChange("voltage_required", checked)}
+                    />
+                    <Label htmlFor="voltage_required">Produto requer seleção de voltagem</Label>
+                  </div>
+
+                  {formData.voltage_required && (
+                    <VoltageSelector
+                      listingId={listingId}
+                      voltageRequired={formData.voltage_required}
+                      readonly={false}
+                      onVoltageRequiredChange={(required) => handleInputChange("voltage_required", required)}
+                      onVoltagesChange={setSelectedVoltages}
                     />
                   )}
                 </div>

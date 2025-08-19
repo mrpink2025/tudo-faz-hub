@@ -578,6 +578,30 @@ export type Database = {
           },
         ]
       }
+      listing_voltages: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          stock_quantity: number
+          voltage_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          stock_quantity?: number
+          voltage_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          stock_quantity?: number
+          voltage_id?: string
+        }
+        Relationships: []
+      }
       listings: {
         Row: {
           affiliate_commission_rate: number | null
@@ -603,6 +627,7 @@ export type Database = {
           title: string
           updated_at: string
           user_id: string
+          voltage_required: boolean
         }
         Insert: {
           affiliate_commission_rate?: number | null
@@ -628,6 +653,7 @@ export type Database = {
           title: string
           updated_at?: string
           user_id: string
+          voltage_required?: boolean
         }
         Update: {
           affiliate_commission_rate?: number | null
@@ -653,6 +679,7 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+          voltage_required?: boolean
         }
         Relationships: [
           {
@@ -1431,6 +1458,27 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      voltages: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
         }
         Relationships: []
       }

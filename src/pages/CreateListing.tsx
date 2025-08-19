@@ -32,6 +32,7 @@ import {
   CheckCircle
 } from "lucide-react";
 import { SizeSelector } from "@/components/listings/SizeSelector";
+import { VoltageSelector } from "@/components/listings/VoltageSelector";
 
 const MAX_PHOTOS = 10;
 
@@ -67,6 +68,8 @@ const CreateListing = () => {
   // Size settings
   const [sizeRequired, setSizeRequired] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<{ sizeId: string; stockQuantity: number }[]>([]);
+  const [voltageRequired, setVoltageRequired] = useState(false);
+  const [selectedVoltages, setSelectedVoltages] = useState<{ voltageId: string; stockQuantity: number }[]>([]);
 
   const subcategories = useMemo(
     () => (categories ?? []).filter((c: any) => c.parent_id === rootId),
@@ -86,6 +89,19 @@ const CreateListing = () => {
       return "accessories";
     }
     return null;
+  };
+
+  // Verificar se categoria requer voltagem
+  const requiresVoltage = (categoryName: string): boolean => {
+    const name = categoryName.toLowerCase();
+    return name.includes("eletrônico") || 
+           name.includes("eletrodoméstico") || 
+           name.includes("informática") ||
+           name.includes("tv") ||
+           name.includes("som") ||
+           name.includes("eletroportátil") ||
+           name.includes("ar condicionado") ||
+           name.includes("ventilador");
   };
 
   const selectedCategory = categories?.find(c => c.id === subId);
@@ -208,6 +224,7 @@ const CreateListing = () => {
             inventory_count: sellable ? totalInventory : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
             size_required: sizeRequired,
+            voltage_required: voltageRequired,
           })
           .eq("id", editId);
 
@@ -236,6 +253,7 @@ const CreateListing = () => {
             inventory_count: sellable ? totalInventory : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
             size_required: sizeRequired,
+            voltage_required: voltageRequired,
           })
           .select("id")
           .maybeSingle();
@@ -326,6 +344,28 @@ const CreateListing = () => {
             );
           if (sizesError) {
             logger.error("Error saving sizes", { error: sizesError, listingId });
+          }
+        }
+
+        // Delete existing voltages first (for both create and edit)
+        await supabase
+          .from("listing_voltages")
+          .delete()
+          .eq("listing_id", listingId);
+
+        // Insert new voltages if required
+        if (voltageRequired && selectedVoltages.length > 0) {
+          const { error: voltagesError } = await supabase
+            .from("listing_voltages")
+            .insert(
+              selectedVoltages.map(voltage => ({
+                listing_id: listingId,
+                voltage_id: voltage.voltageId,
+                stock_quantity: voltage.stockQuantity,
+              }))
+            );
+          if (voltagesError) {
+            logger.error("Error saving voltages", { error: voltagesError, listingId });
           }
         }
       }
@@ -679,6 +719,17 @@ const CreateListing = () => {
               onSizeRequiredChange={setSizeRequired}
               onSizesChange={setSelectedSizes}
               sizeRequired={sizeRequired}
+            />
+          )}
+
+          {/* Voltagens - só aparece para categorias de eletrônicos */}
+          {(requiresVoltage(selectedCategory?.name_pt || "") || voltageRequired) && (
+            <VoltageSelector
+              listingId={editId || undefined}
+              voltageRequired={voltageRequired}
+              readonly={false}
+              onVoltageRequiredChange={setVoltageRequired}
+              onVoltagesChange={setSelectedVoltages}
             />
           )}
 
