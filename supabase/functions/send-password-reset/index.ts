@@ -1,7 +1,20 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.54.0';
 import { Resend } from "npm:resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+// Criar cliente Supabase com chave de serviço para gerar tokens
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,7 +23,7 @@ const corsHeaders = {
 
 interface PasswordResetEmailRequest {
   email: string;
-  resetUrl: string;
+  redirectUrl: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -20,14 +33,38 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, resetUrl }: PasswordResetEmailRequest = await req.json();
+    const { email, redirectUrl }: PasswordResetEmailRequest = await req.json();
 
-    console.log("Sending password reset email to:", email);
+    console.log("Processing password reset for:", email);
+    console.log("Redirect URL:", redirectUrl);
 
+    // Gerar link de redefinição de senha usando o Supabase Admin API
+    const { data, error } = await supabase.auth.admin.generateLink({
+      type: 'recovery',
+      email: email,
+      options: {
+        redirectTo: redirectUrl
+      }
+    });
+
+    if (error) {
+      console.error("Error generating reset link:", error);
+      throw new Error(`Failed to generate reset link: ${error.message}`);
+    }
+
+    const resetLinkWithToken = data.properties?.action_link;
+    
+    if (!resetLinkWithToken) {
+      throw new Error("No action link generated");
+    }
+
+    console.log("Generated reset link with tokens");
+
+    // Enviar email bonito personalizado com o link real que contém tokens
     const emailResponse = await resend.emails.send({
       from: "TudoFaz Hub <noreply@tudofaz.com>",
       to: [email],
-      subject: "Redefinir sua senha - TudoFaz Hub",
+      subject: "🔑 Redefinir sua senha - TudoFaz Hub",
       html: `
         <!DOCTYPE html>
         <html lang="pt-BR">
@@ -66,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
                                     <table role="presentation" style="margin: 0 auto;">
                                         <tr>
                                             <td style="border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align: center;">
-                                                <a href="${resetUrl}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">
+                                                <a href="${resetLinkWithToken}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">
                                                     🔒 Redefinir Minha Senha
                                                 </a>
                                             </td>
@@ -78,12 +115,18 @@ const handler = async (req: Request): Promise<Response> => {
                                     </p>
                                     
                                     <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea; word-break: break-all;">
-                                        <code style="color: #374151; font-size: 14px;">${resetUrl}</code>
+                                        <code style="color: #374151; font-size: 14px;">${resetLinkWithToken}</code>
                                     </div>
                                     
                                     <div style="margin: 30px 0; padding: 20px; background-color: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
                                         <p style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.5;">
                                             ⚠️ <strong>Importante:</strong> Este link expira em 1 hora por motivos de segurança. Se não foi você quem solicitou esta redefinição, pode ignorar este email com segurança.
+                                        </p>
+                                    </div>
+                                    
+                                    <div style="margin: 30px 0; padding: 20px; background-color: #dbeafe; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                                        <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.5;">
+                                            🛡️ <strong>Segurança:</strong> Este link é único e só pode ser usado uma vez. Após redefinir sua senha, o link será automaticamente invalidado.
                                         </p>
                                     </div>
                                 </td>
@@ -109,9 +152,13 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Password reset email sent successfully:", emailResponse);
+    console.log("Beautiful password reset email sent successfully:", emailResponse);
 
-    return new Response(JSON.stringify({ success: true, emailResponse }), {
+    return new Response(JSON.stringify({ 
+      success: true, 
+      emailResponse,
+      resetLink: resetLinkWithToken 
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
