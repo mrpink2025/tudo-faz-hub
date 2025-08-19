@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { BuyNowButton } from "./BuyNowButton";
 import { useTranslation } from "react-i18next";
 import { ProductSizeSelector } from "./ProductSizeSelector";
+import ContactSellerButton from "@/components/chat/ContactSellerButton";
 
 interface ProductCardProps {
   listing: {
@@ -159,7 +160,7 @@ export function ProductCard({ listing }: ProductCardProps) {
       </CardContent>
 
       {listing.sellable && (
-        <CardFooter className="p-4 pt-0">
+        <CardFooter className="p-4 pt-0 space-y-2">
           {listing.inventory_count > 0 ? (
             <BuyNowButton listing={listing} />
           ) : (
@@ -168,6 +169,13 @@ export function ProductCard({ listing }: ProductCardProps) {
               {t("product.unavailable")}
             </Button>
           )}
+          
+          {/* Contact seller button */}
+          <ContactSellerButton 
+            sellerId={listing.user_id}
+            sellerName="Vendedor"
+            listingTitle={listing.title}
+          />
         </CardFooter>
       )}
     </Card>
