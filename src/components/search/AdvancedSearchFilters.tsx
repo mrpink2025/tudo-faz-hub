@@ -99,37 +99,41 @@ export function AdvancedSearchFilters({
   const updateFilters = (newFilters: Partial<AdvancedFilters>) => {
     const updated = { ...filters, ...newFilters };
     setFilters(updated);
-    onFiltersChange(updated);
+    // Não aplicar automaticamente - aguardar clique no botão
+  };
+
+  const applyFilters = () => {
+    onFiltersChange(filters);
     
     // Update URL params
     const params = new URLSearchParams(searchParams);
     
-    if (updated.searchTerm) {
-      params.set('q', updated.searchTerm);
+    if (filters.searchTerm) {
+      params.set('q', filters.searchTerm);
     } else {
       params.delete('q');
     }
     
-    if (updated.category) {
-      params.set('categoria', updated.category);
+    if (filters.category) {
+      params.set('categoria', filters.category);
     } else {
       params.delete('categoria');
     }
     
-    if (updated.location) {
-      params.set('local', updated.location);
+    if (filters.location) {
+      params.set('local', filters.location);
     } else {
       params.delete('local');
     }
     
-    if (updated.sortBy !== 'recent') {
-      params.set('ordem', updated.sortBy);
+    if (filters.sortBy !== 'recent') {
+      params.set('ordem', filters.sortBy);
     } else {
       params.delete('ordem');
     }
     
     setSearchParams(params);
-    logger.info('Filters updated', { filters: updated });
+    logger.info('Filters applied', { filters });
   };
 
   const clearFilters = () => {
@@ -369,8 +373,20 @@ export function AdvancedSearchFilters({
               </div>
             )}
 
-            {/* Actions */}
+            {/* Apply Filters Button */}
             <div className="flex gap-2 pt-4 border-t">
+              <Button 
+                onClick={applyFilters} 
+                className="flex-1"
+                size="default"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Aplicar Filtros
+              </Button>
+            </div>
+
+            {/* Secondary Actions */}
+            <div className="flex gap-2">
               <Button onClick={saveCurrentFilters} variant="outline" size="sm">
                 {t('search.save_filter')}
               </Button>
