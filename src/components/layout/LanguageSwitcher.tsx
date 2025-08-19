@@ -18,11 +18,18 @@ const langs = [
 ];
 
   const currentLang = (i18n.language || "pt").split("-")[0];
+  console.log("Current language in LanguageSwitcher:", currentLang, "Full language:", i18n.language);
   const current = currentLang === "pt" ? "BR" : currentLang.toUpperCase();
 
   const changeLang = (code: string) => {
+    console.log("Changing language to:", code);
     i18n.changeLanguage(code);
-    try { localStorage.setItem("lang", code); } catch {}
+    try { 
+      localStorage.setItem("lang", code);
+      console.log("Language saved to localStorage:", code);
+    } catch (e) {
+      console.warn("Failed to save language to localStorage:", e);
+    }
   };
 
   return (
