@@ -2,6 +2,7 @@
   "name": "TudoFaz - Marketplace Completo",
   "short_name": "TudoFaz",
   "description": "Plataforma completa para compra, venda e prestação de serviços",
+  "version": "2.2.0",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

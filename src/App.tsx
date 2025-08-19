@@ -41,11 +41,13 @@ import { TelemetryProvider } from "./components/monitoring/TelemetryProvider";
 import DynamicFavicon from "./components/branding/DynamicFavicon";
 import { SearchProvider } from "./contexts/SearchContext";
 import { useNativePushNotifications } from "./hooks/useNativePushNotifications";
+import { useAppUpdater } from "./hooks/useAppUpdater";
 import "./i18n";
 
 // Componente para inicializar capacidades nativas
 const NativeCapabilities = () => {
   useNativePushNotifications();
+  useAppUpdater(); // Adicionar verificação de atualizações automáticas
   return null;
 };
 
