@@ -86,9 +86,9 @@ const PasswordReset = () => {
                   <p style="color: #f7fafc; font-size: 14px; margin-bottom: 0;">Você receberá um email oficial do Supabase com o link funcional.</p>
                 </div>
                 
-                <div style="background: #fef2f2; padding: 20px; border-radius: 8px; border-left: 4px solid #ef4444;">
-                  <p style="margin: 0; color: #991b1b; font-size: 14px;">
-                    <strong>⚡ URGENTE:</strong> O link expira em 10 minutos. Clique no link IMEDIATAMENTE ao receber o email.
+                <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; border-left: 4px solid #0ea5e9;">
+                  <p style="margin: 0; color: #0c4a6e; font-size: 14px;">
+                    <strong>⏰ Validade:</strong> Este link deve permanecer válido por 1 hora. Se expirar antes, é um bug do sistema.
                   </p>
                 </div>
                 
@@ -116,7 +116,7 @@ const PasswordReset = () => {
       setEmailSent(true);
       toast({
         title: "Email enviado!",
-        description: "ATENÇÃO: O link expira em 10 minutos. Use-o imediatamente!",
+        description: "Link válido por 1 hora. Verifique sua caixa de entrada.",
         variant: "default",
       });
     } catch (error: any) {
