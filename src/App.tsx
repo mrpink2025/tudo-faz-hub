@@ -39,6 +39,7 @@ import { MessageNotifications } from "./components/notifications/MessageNotifica
 import { AffiliateNotifications } from "./components/notifications/AffiliateNotifications";
 import { TelemetryProvider } from "./components/monitoring/TelemetryProvider";
 import DynamicFavicon from "./components/branding/DynamicFavicon";
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { SearchProvider } from "./contexts/SearchContext";
 import { useNativePushNotifications } from "./hooks/useNativePushNotifications";
 import { useAppUpdater } from "./hooks/useAppUpdater";
@@ -97,6 +98,7 @@ const App = () => (
           </Routes>
             <MessageNotifications />
             <AffiliateNotifications />
+            <PWAInstallPrompt />
             <Footer />
           </TelemetryProvider>
         </SearchProvider>
