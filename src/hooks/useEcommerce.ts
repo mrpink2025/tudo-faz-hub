@@ -79,6 +79,15 @@ export function useShoppingCart() {
       const user = (await supabase.auth.getUser()).data.user;
       if (!user) throw new Error("Usuário não autenticado");
 
+      // Get listing info to check max quantity per purchase
+      const { data: listing, error: listingError } = await supabase
+        .from('listings')
+        .select('max_quantity_per_purchase, inventory_count, title')
+        .eq('id', listingId)
+        .single();
+
+      if (listingError) throw new Error("Erro ao buscar informações do produto");
+
       // Check if item already exists in cart
       const { data: existingItem } = await supabase
         .from("shopping_cart")
@@ -87,11 +96,23 @@ export function useShoppingCart() {
         .eq("listing_id", listingId)
         .maybeSingle();
 
+      const newQuantity = existingItem ? existingItem.quantity + quantity : quantity;
+
+      // Validate max quantity per purchase
+      if (listing.max_quantity_per_purchase && newQuantity > listing.max_quantity_per_purchase) {
+        throw new Error(`Máximo de ${listing.max_quantity_per_purchase} unidades por compra para este produto`);
+      }
+
+      // Validate inventory
+      if (listing.inventory_count && newQuantity > listing.inventory_count) {
+        throw new Error(`Apenas ${listing.inventory_count} unidades disponíveis em estoque`);
+      }
+
       if (existingItem) {
         // Update quantity instead of inserting duplicate
         const { data, error } = await supabase
           .from("shopping_cart")
-          .update({ quantity: existingItem.quantity + quantity })
+          .update({ quantity: newQuantity })
           .eq("id", existingItem.id)
           .select()
           .single();
@@ -145,6 +166,35 @@ export function useShoppingCart() {
           .eq("id", cartId);
         if (error) throw error;
       } else {
+        // Get cart item with listing info to validate limits
+        const { data: cartItem, error: cartError } = await supabase
+          .from('shopping_cart')
+          .select(`
+            id,
+            listing_id,
+            listings!inner(
+              max_quantity_per_purchase,
+              inventory_count,
+              title
+            )
+          `)
+          .eq('id', cartId)
+          .single();
+
+        if (cartError) throw new Error("Erro ao buscar item do carrinho");
+
+        const listing = cartItem.listings;
+
+        // Validate max quantity per purchase
+        if (listing.max_quantity_per_purchase && quantity > listing.max_quantity_per_purchase) {
+          throw new Error(`Máximo de ${listing.max_quantity_per_purchase} unidades por compra para este produto`);
+        }
+
+        // Validate inventory
+        if (listing.inventory_count && quantity > listing.inventory_count) {
+          throw new Error(`Apenas ${listing.inventory_count} unidades disponíveis em estoque`);
+        }
+
         const { data, error } = await supabase
           .from("shopping_cart")
           .update({ quantity })

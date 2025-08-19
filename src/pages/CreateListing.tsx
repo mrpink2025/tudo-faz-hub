@@ -56,6 +56,7 @@ const CreateListing = () => {
   // E-commerce settings
   const [sellable, setSellable] = useState(false);
   const [inventoryCount, setInventoryCount] = useState<string>("0");
+  const [maxQuantityPerPurchase, setMaxQuantityPerPurchase] = useState<string>("");
   // Address fields
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
@@ -100,6 +101,7 @@ const CreateListing = () => {
           setCommissionRate((listing.affiliate_commission_rate / 100)?.toString() || "5");
           setSellable(listing.sellable || false);
           setInventoryCount(listing.inventory_count?.toString() || "0");
+          setMaxQuantityPerPurchase(listing.max_quantity_per_purchase?.toString() || "");
           
           // Load location data
           const { data: location } = await supabase
@@ -157,7 +159,7 @@ const CreateListing = () => {
         return;
       }
 
-      const parsedPrice = price ? parseInt(price, 10) : null;
+      const parsedPrice = price ? Math.round(parseFloat(price) * 100) : null;
       const locationPublic = city ? (neighborhood ? `${city} - ${neighborhood}` : city) : null;
       
       let listingId = editId;
@@ -177,6 +179,7 @@ const CreateListing = () => {
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
             sellable,
             inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
+            max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
           })
           .eq("id", editId);
 
@@ -199,6 +202,7 @@ const CreateListing = () => {
             affiliate_commission_rate: affiliateEnabled ? parseFloat(commissionRate) * 100 : 0,
             sellable,
             inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
+            max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
           })
           .select("id")
           .maybeSingle();
@@ -551,23 +555,44 @@ const CreateListing = () => {
               </div>
               
               {sellable && (
-                <div className="space-y-2 animate-fade-in">
-                  <Label htmlFor="inventory" className="text-sm font-medium flex items-center gap-2">
-                    <Package className="h-4 w-4" />
-                    Quantidade em Estoque
-                  </Label>
-                  <Input 
-                    id="inventory" 
-                    type="number" 
-                    min="0" 
-                    value={inventoryCount} 
-                    onChange={(e) => setInventoryCount(e.target.value)} 
-                    placeholder="Ex: 10, 50, 100"
-                    className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Quantidade de produtos disponíveis para venda online
-                  </p>
+                <div className="space-y-4 animate-fade-in">
+                  <div className="space-y-2">
+                    <Label htmlFor="inventory" className="text-sm font-medium flex items-center gap-2">
+                      <Package className="h-4 w-4" />
+                      Quantidade em Estoque
+                    </Label>
+                    <Input 
+                      id="inventory" 
+                      type="number" 
+                      min="0" 
+                      value={inventoryCount} 
+                      onChange={(e) => setInventoryCount(e.target.value)} 
+                      placeholder="Ex: 10, 50, 100"
+                      className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Quantidade de produtos disponíveis para venda online
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="maxQuantity" className="text-sm font-medium flex items-center gap-2">
+                      <ShoppingCart className="h-4 w-4" />
+                      Limite por Compra (opcional)
+                    </Label>
+                    <Input 
+                      id="maxQuantity" 
+                      type="number" 
+                      min="1" 
+                      value={maxQuantityPerPurchase} 
+                      onChange={(e) => setMaxQuantityPerPurchase(e.target.value)} 
+                      placeholder="Ex: 2, 5, 10"
+                      className="transition-all duration-200 focus:ring-2 focus:ring-purple-200"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Máximo que cada pessoa pode comprar por pedido. Deixe vazio para sem limite.
+                    </p>
+                  </div>
                 </div>
               )}
             </CardContent>

@@ -32,6 +32,33 @@ serve(async (req) => {
       total_amount 
     } = await req.json();
 
+    // Validate quantity limits for each item
+    const supabaseService = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
+    for (const item of items) {
+      const { data: listing, error } = await supabaseService
+        .from('listings')
+        .select('max_quantity_per_purchase, inventory_count, title')
+        .eq('id', item.listing_id)
+        .single();
+
+      if (error) throw new Error(`Erro ao validar produto: ${item.title || item.listing_id}`);
+      
+      // Check max quantity per purchase
+      if (listing.max_quantity_per_purchase && item.quantity > listing.max_quantity_per_purchase) {
+        throw new Error(`Máximo de ${listing.max_quantity_per_purchase} unidades por compra para ${listing.title}`);
+      }
+      
+      // Check inventory
+      if (listing.inventory_count && item.quantity > listing.inventory_count) {
+        throw new Error(`Apenas ${listing.inventory_count} unidades disponíveis para ${listing.title}`);
+      }
+    }
+
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
     });
@@ -95,12 +122,7 @@ serve(async (req) => {
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
-    // Create order record
-    const supabaseService = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
+    // Create order record using the same service client
 
     const totalAmount = total_amount || items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
     

@@ -555,6 +555,7 @@ export type Database = {
           lat: number | null
           lng: number | null
           location: string | null
+          max_quantity_per_purchase: number | null
           price: number | null
           sellable: boolean | null
           sold_count: number | null
@@ -578,6 +579,7 @@ export type Database = {
           lat?: number | null
           lng?: number | null
           location?: string | null
+          max_quantity_per_purchase?: number | null
           price?: number | null
           sellable?: boolean | null
           sold_count?: number | null
@@ -601,6 +603,7 @@ export type Database = {
           lat?: number | null
           lng?: number | null
           location?: string | null
+          max_quantity_per_purchase?: number | null
           price?: number | null
           sellable?: boolean | null
           sold_count?: number | null
