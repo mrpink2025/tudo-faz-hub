@@ -183,15 +183,7 @@ const ListingDetail = () => {
 
           <aside className="space-y-4">
             {listing.sellable ? (
-              <>
-                <ProductCard listing={listing} />
-                {/* Additional contact button for sellable products */}
-                <ContactSellerButton 
-                  sellerId={listing.user_id}
-                  sellerName="Vendedor"
-                  listingTitle={listing.title}
-                />
-              </>
+              <ProductCard listing={listing} />
             ) : (
               <>
                 <Card>

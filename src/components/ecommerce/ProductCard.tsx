@@ -160,7 +160,7 @@ export function ProductCard({ listing }: ProductCardProps) {
       </CardContent>
 
       {listing.sellable && (
-        <CardFooter className="p-4 pt-0 space-y-2">
+        <CardFooter className="p-4 pt-0">
           {listing.inventory_count > 0 ? (
             <BuyNowButton listing={listing} />
           ) : (
@@ -169,7 +169,6 @@ export function ProductCard({ listing }: ProductCardProps) {
               {t("product.unavailable")}
             </Button>
           )}
-          
         </CardFooter>
       )}
     </Card>
