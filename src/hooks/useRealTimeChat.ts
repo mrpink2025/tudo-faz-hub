@@ -93,15 +93,20 @@ export const useRealTimeChat = (recipientId?: string) => {
 
       if (error) throw error;
       
+      // Refetch messages immediately to show the new message
+      await fetchMessages(toUserId);
+      
       // Atualizar lista de conversas
       await fetchConversations();
+      
+      toast.success('Mensagem enviada!');
     } catch (error) {
       logger.error('Erro ao enviar mensagem', { error, toUserId, content });
       toast.error('Erro ao enviar mensagem');
     } finally {
       setSending(false);
     }
-  }, [user, fetchConversations]);
+  }, [user, fetchConversations, fetchMessages]);
 
   // Configurar realtime para mensagens
   useEffect(() => {
