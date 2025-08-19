@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -10,14 +9,17 @@ export const useNativePushNotifications = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const initializePushNotifications = async () => {
-      // Verificar se estamos em um ambiente nativo
-      if (!Capacitor.isNativePlatform()) {
-        console.log('Push notifications only work on native platforms');
-        return;
-      }
+    // CRÍTICO: Só executar em plataformas nativas, nunca no navegador
+    if (!Capacitor.isNativePlatform()) {
+      console.log('PushNotifications: Skipping initialization on web platform');
+      return;
+    }
 
+    const initializePushNotifications = async () => {
       try {
+        // Importação dinâmica apenas em plataformas nativas
+        const { PushNotifications } = await import('@capacitor/push-notifications');
+        
         // Verificar permissões
         const permission = await PushNotifications.checkPermissions();
         
@@ -50,23 +52,7 @@ export const useNativePushNotifications = () => {
           description: 'Você receberá notificações de compras e atualizações',
         });
 
-      } catch (error) {
-        console.error('Erro ao inicializar push notifications:', error);
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível ativar as notificações',
-          variant: 'destructive'
-        });
-      }
-    };
-
-    // Só executar se estamos em plataforma nativa
-    if (Capacitor.isNativePlatform()) {
-      initializePushNotifications();
-
-      // Listeners para eventos de push notification
-      const addListeners = () => {
-        // Quando o registro for bem-sucedido
+        // Listeners para eventos de push notification
         PushNotifications.addListener('registration', async (token) => {
           console.log('Push registration success, token: ' + token.value);
           setToken(token.value);
@@ -84,7 +70,6 @@ export const useNativePushNotifications = () => {
           }
         });
 
-        // Quando houver erro no registro
         PushNotifications.addListener('registrationError', (error) => {
           console.error('Error on registration: ' + JSON.stringify(error));
           toast({
@@ -94,49 +79,53 @@ export const useNativePushNotifications = () => {
           });
         });
 
-        // Quando uma notificação for recebida
         PushNotifications.addListener('pushNotificationReceived', (notification) => {
           console.log('Push notification received: ', notification);
           
-          // Mostrar toast para notificação recebida em primeiro plano
           toast({
             title: notification.title || 'Nova notificação',
             description: notification.body || 'Você tem uma nova mensagem',
           });
         });
 
-        // Quando uma notificação for tocada/aberta
         PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
           console.log('Push notification action performed', notification.actionId, notification.inputValue);
           
-          // Aqui você pode navegar para uma tela específica baseado na notificação
           const data = notification.notification.data;
           if (data?.type === 'order') {
-            // Navegar para tela de pedidos
             window.location.href = '/pedidos';
           } else if (data?.type === 'message') {
-            // Navegar para tela de mensagens  
             window.location.href = '/mensagens';
           }
         });
-      };
 
-      addListeners();
+        return () => {
+          PushNotifications.removeAllListeners();
+        };
 
-      return () => {
-        PushNotifications.removeAllListeners();
-      };
-    }
+      } catch (error) {
+        console.error('Erro ao inicializar push notifications:', error);
+        // Não mostrar toast de erro para evitar spam no web
+      }
+    };
+
+    initializePushNotifications();
   }, [toast]);
 
   return {
     isRegistered,
     token,
     requestPermissions: async () => {
-      if (Capacitor.isNativePlatform()) {
-        return await PushNotifications.requestPermissions();
+      if (!Capacitor.isNativePlatform()) {
+        return { receive: 'denied' };
       }
-      return { receive: 'denied' };
+      
+      try {
+        const { PushNotifications } = await import('@capacitor/push-notifications');
+        return await PushNotifications.requestPermissions();
+      } catch {
+        return { receive: 'denied' };
+      }
     }
   };
 };

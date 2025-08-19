@@ -45,12 +45,53 @@ const NewPassword = () => {
     // Verificar se há uma sessão de redefinição de senha válida
     const checkSession = async () => {
       try {
+        console.log('🔍 Verificando sessão para redefinição de senha...');
+        console.log('📍 URL atual:', window.location.href);
+        console.log('🔗 SearchParams:', Object.fromEntries(searchParams.entries()));
+        
+        // Verificar se há parâmetros de auth na URL
+        const accessToken = searchParams.get('access_token');
+        const refreshToken = searchParams.get('refresh_token');
+        const type = searchParams.get('type');
+        
+        console.log('🎫 Tokens da URL:', { accessToken: !!accessToken, refreshToken: !!refreshToken, type });
+        
+        // Se há tokens na URL, definir sessão do Supabase
+        if (accessToken && refreshToken && type === 'recovery') {
+          console.log('🔄 Estabelecendo sessão com tokens da URL...');
+          
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+          
+          if (error) {
+            console.error('❌ Erro ao estabelecer sessão:', error);
+            toast({
+              title: "Link inválido",
+              description: "Não foi possível validar o link de redefinição. Solicite um novo.",
+              variant: "destructive",
+            });
+            navigate("/esqueceu-senha");
+            return;
+          }
+          
+          console.log('✅ Sessão estabelecida com sucesso:', !!data.session);
+          setIsValidSession(true);
+          return;
+        }
+        
+        // Caso contrário, verificar sessão existente
         const { data: { session }, error } = await supabase.auth.getSession();
         
-        console.log('Verificando sessão para redefinição de senha:', { session, error });
+        console.log('📋 Dados da sessão existente:', { 
+          hasSession: !!session, 
+          hasUser: !!session?.user,
+          error: error?.message 
+        });
         
         if (error) {
-          console.error('Erro ao verificar sessão:', error);
+          console.error('❌ Erro ao verificar sessão:', error);
           toast({
             title: "Erro na sessão",
             description: "Não foi possível verificar a sessão. Tente novamente.",
@@ -60,25 +101,12 @@ const NewPassword = () => {
           return;
         }
 
-        // Verificar se há uma sessão ativa E se é uma sessão de recuperação
-        if (session && session.user) {
-          // Verificar se a sessão tem metadados de reset de senha
-          const isPasswordResetSession = session.user.app_metadata?.provider === 'email' || 
-                                       session.access_token; // Token válido indica sessão de reset
-          
-          console.log('Sessão de reset válida:', isPasswordResetSession);
-          
-          if (isPasswordResetSession) {
-            setIsValidSession(true);
-          } else {
-            toast({
-              title: "Sessão inválida",
-              description: "Esta não é uma sessão de redefinição de senha válida.",
-              variant: "destructive",
-            });
-            navigate("/esqueceu-senha");
-          }
+        // Verificar se existe uma sessão válida
+        if (session && session.user && session.access_token) {
+          console.log('✅ Sessão válida encontrada');
+          setIsValidSession(true);
         } else {
+          console.log('❌ Sessão inválida ou expirada');
           toast({
             title: "Link expirado",
             description: "Link de redefinição de senha expirado ou inválido. Solicite um novo link.",
@@ -87,7 +115,7 @@ const NewPassword = () => {
           navigate("/esqueceu-senha");
         }
       } catch (error) {
-        console.error('Erro inesperado ao verificar sessão:', error);
+        console.error('💥 Erro inesperado ao verificar sessão:', error);
         toast({
           title: "Erro inesperado",
           description: "Tente novamente mais tarde.",
@@ -97,8 +125,11 @@ const NewPassword = () => {
       }
     };
 
-    checkSession();
-  }, [navigate, toast]);
+    // Adicionar delay para garantir que os parâmetros da URL sejam processados
+    const timer = setTimeout(checkSession, 100);
+    
+    return () => clearTimeout(timer);
+  }, [navigate, toast, searchParams]);
 
   const handleUpdatePassword = async (values: NewPasswordInput) => {
     setIsLoading(true);
