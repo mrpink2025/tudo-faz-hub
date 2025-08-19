@@ -126,7 +126,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Enviar email
     const emailResponse = await resend.emails.send({
-      from: "TudoFaz <notificacoes@resend.dev>",
+      from: "TudoFaz Hub <noreply@tudofaz.com>",
       to: [data.user_email],
       subject: emailSubject,
       html: emailHtml,

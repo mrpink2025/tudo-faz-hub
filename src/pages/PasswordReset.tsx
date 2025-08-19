@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +29,10 @@ const PasswordReset = () => {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { email: "" },
   });
+
+  useEffect(() => {
+    document.title = "Recuperar Senha - TudoFaz Hub";
+  }, []);
 
   const handleResetPassword = async (values: ResetPasswordInput) => {
     setIsLoading(true);

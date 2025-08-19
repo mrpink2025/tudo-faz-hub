@@ -39,7 +39,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "TudoFaz <noreply@resend.dev>",
+      from: "TudoFaz Hub <noreply@tudofaz.com>",
       to: [to],
       subject: `[TudoFaz] ${subject}`,
       html: emailHtml,
