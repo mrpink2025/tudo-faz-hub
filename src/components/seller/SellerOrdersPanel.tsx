@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSellerOrders } from "@/hooks/useEcommerce";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,7 @@ const statusColors = {
 };
 
 export const SellerOrdersPanel = () => {
+  const { t } = useTranslation();
   const { orders = [], isLoading } = useSellerOrders();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -47,14 +49,14 @@ export const SellerOrdersPanel = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["seller-orders"] });
       toast({
-        title: "Pedido atualizado",
-        description: "As informações do pedido foram atualizadas com sucesso.",
+        title: t("seller.order_updated"),
+        description: t("seller.order_updated"),
       });
     },
     onError: (error) => {
       toast({
-        title: "Erro",
-        description: "Erro ao atualizar pedido: " + error.message,
+        title: t("common.error"),
+        description: t("seller.update_error") + ": " + error.message,
         variant: "destructive",
       });
     },
@@ -71,10 +73,10 @@ export const SellerOrdersPanel = () => {
     return (
       <Badge className={`${colorClass} text-white`}>
         <Icon className="h-3 w-3 mr-1" />
-        {status === "pending" ? "Pendente" :
-         status === "confirmed" ? "Confirmado" :
-         status === "shipped" ? "Enviado" :
-         status === "delivered" ? "Entregue" : "Cancelado"}
+        {status === "pending" ? t("seller.pending") :
+         status === "confirmed" ? t("seller.confirmed") :
+         status === "shipped" ? t("seller.shipped") :
+         status === "delivered" ? t("seller.delivered") : t("seller.cancelled")}
       </Badge>
     );
   };
@@ -87,25 +89,25 @@ export const SellerOrdersPanel = () => {
   };
 
   if (isLoading) {
-    return <div>Carregando pedidos...</div>;
+    return <div>{t("seller.loading")}</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Gerenciar Pedidos</h2>
+        <h2 className="text-2xl font-bold">{t("seller.manage_orders")}</h2>
         <div className="flex gap-2">
-          <Badge variant="outline">{orders.length} pedidos totais</Badge>
+          <Badge variant="outline">{orders.length} {t("seller.orders").toLowerCase()}</Badge>
         </div>
       </div>
 
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">Todos</TabsTrigger>
-          <TabsTrigger value="pending">Pendentes</TabsTrigger>
-          <TabsTrigger value="confirmed">Confirmados</TabsTrigger>
-          <TabsTrigger value="shipped">Enviados</TabsTrigger>
-          <TabsTrigger value="delivered">Entregues</TabsTrigger>
+          <TabsTrigger value="all">{t("seller.all")}</TabsTrigger>
+          <TabsTrigger value="pending">{t("seller.pending")}</TabsTrigger>
+          <TabsTrigger value="confirmed">{t("seller.confirmed")}</TabsTrigger>
+          <TabsTrigger value="shipped">{t("seller.shipped")}</TabsTrigger>
+          <TabsTrigger value="delivered">{t("seller.delivered")}</TabsTrigger>
         </TabsList>
 
         {["all", "pending", "confirmed", "shipped", "delivered"].map((tab) => (
@@ -118,7 +120,7 @@ export const SellerOrdersPanel = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-lg">
-                          Pedido #{order.id.slice(0, 8)}
+                          {t("seller.order_id")} #{order.id.slice(0, 8)}
                         </CardTitle>
                         <p className="text-sm text-muted-foreground">
                           {new Date(order.created_at).toLocaleDateString('pt-BR')}
@@ -136,7 +138,7 @@ export const SellerOrdersPanel = () => {
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor={`status-${order.id}`}>Status</Label>
+                          <Label htmlFor={`status-${order.id}`}>{t("seller.status")}</Label>
                           <Select
                             value={order.status}
                             onValueChange={(value) => 
@@ -147,50 +149,50 @@ export const SellerOrdersPanel = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">Pendente</SelectItem>
-                              <SelectItem value="confirmed">Confirmado</SelectItem>
-                              <SelectItem value="shipped">Enviado</SelectItem>
-                              <SelectItem value="delivered">Entregue</SelectItem>
-                              <SelectItem value="cancelled">Cancelado</SelectItem>
+                              <SelectItem value="pending">{t("seller.pending")}</SelectItem>
+                              <SelectItem value="confirmed">{t("seller.confirmed")}</SelectItem>
+                              <SelectItem value="shipped">{t("seller.shipped")}</SelectItem>
+                              <SelectItem value="delivered">{t("seller.delivered")}</SelectItem>
+                              <SelectItem value="cancelled">{t("seller.cancelled")}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <Label htmlFor={`tracking-${order.id}`}>Código de Rastreamento</Label>
+                          <Label htmlFor={`tracking-${order.id}`}>{t("seller.tracking_code")}</Label>
                           <Input
                             id={`tracking-${order.id}`}
                             value={order.tracking_code || ""}
                             onChange={(e) => 
                               handleUpdateOrder(order.id, { tracking_code: e.target.value })
                             }
-                            placeholder="Digite o código de rastreamento"
+                            placeholder={t("seller.tracking_code")}
                           />
                         </div>
                       </div>
                       
                       <div>
-                        <Label htmlFor={`notes-${order.id}`}>Observações do Vendedor</Label>
+                        <Label htmlFor={`notes-${order.id}`}>{t("seller.seller_notes")}</Label>
                         <Textarea
                           id={`notes-${order.id}`}
                           value={order.seller_notes || ""}
                           onChange={(e) => 
                             handleUpdateOrder(order.id, { seller_notes: e.target.value })
                           }
-                          placeholder="Adicione observações sobre este pedido..."
+                          placeholder={t("seller.seller_notes")}
                           rows={3}
                         />
                       </div>
 
                       {order.order_items && order.order_items.length > 0 && (
                         <div>
-                          <h4 className="font-semibold mb-2">Itens do Pedido:</h4>
+                          <h4 className="font-semibold mb-2">{t("seller.order_items")}:</h4>
                           <div className="space-y-2">
                             {order.order_items.map((item: any, index: number) => (
                               <div key={index} className="flex justify-between items-center p-2 bg-muted rounded">
                                 <span>{item.listing?.title || "Item"}</span>
                                 <div className="text-right">
                                   <span className="text-sm text-muted-foreground">
-                                    Qtd: {item.quantity}
+                                    {t("seller.quantity")}: {item.quantity}
                                   </span>
                                   <br />
                                   <span className="font-semibold">
