@@ -142,7 +142,7 @@ export const PWAInstallPrompt = () => {
     }
 
     toast({
-      title: 'Como instalar o TudoFaz Hub',
+      title: 'Como instalar o app TudoFaz',
       description: instructions,
       duration: 10000,
     });
@@ -166,7 +166,7 @@ export const PWAInstallPrompt = () => {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <Smartphone className="h-5 w-5 text-primary" />
-              <CardTitle className="text-base">Instalar TudoFaz Hub</CardTitle>
+              <CardTitle className="text-base">Instalar o app TudoFaz</CardTitle>
             </div>
             <Button
               variant="ghost"
