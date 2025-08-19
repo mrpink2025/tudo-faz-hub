@@ -10,19 +10,19 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+      "src": "/lovable-uploads/tudofaz-gradient-icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+      "src": "/lovable-uploads/tudofaz-gradient-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+      "src": "/lovable-uploads/tudofaz-gradient-icon.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
@@ -39,7 +39,7 @@
       "description": "Navegue pelos produtos e serviços disponíveis",
       "icons": [
         {
-          "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+          "src": "/lovable-uploads/tudofaz-gradient-icon.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -51,7 +51,7 @@
       "description": "Acesse suas conversas e mensagens",
       "icons": [
         {
-          "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+          "src": "/lovable-uploads/tudofaz-gradient-icon.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -63,7 +63,7 @@
       "description": "Crie um novo anúncio para vender ou oferecer serviços",
       "icons": [
         {
-          "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+          "src": "/lovable-uploads/tudofaz-gradient-icon.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -75,7 +75,7 @@
   "iarc_rating_id": "",
   "screenshots": [
     {
-      "src": "/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png",
+      "src": "/lovable-uploads/tudofaz-gradient-icon.png",
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
