@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
 import { ProductReviews } from "@/components/ecommerce/ProductReviews";
 import ContactSellerButton from "@/components/chat/ContactSellerButton";
+import { ProductSizeDisplay } from "@/components/ecommerce/ProductSizeDisplay";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -198,6 +199,11 @@ const ListingDetail = () => {
           </div>
 
           <aside className="space-y-4">
+            {/* Size Selection for products that require size */}
+            {listing.sellable && listing.size_required && (
+              <ProductSizeDisplay listingId={listing.id} />
+            )}
+
             {listing.sellable ? (
               <ProductCard listing={listing} />
             ) : (
