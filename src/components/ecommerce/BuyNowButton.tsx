@@ -15,10 +15,12 @@ interface BuyNowButtonProps {
     price: number;
     user_id: string;
     currency?: string;
+    size_required?: boolean;
   };
+  selectedSize?: string;
 }
 
-export function BuyNowButton({ listing }: BuyNowButtonProps) {
+export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { addToCart } = useShoppingCart();
   const { toast } = useToast();
@@ -35,11 +37,21 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
       return;
     }
 
+    if (listing.size_required && !selectedSize) {
+      toast({
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de comprar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Primeiro adicionar ao carrinho e depois ir para checkout
     try {
       await addToCart.mutateAsync({
         listingId: listing.id,
         quantity: 1,
+        sizeId: selectedSize,
       });
       
       // Redirecionar para página de checkout
@@ -63,9 +75,19 @@ export function BuyNowButton({ listing }: BuyNowButtonProps) {
       return;
     }
 
+    if (listing.size_required && !selectedSize) {
+      toast({
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     addToCart.mutate({
       listingId: listing.id,
       quantity: 1,
+      sizeId: selectedSize,
     });
   };
 

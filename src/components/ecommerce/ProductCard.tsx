@@ -162,7 +162,7 @@ export function ProductCard({ listing }: ProductCardProps) {
       {listing.sellable && (
         <CardFooter className="p-4 pt-0">
           {listing.inventory_count > 0 ? (
-            <BuyNowButton listing={listing} />
+            <BuyNowButton listing={listing} selectedSize={selectedSize} />
           ) : (
             <Button disabled className="w-full" variant="secondary">
               <ShoppingCart className="h-4 w-4 mr-2" />
