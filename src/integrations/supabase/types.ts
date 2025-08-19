@@ -539,6 +539,45 @@ export type Database = {
           },
         ]
       }
+      listing_sizes: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          size_id: string
+          stock_quantity: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          size_id: string
+          stock_quantity?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          size_id?: string
+          stock_quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_sizes_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_sizes_size_id_fkey"
+            columns: ["size_id"]
+            isOneToOne: false
+            referencedRelation: "sizes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           affiliate_commission_rate: number | null
@@ -558,6 +597,7 @@ export type Database = {
           max_quantity_per_purchase: number | null
           price: number | null
           sellable: boolean | null
+          size_required: boolean
           sold_count: number | null
           status: string | null
           title: string
@@ -582,6 +622,7 @@ export type Database = {
           max_quantity_per_purchase?: number | null
           price?: number | null
           sellable?: boolean | null
+          size_required?: boolean
           sold_count?: number | null
           status?: string | null
           title: string
@@ -606,6 +647,7 @@ export type Database = {
           max_quantity_per_purchase?: number | null
           price?: number | null
           sellable?: boolean | null
+          size_required?: boolean
           sold_count?: number | null
           status?: string | null
           title?: string
@@ -689,6 +731,7 @@ export type Database = {
           listing_id: string
           order_id: string
           quantity: number
+          size_id: string | null
           total_price: number
           unit_price: number
         }
@@ -698,6 +741,7 @@ export type Database = {
           listing_id: string
           order_id: string
           quantity?: number
+          size_id?: string | null
           total_price: number
           unit_price: number
         }
@@ -707,6 +751,7 @@ export type Database = {
           listing_id?: string
           order_id?: string
           quantity?: number
+          size_id?: string | null
           total_price?: number
           unit_price?: number
         }
@@ -723,6 +768,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_size_id_fkey"
+            columns: ["size_id"]
+            isOneToOne: false
+            referencedRelation: "sizes"
             referencedColumns: ["id"]
           },
         ]
@@ -1139,6 +1191,7 @@ export type Database = {
           id: string
           listing_id: string
           quantity: number
+          size_id: string | null
           user_id: string
         }
         Insert: {
@@ -1146,6 +1199,7 @@ export type Database = {
           id?: string
           listing_id: string
           quantity?: number
+          size_id?: string | null
           user_id: string
         }
         Update: {
@@ -1153,6 +1207,7 @@ export type Database = {
           id?: string
           listing_id?: string
           quantity?: number
+          size_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -1161,6 +1216,13 @@ export type Database = {
             columns: ["listing_id"]
             isOneToOne: false
             referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shopping_cart_size_id_fkey"
+            columns: ["size_id"]
+            isOneToOne: false
+            referencedRelation: "sizes"
             referencedColumns: ["id"]
           },
         ]
@@ -1207,6 +1269,30 @@ export type Database = {
           stripe_enabled?: boolean | null
           stripe_publishable_key?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      sizes: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
         }
         Relationships: []
       }

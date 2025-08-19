@@ -31,6 +31,7 @@ import {
   Sparkles,
   CheckCircle
 } from "lucide-react";
+import { SizeSelector } from "@/components/listings/SizeSelector";
 
 const MAX_PHOTOS = 10;
 
@@ -63,11 +64,31 @@ const CreateListing = () => {
   const [neighborhood, setNeighborhood] = useState("");
   const [city, setCity] = useState("");
   const [stateUf, setStateUf] = useState("");
+  // Size settings
+  const [sizeRequired, setSizeRequired] = useState(false);
 
   const subcategories = useMemo(
     () => (categories ?? []).filter((c: any) => c.parent_id === rootId),
     [categories, rootId]
   );
+
+  // Categorias que requerem tamanhos
+  const getCategoryType = (categoryName: string): "shoes" | "clothes" | "accessories" | null => {
+    const name = categoryName.toLowerCase();
+    if (name.includes("sapato") || name.includes("tênis") || name.includes("calçado") || name.includes("bota") || name.includes("sandália")) {
+      return "shoes";
+    }
+    if (name.includes("roupa") || name.includes("camisa") || name.includes("calça") || name.includes("vestido") || name.includes("blusa") || name.includes("camiseta")) {
+      return "clothes";
+    }
+    if (name.includes("acessório") || name.includes("bolsa") || name.includes("mochila") || name.includes("chapéu") || name.includes("boné")) {
+      return "accessories";
+    }
+    return null;
+  };
+
+  const selectedCategory = categories?.find(c => c.id === subId);
+  const categoryType = selectedCategory ? getCategoryType(selectedCategory.name_pt || "") : null;
 
   useEffect(() => {
     document.title = `${editId ? t("edit.pageTitle") : t("create.pageTitle")} - tudofaz.com`;
@@ -102,6 +123,7 @@ const CreateListing = () => {
           setSellable(listing.sellable || false);
           setInventoryCount(listing.inventory_count?.toString() || "0");
           setMaxQuantityPerPurchase(listing.max_quantity_per_purchase?.toString() || "");
+          setSizeRequired(listing.size_required || false);
           
           // Load location data
           const { data: location } = await supabase
@@ -180,6 +202,7 @@ const CreateListing = () => {
             sellable,
             inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
+            size_required: sizeRequired,
           })
           .eq("id", editId);
 
@@ -203,6 +226,7 @@ const CreateListing = () => {
             sellable,
             inventory_count: sellable ? parseInt(inventoryCount) || 0 : 0,
             max_quantity_per_purchase: sellable && maxQuantityPerPurchase ? parseInt(maxQuantityPerPurchase) || null : null,
+            size_required: sizeRequired,
           })
           .select("id")
           .maybeSingle();
@@ -597,6 +621,16 @@ const CreateListing = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Tamanhos - só aparece para categorias relevantes */}
+          {categoryType && (
+            <SizeSelector
+              listingId={editId || undefined}
+              categoryType={categoryType}
+              onSizeRequiredChange={setSizeRequired}
+              sizeRequired={sizeRequired}
+            />
+          )}
 
           {/* Afiliados */}
           <Card className="animate-fade-in hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/20">

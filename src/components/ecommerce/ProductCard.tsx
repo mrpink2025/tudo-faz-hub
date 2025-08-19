@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { BuyNowButton } from "./BuyNowButton";
 import { useTranslation } from "react-i18next";
+import { ProductSizeSelector } from "./ProductSizeSelector";
 
 interface ProductCardProps {
   listing: {
@@ -22,11 +23,13 @@ interface ProductCardProps {
     inventory_count: number;
     sold_count: number;
     user_id: string;
+    size_required?: boolean;
   };
 }
 
 export function ProductCard({ listing }: ProductCardProps) {
   const [imageLoading, setImageLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
   const { user } = useSupabaseAuth();
   const { addToCart } = useShoppingCart();
   const { rating } = useProductReviews(listing.id);
@@ -43,6 +46,15 @@ export function ProductCard({ listing }: ProductCardProps) {
       return;
     }
 
+    if (listing.size_required && !selectedSize) {
+      toast({
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (listing.inventory_count <= 0) {
       toast({
         title: t("auth.product_unavailable"),
@@ -52,7 +64,7 @@ export function ProductCard({ listing }: ProductCardProps) {
       return;
     }
 
-    addToCart.mutate({ listingId: listing.id });
+    addToCart.mutate({ listingId: listing.id, sizeId: selectedSize });
   };
 
   const averageRating = (rating as any)?.average_rating || 0;
@@ -133,6 +145,16 @@ export function ProductCard({ listing }: ProductCardProps) {
             <div>{t("product.stock")}: {listing.inventory_count}</div>
             <div>{t("product.sold")}: {listing.sold_count}</div>
           </div>
+        )}
+
+        {/* Size selector for products that require size */}
+        {listing.size_required && (
+          <ProductSizeSelector
+            listingId={listing.id}
+            selectedSize={selectedSize}
+            onSizeChange={setSelectedSize}
+            className="mt-4"
+          />
         )}
       </CardContent>
 

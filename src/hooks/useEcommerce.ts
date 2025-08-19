@@ -75,7 +75,7 @@ export function useShoppingCart() {
   });
 
   const addToCart = useMutation({
-    mutationFn: async ({ listingId, quantity = 1 }: { listingId: string; quantity?: number }) => {
+    mutationFn: async ({ listingId, quantity = 1, sizeId }: { listingId: string; quantity?: number; sizeId?: string }) => {
       const user = (await supabase.auth.getUser()).data.user;
       if (!user) throw new Error("Usuário não autenticado");
 
@@ -138,6 +138,7 @@ export function useShoppingCart() {
           user_id: user.id,
           listing_id: listingId,
           quantity,
+          size_id: sizeId,
         })
         .select()
         .single();
