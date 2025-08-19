@@ -10,9 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { AdminTableSkeleton } from "@/components/ui/loading-skeletons";
+import { AdminTableSkeleton } from "./AdminTableSkeleton";
 import { queryConfigs, createQueryKey } from "@/utils/query-config";
 import { Pencil, Trash2, Eye, Search, Check, X, Star } from "lucide-react";
+import { EditListingModal } from "./EditListingModal";
 
 export default function ListingsManagement() {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export default function ListingsManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [approvalFilter, setApprovalFilter] = useState("all");
+  const [editingListingId, setEditingListingId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: createQueryKey("admin-listings", { search: searchTerm, status: statusFilter, approval: approvalFilter }),
@@ -242,7 +244,7 @@ export default function ListingsManagement() {
                   <Button 
                     size="sm" 
                     variant="outline"
-                    onClick={() => window.open(`/criar-anuncio?edit=${listing.id}`, '_blank')}
+                    onClick={() => setEditingListingId(listing.id)}
                   >
                     <Pencil className="w-4 h-4 mr-1" />
                     Editar
@@ -320,6 +322,17 @@ export default function ListingsManagement() {
             <p className="text-muted-foreground">Nenhum anúncio encontrado com os filtros aplicados.</p>
           </CardContent>
         </Card>
+      )}
+
+      {/* Edit Modal */}
+      {editingListingId && (
+        <EditListingModal
+          listingId={editingListingId}
+          open={!!editingListingId}
+          onOpenChange={(open) => {
+            if (!open) setEditingListingId(null);
+          }}
+        />
       )}
     </section>
   );
