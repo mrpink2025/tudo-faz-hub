@@ -54,16 +54,41 @@ const PasswordReset = () => {
         return;
       }
 
-      // Nota: O Supabase já enviou o email com token válido
-      // Agora vamos tentar enviar nosso email bonito também, mas como backup
+      // Enviar email bonito via send-notification
       try {
-        await supabase.functions.invoke('send-password-reset', {
+        await supabase.functions.invoke('send-notification', {
           body: {
-            email: values.email,
-            redirectUrl: redirectUrl,
-          },
+            to: values.email,
+            subject: '🔑 Redefinir sua senha - TudoFaz Hub',
+            message: `
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                  <h1 style="color: #1a365d; margin-bottom: 10px;">🔑 Redefinir Senha</h1>
+                  <p style="color: #4a5568; font-size: 16px;">Recebemos uma solicitação para redefinir sua senha</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin: 20px 0;">
+                  <p style="color: white; margin-bottom: 20px; font-size: 16px;">📧 Verifique sua caixa de entrada!</p>
+                  <p style="color: #f7fafc; font-size: 14px; margin-bottom: 0;">Você receberá um email oficial do Supabase com o link funcional para redefinir sua senha.</p>
+                </div>
+                
+                <div style="background: #f7fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #4299e1;">
+                  <p style="margin: 0; color: #2d3748; font-size: 14px;">
+                    <strong>📧 Importante:</strong> Use o link do email oficial do Supabase (não de resposta) para redefinir sua senha com segurança.
+                  </p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                  <p style="color: #718096; font-size: 12px; margin: 0;">
+                    Se você não solicitou esta redefinição, pode ignorar este email com segurança.
+                  </p>
+                </div>
+              </div>
+            `,
+            type: 'info'
+          }
         });
-        console.log("Email bonito enviado como backup");
+        console.log("Email bonito enviado com sucesso");
       } catch (customEmailError) {
         console.warn("Email personalizado falhou, mas o nativo do Supabase funcionou:", customEmailError);
       }
