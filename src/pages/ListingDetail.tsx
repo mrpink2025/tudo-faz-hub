@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Capturar código de rastreamento de afiliado da URL
   const trackingCode = searchParams.get("ref");
@@ -48,7 +49,11 @@ const ListingDetail = () => {
     enabled: Boolean(id),
   });
 
-  const heroUrl = listing?.cover_image || images?.[0]?.url || "/placeholder.svg";
+  const allImages = [
+    ...(listing?.cover_image ? [{ url: listing.cover_image, position: -1 }] : []),
+    ...images
+  ];
+  const heroUrl = allImages[selectedImageIndex]?.url || "/placeholder.svg";
 
   // Registrar clique de afiliado se presente
   useEffect(() => {
@@ -71,6 +76,11 @@ const ListingDetail = () => {
       trackClick();
     }
   }, [trackingCode, id, listing]);
+
+  // Reset selected image when listing changes
+  useEffect(() => {
+    setSelectedImageIndex(0);
+  }, [listing?.id]);
 
   useEffect(() => {
     const title = listing?.title ? `${listing.title} - tudofaz.com` : `${t("listing.pageTitle")} - tudofaz.com`;
@@ -153,18 +163,24 @@ const ListingDetail = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              {images && images.length > 1 && (
+              {allImages && allImages.length > 1 && (
                 <CardContent className="pt-4">
                   <div className="grid grid-cols-4 gap-2">
-                    {images.slice(0, 8).map((img: any, idx: number) => (
-                      <div className="aspect-[4/3] bg-muted overflow-hidden rounded" key={`${img.url}-${idx}`}>
+                    {allImages.slice(0, 8).map((img: any, idx: number) => (
+                      <button
+                        key={`${img.url}-${idx}`}
+                        onClick={() => setSelectedImageIndex(idx)}
+                        className={`aspect-[4/3] bg-muted overflow-hidden rounded transition-all duration-200 hover:opacity-80 ${
+                          selectedImageIndex === idx ? 'ring-2 ring-primary' : ''
+                        }`}
+                      >
                         <img
                           src={img.url}
                           alt={`Foto ${idx + 1} de ${listing.title}`}
                           loading="lazy"
                           className="w-full h-full object-cover"
                         />
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </CardContent>
