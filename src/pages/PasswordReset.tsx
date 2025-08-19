@@ -38,15 +38,18 @@ const PasswordReset = () => {
     setIsLoading(true);
     
     try {
-      // Primeiro, fazer logout de qualquer sessão existente para garantir token limpo
-      await supabase.auth.signOut();
+      // Primeiro, fazer logout completo para limpar qualquer sessão
+      await supabase.auth.signOut({ scope: 'global' });
       
       // Aguardar um momento para garantir que o logout foi processado
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       console.log('🔄 Iniciando processo de redefinição de senha para:', values.email);
       
-      const redirectUrl = `${window.location.origin}/nova-senha`;
+      // Usar URL de produção (tudofaz.com) para garantir que o link funcione
+      const redirectUrl = "https://tudofaz.com/nova-senha";
+      
+      console.log('🔗 URL de redirecionamento:', redirectUrl);
       
       // Usar APENAS o Supabase nativo que gera tokens válidos
       const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
@@ -65,7 +68,7 @@ const PasswordReset = () => {
 
       console.log('✅ Email de redefinição enviado pelo Supabase');
 
-      // Enviar email bonito via send-notification como backup/notificação
+      // Enviar email bonito informativo
       try {
         await supabase.functions.invoke('send-notification', {
           body: {
@@ -79,41 +82,42 @@ const PasswordReset = () => {
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin: 20px 0;">
-                  <p style="color: white; margin-bottom: 20px; font-size: 16px;">📧 Verifique sua caixa de entrada!</p>
-                  <p style="color: #f7fafc; font-size: 14px; margin-bottom: 0;">Você receberá um email oficial do Supabase com o link funcional para redefinir sua senha.</p>
+                  <p style="color: white; margin-bottom: 20px; font-size: 16px;">📧 Verifique sua caixa de entrada AGORA!</p>
+                  <p style="color: #f7fafc; font-size: 14px; margin-bottom: 0;">Você receberá um email oficial do Supabase com o link funcional.</p>
                 </div>
                 
-                <div style="background: #f7fafc; padding: 20px; border-radius: 8px; border-left: 4px solid #4299e1;">
-                  <p style="margin: 0; color: #2d3748; font-size: 14px;">
-                    <strong>⚡ Importante:</strong> O link tem validade de apenas 10 minutos por segurança. Use-o imediatamente após receber.
+                <div style="background: #fef2f2; padding: 20px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                  <p style="margin: 0; color: #991b1b; font-size: 14px;">
+                    <strong>⚡ URGENTE:</strong> O link expira em 10 minutos. Clique no link IMEDIATAMENTE ao receber o email.
                   </p>
                 </div>
                 
                 <div style="background: #fffaf0; padding: 20px; border-radius: 8px; border-left: 4px solid #ed8936; margin-top: 15px;">
                   <p style="margin: 0; color: #744210; font-size: 14px;">
-                    <strong>🚨 Dica:</strong> Se o link expirar, solicite um novo. Cada solicitação cancela o link anterior.
+                    <strong>🚨 Importante:</strong> Se o link não funcionar, solicite um novo imediatamente. Cada nova solicitação cancela a anterior.
                   </p>
                 </div>
                 
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
                   <p style="color: #718096; font-size: 12px; margin: 0;">
-                    Se você não solicitou esta redefinição, pode ignorar este email com segurança.
+                    TudoFaz Hub - Sistema de Redefinição de Senha
                   </p>
                 </div>
               </div>
             `,
-            type: 'info'
+            type: 'warning'
           }
         });
-        console.log("✅ Email bonito enviado como notificação");
+        console.log("✅ Email informativo enviado");
       } catch (customEmailError) {
-        console.warn("⚠️ Email personalizado falhou, mas o nativo do Supabase funcionou:", customEmailError);
+        console.warn("⚠️ Email personalizado falhou:", customEmailError);
       }
 
       setEmailSent(true);
       toast({
         title: "Email enviado!",
-        description: "Verifique sua caixa de entrada. O link expira em 10 minutos.",
+        description: "ATENÇÃO: O link expira em 10 minutos. Use-o imediatamente!",
+        variant: "default",
       });
     } catch (error: any) {
       console.error("💥 Erro inesperado no reset:", error);
