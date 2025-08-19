@@ -927,31 +927,40 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          cpf: string
           created_at: string
           email: string | null
           email_confirmed_at: string | null
+          first_name: string
           full_name: string | null
           id: string
+          last_name: string
           last_sign_in_at: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
+          cpf: string
           created_at?: string
           email?: string | null
           email_confirmed_at?: string | null
+          first_name: string
           full_name?: string | null
           id: string
+          last_name: string
           last_sign_in_at?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
+          cpf?: string
           created_at?: string
           email?: string | null
           email_confirmed_at?: string | null
+          first_name?: string
           full_name?: string | null
           id?: string
+          last_name?: string
           last_sign_in_at?: string | null
           updated_at?: string
         }
