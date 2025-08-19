@@ -88,53 +88,6 @@
     "acceptedBrands": "Bandeiras aceitas",
     "copyright": "Todos os direitos reservados."
   },
-  "admin": {
-    "settings": {
-      "title": "Configurações do site",
-      "subtitle": "Nome, logo, paleta de cores (RGB) e tema claro/escuro.",
-      "saved": "Configurações salvas",
-      "save_error": "Erro ao salvar",
-      "identity": "Identidade",
-      "site_name": "Nome do site",
-      "logo": "Logo",
-      "upload_error_logo": "Erro ao enviar logo",
-      "upload_error_hero": "Erro ao enviar imagem hero",
-      "upload_error_favicon": "Erro ao enviar favicon",
-      "color_palette": "Paleta de cores (RGB)",
-      "primary": "Primária",
-      "accent": "Acento",
-      "save_palette": "Salvar paleta",
-      "theme": "Tema",
-      "light_mode": "Modo claro",
-      "dark_mode": "Modo escuro",
-      "site_images": "Imagens do Site",
-      "hero_image": "Imagem Hero Principal",
-      "favicon": "Favicon (PNG)",
-      "favicon_note": "Importante: Use PNG/JPG. Arquivos .ico não são suportados.",
-      "promo": "Promo",
-      "promo_html": "HTML promocional",
-      "payments": "Pagamentos",
-      "stripe_enabled": "Stripe habilitado",
-      "stripe_key": "Stripe Publishable Key"
-    },
-    "moderate": {
-      "title": "Moderação de anúncios",
-      "subtitle": "Aprove os anúncios pendentes e gerencie o destaque.",
-      "approved": "Anúncio aprovado",
-      "approve_error": "Erro ao aprovar",
-      "highlight_error": "Erro ao atualizar destaque",
-      "no_pending": "Não há anúncios pendentes.",
-      "created_at": "Criado em",
-      "no_price": "sem preço"
-    },
-    "orders": {
-      "title": "Pedidos",
-      "subtitle": "Acompanhe os últimos pedidos e atualize o status.",
-      "update_error": "Erro ao atualizar status",
-      "user": "usuario",
-      "listing": "anúncio"
-    }
-  },
   "credits": {
     "title": "Gerenciar Créditos",
     "description": "Compre créditos para destacar seus anúncios e aumentar sua visibilidade.",
@@ -732,43 +685,6 @@
     "profile_updated": "Perfil atualizado com sucesso!",
     "request_sent": "Solicitação enviada com sucesso!",
     "link_created": "Link de afiliado criado com sucesso!"
-  },
-  "admin": {
-    "users": {
-      "manage": "Gerenciar usuários",
-      "manage_desc": "Gerencie usuários e suas permissões no sistema",
-      "filters": "Filtros",
-      "search_user": "Buscar usuário",
-      "search_placeholder": "Buscar por nome ou email...",
-      "role_filter": "Filtrar por função",
-      "all_roles": "Todas as funções",
-      "admins": "Administradores",
-      "moderators": "Moderadores",
-      "regular_users": "Usuários regulares",
-      "no_users_found": "Nenhum usuário encontrado",
-      "name_not_provided": "Nome não fornecido",
-      "email_not_confirmed": "Email não confirmado",
-      "registered_on": "Registrado em",
-      "last_access": "Último acesso",
-      "role_admin": "Admin",
-      "role_moderator": "Moderador",
-      "role_user": "Usuário",
-      "make_admin": "Tornar Admin",
-      "make_moderator": "Tornar Moderador",
-      "remove_admin": "Remover Admin",
-      "remove_moderator": "Remover Moderador",
-      "remove_admin_title": "Remover privilégios de administrador",
-      "remove_admin_desc": "Tem certeza que deseja remover os privilégios de administrador de",
-      "remove_moderator_title": "Remover privilégios de moderador",
-      "remove_moderator_desc": "Tem certeza que deseja remover os privilégios de moderador de",
-      "cancel": "Cancelar",
-      "role_added": "Função atribuída com sucesso",
-      "role_removed": "Função removida com sucesso",
-      "role_add_error": "Erro ao atribuir função",
-      "role_remove_error": "Erro ao remover função",
-      "role_exists": "Usuário já possui esta função",
-      "error_prefix": "Erro ao carregar usuários:"
-    }
   }
 }
 
