@@ -50,7 +50,7 @@ const NewPassword = () => {
       } else {
         toast({
           title: "Sessão inválida",
-          description: "Link de redefinição de senha expirado ou inválido.",
+          description: "Link de redefinição de senha expirado ou inválido. Solicite um novo link.",
           variant: "destructive",
         });
         navigate("/esqueceu-senha");

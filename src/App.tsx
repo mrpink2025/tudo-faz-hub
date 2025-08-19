@@ -115,7 +115,7 @@ const App = () => (
             <Route path="/pagamento-cancelado" element={<PaymentCanceled />} />
             <Route path="/entrar" element={<Auth />} />
             <Route path="/esqueceu-senha" element={<PasswordReset />} />
-            <Route path="/redefinir-senha" element={<NewPassword />} />
+            <Route path="/nova-senha" element={<NewPassword />} />
             <Route path="/confirmar-email" element={<EmailConfirmation />} />
             <Route path="/termos" element={<Terms />} />
             <Route path="/privacidade" element={<Privacy />} />

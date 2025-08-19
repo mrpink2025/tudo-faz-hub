@@ -38,9 +38,10 @@ const PasswordReset = () => {
     setIsLoading(true);
     
     try {
-      const redirectUrl = `${window.location.origin}/redefinir-senha`;
+      // Construir URL de redirecionamento com token único
+      const redirectUrl = `${window.location.origin}/nova-senha`;
       
-      // Primeiro, usar a função nativa do Supabase
+      // Usar a função nativa do Supabase que já gera token único automaticamente
       const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
         redirectTo: redirectUrl,
       });
