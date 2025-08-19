@@ -13,17 +13,41 @@ export default function Footer() {
             {t("footer.description")}
           </p>
         </div>
-        <nav className="flex items-center gap-4 md:justify-end text-sm text-muted-foreground">
-          <Link to="/explorar" className="hover:text-foreground transition">{t("footer.links.explore")}</Link>
-          <Link to="/publicar" className="hover:text-foreground transition">{t("footer.links.publish")}</Link>
-          <Link to="/entrar" className="hover:text-foreground transition">{t("footer.links.login")}</Link>
+        <nav className="flex items-center gap-4 md:justify-end text-sm text-muted-foreground" role="navigation" aria-label="Footer navigation">
+          <Link 
+            to="/explorar" 
+            className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
+            aria-label={t("footer.links.explore")}
+          >
+            {t("footer.links.explore")}
+          </Link>
+          <Link 
+            to="/publicar" 
+            className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
+            aria-label={t("footer.links.publish")}
+          >
+            {t("footer.links.publish")}
+          </Link>
+          <Link 
+            to="/entrar" 
+            className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
+            aria-label={t("footer.links.login")}
+          >
+            {t("footer.links.login")}
+          </Link>
         </nav>
       </div>
       <div className="border-t">
         <div className="container py-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>{t("footer.poweredBy")}</span>
-            <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" aria-label="Stripe payments">
+            <a 
+              href="https://stripe.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              aria-label="Stripe payments - opens in new tab"
+              className="hover:opacity-80 focus:opacity-80 transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+            >
               <img src="https://cdn.simpleicons.org/stripe" alt="Stripe logo" width="64" height="24" loading="lazy" decoding="async" />
             </a>
           </div>
@@ -39,9 +63,21 @@ export default function Footer() {
       <div className="border-t">
         <div className="container py-4 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-2">
           <span>© {year} tudofaz.com — {t("footer.copyright")}</span>
-          <nav className="flex items-center gap-4">
-            <Link to="/termos" className="hover:text-foreground transition">Termos de Uso</Link>
-            <Link to="/privacidade" className="hover:text-foreground transition">Política de Privacidade</Link>
+          <nav className="flex items-center gap-4" role="navigation" aria-label="Legal navigation">
+            <Link 
+              to="/termos" 
+              className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
+              aria-label="Termos de Uso"
+            >
+              Termos de Uso
+            </Link>
+            <Link 
+              to="/privacidade" 
+              className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
+              aria-label="Política de Privacidade"
+            >
+              Política de Privacidade
+            </Link>
           </nav>
         </div>
       </div>
