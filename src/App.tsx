@@ -40,7 +40,14 @@ import { AffiliateNotifications } from "./components/notifications/AffiliateNoti
 import { TelemetryProvider } from "./components/monitoring/TelemetryProvider";
 import DynamicFavicon from "./components/branding/DynamicFavicon";
 import { SearchProvider } from "./contexts/SearchContext";
+import { useNativePushNotifications } from "./hooks/useNativePushNotifications";
 import "./i18n";
+
+// Componente para inicializar capacidades nativas
+const NativeCapabilities = () => {
+  useNativePushNotifications();
+  return null;
+};
 
 const queryClient = new QueryClient();
 const App = () => (
@@ -52,6 +59,7 @@ const App = () => (
         <SearchProvider>
           <TelemetryProvider>
             <BrandingLoader />
+            <NativeCapabilities />
             <DynamicFavicon />
           <Header />
           <Routes>
