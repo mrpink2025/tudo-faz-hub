@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - 首页", "explore": "探索", "messages": "消息", "login": "登录", "publish": "发布帖子", "publish_short": "发布", "affiliates": "联盟", "advertiser": "广告商", "orders": "订单", "seller_dashboard": "卖家面板", "admin_panel": "管理面板", "logout": "退出" },
+  "nav": { "home_aria": "tudofaz - 首页", "explore": "探索", "messages": "消息", "login": "登录", "publish": "发布帖子", "publish_short": "发布", "affiliates": "联盟", "advertiser": "广告商", "orders": "订单", "seller_dashboard": "卖家面板", "admin_panel": "管理面板", "logout": "退出", "menu": "菜单" },
   "common": { "loading": "加载中..." },
   "home": { "tagline_small": "本地综合交易平台", "hero_description": "产品、服务、工作、房地产等更多内容就在您身边。几分钟内发布广告，触达您的社区。", "credit_tooltip": "登录以管理积分和亮点" },
   "promo": {
@@ -291,6 +291,9 @@
       "frequent_actions": "最频繁操作",
       "performance_metrics": "性能指标"
     }
+  },
+  "credits": {
+    "nav": "积分"
   },
   "auth": {
     "login_required": "需要登录",

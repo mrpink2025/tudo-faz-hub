@@ -25,7 +25,7 @@ export const MobileMenuDropdown = ({ user }: MobileMenuDropdownProps) => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
           <Menu className="h-4 w-4 mr-1" />
-          Menu
+          {t("nav.menu")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover text-foreground z-50">

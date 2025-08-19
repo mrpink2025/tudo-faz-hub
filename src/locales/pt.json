@@ -1,6 +1,6 @@
 {
   "site": { "name": "tudofaz.com" },
-  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Painel do Vendedor", "admin_panel": "Painel Admin", "logout": "Sair" },
+  "nav": { "home_aria": "tudofaz - início", "explore": "Explorar", "messages": "Mensagens", "login": "Entrar", "publish": "Publicar anúncio", "publish_short": "Publicar", "affiliates": "Afiliados", "advertiser": "Anunciante", "orders": "Pedidos", "seller_dashboard": "Painel do Vendedor", "admin_panel": "Painel Admin", "logout": "Sair", "menu": "Menu" },
   "common": { 
     "loading": "Carregando...", 
     "error": "Erro", 
@@ -82,6 +82,7 @@
     "copyright": "Todos os direitos reservados."
   },
   "credits": {
+    "nav": "Créditos",
     "title": "Gerenciar Créditos",
     "description": "Compre créditos para destacar seus anúncios e aumentar sua visibilidade.",
     "balance": "Saldo atual",
