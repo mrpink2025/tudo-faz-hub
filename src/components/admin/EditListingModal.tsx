@@ -121,10 +121,16 @@ export function EditListingModal({ listingId, open, onOpenChange }: EditListingM
     }
   }, [listingImages]);
 
-  const getCategoryType = (categoryId: string) => {
+  const getCategoryType = (categoryId: string): "clothes" | "shoes" | "accessories" => {
     const category = categories.find(c => c.id === categoryId);
-    return category?.name_pt?.toLowerCase().includes('roupas') || 
-           category?.name_pt?.toLowerCase().includes('calçados') ? 'clothes' : 'accessories';
+    const categoryName = category?.name_pt?.toLowerCase() || '';
+    
+    if (categoryName.includes('calçad') || categoryName.includes('sapato') || categoryName.includes('tênis')) {
+      return 'shoes';
+    } else if (categoryName.includes('roupas') || categoryName.includes('camisa') || categoryName.includes('calça')) {
+      return 'clothes';
+    }
+    return 'accessories';
   };
 
   // Update listing mutation

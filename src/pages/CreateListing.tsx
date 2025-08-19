@@ -76,7 +76,7 @@ const CreateListing = () => {
   // Categorias que requerem tamanhos
   const getCategoryType = (categoryName: string): "shoes" | "clothes" | "accessories" | null => {
     const name = categoryName.toLowerCase();
-    if (name.includes("sapato") || name.includes("tênis") || name.includes("calçado") || name.includes("bota") || name.includes("sandália")) {
+    if (name.includes("sapato") || name.includes("tênis") || name.includes("calçad") || name.includes("bota") || name.includes("sandália")) {
       return "shoes";
     }
     if (name.includes("roupa") || name.includes("camisa") || name.includes("calça") || name.includes("vestido") || name.includes("blusa") || name.includes("camiseta")) {
