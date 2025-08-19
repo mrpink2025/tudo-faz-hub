@@ -501,5 +501,24 @@
     "revenue_total": "总收入",
     "completion_rate": "完成率",
     "requires_attention": "需要关注"
+  },
+  "pwa": {
+    "install_title": "安装 TudoFaz 应用",
+    "install_description": "安装我们的应用获得更好的体验！快速访问、推送通知和离线功能。",
+    "install_button": "安装应用",
+    "not_now": "暂不安装",
+    "features_title": "✨ 已安装应用的功能：",
+    "feature_home_icon": "• 📱 主屏幕图标",
+    "feature_push_notifications": "• 🔔 原生推送通知",
+    "feature_fast_loading": "• 🚀 更快的加载速度",
+    "feature_offline": "• 📶 离线工作",
+    "app_installed_title": "🎉 应用已安装！",
+    "app_installed_description": "TudoFaz Hub 已成功安装到您的设备上！",
+    "install_instructions_title": "如何安装 TudoFaz 应用",
+    "install_instructions_intro": "安装应用：\n\n",
+    "install_android_chrome": "📱 在 Chrome Android 上：\n1. 点击右上角的菜单 (⋮)\n2. 选择"安装应用"或"添加到主屏幕"\n3. 确认安装",
+    "install_android_firefox": "📱 在 Firefox Android 上：\n1. 点击菜单 (⋮)\n2. 选择"安装"\n3. 确认安装",
+    "install_android_general": "📱 在您的 Android 浏览器上：\n1. 访问浏览器菜单\n2. 寻找"安装应用"或"添加到主屏幕"\n3. 确认安装",
+    "install_desktop": "💻 在您的浏览器上：\n1. 在地址栏中寻找安装图标\n2. 或访问菜单并寻找"安装应用"\n3. 确认安装"
   }
 }

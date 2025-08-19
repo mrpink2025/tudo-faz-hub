@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Download, Smartphone, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Capacitor } from '@capacitor/core';
+import { useTranslation } from 'react-i18next';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -16,6 +17,7 @@ export const PWAInstallPrompt = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Verificar se já está instalado como PWA
@@ -58,8 +60,8 @@ export const PWAInstallPrompt = () => {
       setDeferredPrompt(null);
       
       toast({
-        title: '🎉 App Instalado!',
-        description: 'TudoFaz Hub foi instalado com sucesso no seu dispositivo!',
+        title: t('pwa.app_installed_title'),
+        description: t('pwa.app_installed_description'),
         duration: 5000,
       });
     };
@@ -117,32 +119,20 @@ export const PWAInstallPrompt = () => {
     const isChrome = /Chrome/i.test(navigator.userAgent);
     const isFirefox = /Firefox/i.test(navigator.userAgent);
     
-    let instructions = 'Para instalar o app:\n\n';
+    let instructions = t('pwa.install_instructions_intro');
     
     if (isAndroid && isChrome) {
-      instructions += '📱 No Chrome Android:\n' +
-                     '1. Toque no menu (⋮) no canto superior direito\n' +
-                     '2. Selecione "Instalar app" ou "Adicionar à tela inicial"\n' +
-                     '3. Confirme a instalação';
+      instructions += t('pwa.install_android_chrome');
     } else if (isAndroid && isFirefox) {
-      instructions += '📱 No Firefox Android:\n' +
-                     '1. Toque no menu (⋮)\n' +
-                     '2. Selecione "Instalar"\n' +
-                     '3. Confirme a instalação';
+      instructions += t('pwa.install_android_firefox');
     } else if (isAndroid) {
-      instructions += '📱 No seu navegador Android:\n' +
-                     '1. Acesse o menu do navegador\n' +
-                     '2. Procure por "Instalar app" ou "Adicionar à tela inicial"\n' +
-                     '3. Confirme a instalação';
+      instructions += t('pwa.install_android_general');
     } else {
-      instructions += '💻 No seu navegador:\n' +
-                     '1. Procure pelo ícone de instalação na barra de endereços\n' +
-                     '2. Ou acesse o menu e procure "Instalar app"\n' +
-                     '3. Confirme a instalação';
+      instructions += t('pwa.install_desktop');
     }
 
     toast({
-      title: 'Como instalar o app TudoFaz',
+      title: t('pwa.install_instructions_title'),
       description: instructions,
       duration: 10000,
     });
@@ -166,7 +156,7 @@ export const PWAInstallPrompt = () => {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
               <Smartphone className="h-5 w-5 text-primary" />
-              <CardTitle className="text-base">Instalar o app TudoFaz</CardTitle>
+              <CardTitle className="text-base">{t('pwa.install_title')}</CardTitle>
             </div>
             <Button
               variant="ghost"
@@ -178,8 +168,7 @@ export const PWAInstallPrompt = () => {
             </Button>
           </div>
           <CardDescription className="text-sm">
-            Instale nosso app para uma experiência ainda melhor! 
-            Acesso rápido, notificações push e funciona offline.
+            {t('pwa.install_description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0">
@@ -190,7 +179,7 @@ export const PWAInstallPrompt = () => {
               size="sm"
             >
               <Download className="mr-2 h-4 w-4" />
-              Instalar App
+              {t('pwa.install_button')}
             </Button>
             <Button 
               variant="outline" 
@@ -198,18 +187,18 @@ export const PWAInstallPrompt = () => {
               size="sm"
               className="h-9"
             >
-              Agora não
+              {t('pwa.not_now')}
             </Button>
           </div>
           
           <div className="mt-3 text-xs text-muted-foreground">
-            ✨ Funcionalidades do app instalado:
+            {t('pwa.features_title')}
           </div>
           <div className="text-xs text-muted-foreground mt-1 space-y-1">
-            <div>• 📱 Ícone na tela inicial</div>
-            <div>• 🔔 Notificações push nativas</div>
-            <div>• 🚀 Carregamento mais rápido</div>
-            <div>• 📶 Funciona offline</div>
+            <div>{t('pwa.feature_home_icon')}</div>
+            <div>{t('pwa.feature_push_notifications')}</div>
+            <div>{t('pwa.feature_fast_loading')}</div>
+            <div>{t('pwa.feature_offline')}</div>
           </div>
         </CardContent>
       </Card>

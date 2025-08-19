@@ -518,5 +518,24 @@
     "revenue_total": "Total Revenue",
     "completion_rate": "completion rate",
     "requires_attention": "Require attention"
+  },
+  "pwa": {
+    "install_title": "Install TudoFaz app",
+    "install_description": "Install our app for an even better experience! Quick access, push notifications and works offline.",
+    "install_button": "Install App",
+    "not_now": "Not now",
+    "features_title": "✨ Installed app features:",
+    "feature_home_icon": "• 📱 Home screen icon",
+    "feature_push_notifications": "• 🔔 Native push notifications",
+    "feature_fast_loading": "• 🚀 Faster loading",
+    "feature_offline": "• 📶 Works offline",
+    "app_installed_title": "🎉 App Installed!",
+    "app_installed_description": "TudoFaz Hub has been successfully installed on your device!",
+    "install_instructions_title": "How to install TudoFaz app",
+    "install_instructions_intro": "To install the app:\n\n",
+    "install_android_chrome": "📱 On Chrome Android:\n1. Tap the menu (⋮) in the top right corner\n2. Select \"Install app\" or \"Add to home screen\"\n3. Confirm installation",
+    "install_android_firefox": "📱 On Firefox Android:\n1. Tap the menu (⋮)\n2. Select \"Install\"\n3. Confirm installation",
+    "install_android_general": "📱 On your Android browser:\n1. Access the browser menu\n2. Look for \"Install app\" or \"Add to home screen\"\n3. Confirm installation",
+    "install_desktop": "💻 On your browser:\n1. Look for the installation icon in the address bar\n2. Or access the menu and look for \"Install app\"\n3. Confirm installation"
   }
 }

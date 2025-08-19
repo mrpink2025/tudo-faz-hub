@@ -730,6 +730,25 @@
     "revenue_total": "Receita Total",
     "completion_rate": "taxa de conclusão",
     "requires_attention": "Requerem atenção"
+  },
+  "pwa": {
+    "install_title": "Instalar o app TudoFaz",
+    "install_description": "Instale nosso app para uma experiência ainda melhor! Acesso rápido, notificações push e funciona offline.",
+    "install_button": "Instalar App",
+    "not_now": "Agora não",
+    "features_title": "✨ Funcionalidades do app instalado:",
+    "feature_home_icon": "• 📱 Ícone na tela inicial",
+    "feature_push_notifications": "• 🔔 Notificações push nativas", 
+    "feature_fast_loading": "• 🚀 Carregamento mais rápido",
+    "feature_offline": "• 📶 Funciona offline",
+    "app_installed_title": "🎉 App Instalado!",
+    "app_installed_description": "TudoFaz Hub foi instalado com sucesso no seu dispositivo!",
+    "install_instructions_title": "Como instalar o app TudoFaz",
+    "install_instructions_intro": "Para instalar o app:\n\n",
+    "install_android_chrome": "📱 No Chrome Android:\n1. Toque no menu (⋮) no canto superior direito\n2. Selecione \"Instalar app\" ou \"Adicionar à tela inicial\"\n3. Confirme a instalação",
+    "install_android_firefox": "📱 No Firefox Android:\n1. Toque no menu (⋮)\n2. Selecione \"Instalar\"\n3. Confirme a instalação",
+    "install_android_general": "📱 No seu navegador Android:\n1. Acesse o menu do navegador\n2. Procure por \"Instalar app\" ou \"Adicionar à tela inicial\"\n3. Confirme a instalação",
+    "install_desktop": "💻 No seu navegador:\n1. Procure pelo ícone de instalação na barra de endereços\n2. Ou acesse o menu e procure \"Instalar app\"\n3. Confirme a instalação"
   }
 }
 
