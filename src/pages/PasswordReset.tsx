@@ -36,6 +36,7 @@ const PasswordReset = () => {
     try {
       const redirectUrl = `${window.location.origin}/redefinir-senha`;
       
+      // Primeiro, usar a função nativa do Supabase
       const { error } = await supabase.auth.resetPasswordForEmail(values.email, {
         redirectTo: redirectUrl,
       });
@@ -47,6 +48,18 @@ const PasswordReset = () => {
           variant: "destructive",
         });
         return;
+      }
+
+      // Em paralelo, enviar um email personalizado via edge function
+      try {
+        await supabase.functions.invoke('send-password-reset', {
+          body: {
+            email: values.email,
+            resetUrl: redirectUrl,
+          },
+        });
+      } catch (customEmailError) {
+        console.warn("Custom email failed, but native reset still works:", customEmailError);
       }
 
       setEmailSent(true);
