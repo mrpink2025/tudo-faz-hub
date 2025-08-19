@@ -13,10 +13,9 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // Forçar refresh do logo com timestamp único
-        const cacheBust = `?t=${Date.now()}`;
+        // Usar a função RPC sem cache bust na URL
         const response = await fetch(
-          `https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/rpc/get_site_settings_public${cacheBust}`,
+          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/rpc/get_site_settings_public',
           {
             method: 'POST',
             headers: {
@@ -30,23 +29,25 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
         const userData = await response.json();
         
         if (userData && userData.length > 0 && userData[0].logo_url) {
-          // Adicionar cache bust mais agressivo
-          const imageWithCacheBust = `${userData[0].logo_url}?v=${Date.now()}&r=${Math.random()}`;
+          // Forçar novo logo com cache bust apenas na imagem
+          const imageWithCacheBust = `${userData[0].logo_url}?v=${Date.now()}`;
           setLogoUrl(imageWithCacheBust);
         } else {
-          setLogoUrl(defaultLogo);
+          // Usar novo logo por padrão
+          setLogoUrl('/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png');
         }
       } catch (error) {
         console.log('Error fetching logo:', error);
-        setLogoUrl(defaultLogo);
+        // Usar novo logo em caso de erro
+        setLogoUrl('/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png');
       }
     };
 
     // Fetch inicial
     fetchLogo();
     
-    // Polling mais frequente para garantir atualizações
-    const interval = setInterval(fetchLogo, 2000);
+    // Polling para atualizações
+    const interval = setInterval(fetchLogo, 3000);
     
     return () => clearInterval(interval);
   }, []);
