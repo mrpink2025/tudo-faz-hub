@@ -1,3 +1,32 @@
+/**
+ * ============================================================================
+ * ⚙️ TUDOFAZ HUB - VITE BUILD CONFIGURATION
+ * ============================================================================
+ * 
+ * Vite configuration for optimal development and production builds
+ * Includes performance optimizations, code splitting, and development tools
+ * 
+ * @author by_arturalves
+ * @file vite.config.ts
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Build Optimizations:
+ * - 📦 Manual chunk splitting for better caching
+ * - 🔄 Hash-based filenames for cache busting
+ * - ⚡ React SWC for faster builds
+ * - 🎯 Path aliases for clean imports
+ * - 🛠️ Development-specific tooling
+ * 
+ * Performance Features:
+ * - Vendor chunk separation
+ * - UI library chunking
+ * - Router-specific chunking
+ * - Asset optimization
+ * 
+ * ============================================================================
+ */
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";

@@ -1,3 +1,35 @@
+/**
+ * ============================================================================
+ * 🚀 TUDOFAZ HUB - MARKETPLACE PLATFORM
+ * ============================================================================
+ * 
+ * Main entry point for the TudoFaz Hub marketplace application
+ * Enterprise-grade marketplace with real-time features and PWA capabilities
+ * 
+ * @author by_arturalves
+ * @version 1.0.0 
+ * @year 2025
+ * @description Advanced marketplace platform built with React 18 + TypeScript
+ * 
+ * Features:
+ * - 🛒 Complete E-commerce system
+ * - 💬 Real-time chat and notifications  
+ * - 🎯 Advanced affiliate program
+ * - 📊 Business analytics dashboard
+ * - 🔒 Enterprise security (RLS, validation, rate limiting)
+ * - 📱 Progressive Web App (PWA)
+ * - 🌍 Multi-language support (PT, EN, ES, ZH)
+ * - ⚡ Optimized performance (Core Web Vitals)
+ * 
+ * Tech Stack:
+ * - Frontend: React 18, TypeScript, Tailwind CSS, Vite
+ * - Backend: Supabase (PostgreSQL, Edge Functions, Real-time)
+ * - Performance: React Query, Code Splitting, Service Workers
+ * - Security: Row Level Security, Zod Validation, Rate Limiting
+ * 
+ * ============================================================================
+ */
+
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'

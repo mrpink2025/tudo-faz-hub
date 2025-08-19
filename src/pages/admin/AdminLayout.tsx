@@ -1,3 +1,34 @@
+/**
+ * ============================================================================
+ * 🛡️ TUDOFAZ HUB - ADMIN LAYOUT COMPONENT
+ * ============================================================================
+ * 
+ * Administrative layout with sidebar navigation for admin panel
+ * Provides structure and navigation for all admin pages
+ * 
+ * @author by_arturalves
+ * @component AdminLayout
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Features:
+ * - 📊 Admin sidebar navigation
+ * - 🔒 Protected admin routes
+ * - 📱 Responsive admin interface
+ * - 🎨 Consistent admin theming
+ * - 🌐 Multi-language admin panel
+ * 
+ * Admin Capabilities:
+ * - 👥 User management and moderation
+ * - 📋 Listing approval and management
+ * - 📊 Sales reports and analytics
+ * - ⚙️ System settings configuration
+ * - 🔍 SEO management tools
+ * - 📈 Business performance monitoring
+ * 
+ * ============================================================================
+ */
+
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

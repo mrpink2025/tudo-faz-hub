@@ -1,3 +1,33 @@
+/**
+ * ============================================================================
+ * ⚙️ TUDOFAZ HUB - TAILWIND CSS CONFIGURATION
+ * ============================================================================
+ * 
+ * Tailwind CSS configuration with custom design system integration
+ * Extends default theme with semantic tokens and custom utilities
+ * 
+ * @author by_arturalves
+ * @file tailwind.config.ts  
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Configuration Features:
+ * - 🎨 Custom color palette integration
+ * - 📐 Extended spacing and sizing scale
+ * - 🔤 Custom font family definitions
+ * - ✨ Animation and transition utilities
+ * - 📱 Responsive breakpoint configuration
+ * - 🎯 Component-specific utilities
+ * 
+ * Design System Integration:
+ * - HSL color variables from index.css
+ * - Semantic naming conventions
+ * - Dark/Light mode support
+ * - Accessibility-focused defaults
+ * 
+ * ============================================================================
+ */
+
 import type { Config } from "tailwindcss";
 
 export default {

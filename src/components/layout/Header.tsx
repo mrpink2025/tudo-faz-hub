@@ -1,3 +1,28 @@
+/**
+ * ============================================================================
+ * 🧭 TUDOFAZ HUB - HEADER NAVIGATION COMPONENT
+ * ============================================================================
+ * 
+ * Main navigation header with responsive design and dynamic user state
+ * Handles authentication, search, categories, and mobile navigation
+ * 
+ * @author by_arturalves
+ * @component Header
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Features:
+ * - 🔍 Global search integration
+ * - 📱 Mobile-responsive navigation
+ * - 👤 Dynamic user authentication state
+ * - 🎨 Category dropdown menu
+ * - 🔔 Notification center integration
+ * - 🌐 Language switching support
+ * - 🎯 Admin panel access for authorized users
+ * 
+ * ============================================================================
+ */
+
 import { Link, NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";

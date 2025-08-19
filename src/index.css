@@ -1,3 +1,33 @@
+/**
+ * ============================================================================
+ * 🎨 TUDOFAZ HUB - GLOBAL STYLES & DESIGN SYSTEM
+ * ============================================================================
+ * 
+ * Global CSS definitions, design tokens, and Tailwind configuration
+ * Complete design system with semantic tokens and HSL color variables
+ * 
+ * @author by_arturalves
+ * @file index.css
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Design System Features:
+ * - 🎨 HSL color tokens for consistent theming
+ * - 🌓 Dark/Light mode support
+ * - 📐 Spacing and sizing tokens
+ * - ✨ Animation and transition definitions
+ * - 🔤 Typography scale and font families
+ * - 🎯 Accessibility-first approach
+ * 
+ * Architecture:
+ * - CSS Custom Properties for theming
+ * - Semantic color naming convention
+ * - Tailwind CSS integration
+ * - Component-level style isolation
+ * 
+ * ============================================================================
+ */
+
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500;700&display=swap');
 

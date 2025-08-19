@@ -1,3 +1,34 @@
+/**
+ * ============================================================================
+ * 🏗️ TUDOFAZ HUB - MAIN APPLICATION COMPONENT
+ * ============================================================================
+ * 
+ * Core application router and provider setup for the TudoFaz marketplace
+ * Handles routing, global state, and application-wide components
+ * 
+ * @author by_arturalves
+ * @component App
+ * @version 1.0.0
+ * @year 2025
+ * 
+ * Architecture:
+ * - 📡 React Query for server state management
+ * - 🛣️ React Router for client-side routing  
+ * - 🔔 Toast notifications system
+ * - 🎨 Theme and styling providers
+ * - 📊 Analytics and telemetry
+ * - 🔒 Authentication routing guards
+ * - 📱 PWA capabilities integration
+ * 
+ * Performance Features:
+ * - ⚡ Code splitting on route level
+ * - 🎯 Lazy loading of components
+ * - 📈 Real-time performance monitoring
+ * - 🔄 Service worker integration
+ * 
+ * ============================================================================
+ */
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";

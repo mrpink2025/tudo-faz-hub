@@ -1,3 +1,26 @@
+/**
+ * ============================================================================
+ * 🦶 TUDOFAZ HUB - FOOTER COMPONENT  
+ * ============================================================================
+ * 
+ * Site footer with links, social media, and legal information
+ * Responsive design with multi-language support
+ * 
+ * @author by_arturalves
+ * @component Footer
+ * @version 1.0.0  
+ * @year 2025
+ * 
+ * Features:
+ * - 🔗 Legal and informational links
+ * - 📧 Contact information
+ * - 🌐 Multi-language footer content
+ * - 📱 Responsive layout
+ * - ♿ Accessibility compliant
+ * 
+ * ============================================================================
+ */
+
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
