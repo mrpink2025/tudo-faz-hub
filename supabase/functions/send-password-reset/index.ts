@@ -1,179 +1,119 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
+import React from 'npm:react@18.3.1'
+import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0'
+import { Resend } from 'npm:resend@4.0.0'
+import { renderAsync } from 'npm:@react-email/components@0.0.22'
+import { PasswordResetEmail } from './_templates/password-reset.tsx'
 
-console.log("🚀 Password reset function starting...");
+console.log("🚀 Password reset webhook function starting...");
 
-const resendApiKey = Deno.env.get("RESEND_API_KEY");
-const supabaseUrl = Deno.env.get('SUPABASE_URL');
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string)
+const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string
 
 console.log("🔍 Environment check:", {
-  hasResendKey: !!resendApiKey,
-  hasSupabaseUrl: !!supabaseUrl,
-  hasServiceKey: !!supabaseServiceKey
+  hasResendKey: !!Deno.env.get('RESEND_API_KEY'),
+  hasHookSecret: !!hookSecret
 });
 
-if (!resendApiKey) {
-  console.error("❌ Missing RESEND_API_KEY");
-}
-
-const resend = new Resend(resendApiKey);
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-interface PasswordResetEmailRequest {
-  email: string;
-  redirectUrl: string;
-}
-
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+Deno.serve(async (req) => {
+  if (req.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 })
   }
 
   try {
-    const { email, redirectUrl }: PasswordResetEmailRequest = await req.json();
-
-    console.log("📧 Processing password reset for:", email);
-    console.log("🔗 Redirect URL:", redirectUrl);
-
-    // Gerar link com token básico (simulando o comportamento do Supabase)
-    const tokenParam = `access_token=${crypto.randomUUID()}&refresh_token=${crypto.randomUUID()}&type=recovery`;
-    const resetLinkWithToken = `${redirectUrl}?${tokenParam}`;
+    const payload = await req.text()
+    const headers = Object.fromEntries(req.headers)
     
-    console.log("🔗 Generated reset link with token");
+    console.log("📨 Received webhook payload");
+    
+    if (!hookSecret) {
+      console.error("❌ Missing SEND_EMAIL_HOOK_SECRET");
+      return new Response('Hook secret not configured', { status: 500 })
+    }
+    
+    const wh = new Webhook(hookSecret)
+    
+    const {
+      user,
+      email_data: { token, token_hash, redirect_to, email_action_type },
+    } = wh.verify(payload, headers) as {
+      user: {
+        email: string
+      }
+      email_data: {
+        token: string
+        token_hash: string
+        redirect_to: string
+        email_action_type: string
+        site_url: string
+      }
+    }
 
-    console.log("📨 Sending beautiful email...");
+    console.log("✅ Webhook verified successfully");
+    console.log("📧 Processing email for:", user.email);
+    console.log("🔒 Action type:", email_action_type);
 
-    // Enviar email bonito personalizado
-    const emailResponse = await resend.emails.send({
-      from: "TudoFaz Hub <noreply@tudofaz.com>",
-      to: [email],
-      subject: "🔑 Redefinir sua senha - TudoFaz Hub",
-      html: `
-        <!DOCTYPE html>
-        <html lang="pt-BR">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Redefinir Senha - TudoFaz Hub</title>
-        </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa;">
-            <table role="presentation" style="width: 100%; border-collapse: collapse;">
-                <tr>
-                    <td align="center" style="padding: 40px 20px;">
-                        <table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                            <!-- Header -->
-                            <tr>
-                                <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
-                                    <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">🔑 TudoFaz Hub</h1>
-                                    <p style="margin: 8px 0 0 0; color: #ffffff; opacity: 0.9; font-size: 16px;">Redefinição de Senha</p>
-                                </td>
-                            </tr>
-                            
-                            <!-- Content -->
-                            <tr>
-                                <td style="padding: 40px 30px;">
-                                    <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 24px; font-weight: 600;">Esqueceu sua senha?</h2>
-                                    
-                                    <p style="margin: 0 0 20px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
-                                        Não se preocupe! Recebemos uma solicitação para redefinir a senha da sua conta no TudoFaz Hub.
-                                    </p>
-                                    
-                                    <p style="margin: 0 0 30px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
-                                        Clique no botão abaixo para criar uma nova senha:
-                                    </p>
-                                    
-                                    <!-- CTA Button -->
-                                    <table role="presentation" style="margin: 0 auto;">
-                                        <tr>
-                                            <td style="border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align: center;">
-                                                <a href="${resetLinkWithToken}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">
-                                                    🔒 Redefinir Minha Senha
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                    <p style="margin: 30px 0 20px 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
-                                        Se o botão não funcionar, copie e cole este link no seu navegador:
-                                    </p>
-                                    
-                                    <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; border-left: 4px solid #667eea; word-break: break-all;">
-                                        <code style="color: #374151; font-size: 14px;">${resetLinkWithToken}</code>
-                                    </div>
-                                    
-                                    <div style="margin: 30px 0; padding: 20px; background-color: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                                        <p style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.5;">
-                                            ⚠️ <strong>Importante:</strong> Este link expira em 1 hora por motivos de segurança. Se não foi você quem solicitou esta redefinição, pode ignorar este email com segurança.
-                                        </p>
-                                    </div>
-                                    
-                                    <div style="margin: 30px 0; padding: 20px; background-color: #dbeafe; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                                        <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.5;">
-                                            🛡️ <strong>Segurança:</strong> Este link é único e só pode ser usado uma vez. Após redefinir sua senha, o link será automaticamente invalidado.
-                                        </p>
-                                    </div>
-                                    
-                                    <div style="margin: 30px 0; padding: 20px; background-color: #f0fdf4; border-radius: 8px; border-left: 4px solid #22c55e;">
-                                        <p style="margin: 0; color: #15803d; font-size: 14px; line-height: 1.5;">
-                                            ✅ <strong>Teste:</strong> Este é um email de teste para verificar se está funcionando corretamente. O link pode redirecionar para uma página de teste.
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Footer -->
-                            <tr>
-                                <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-                                    <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
-                                        Este email foi enviado pelo TudoFaz Hub
-                                    </p>
-                                    <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                                        Se você tem dúvidas, entre em contato conosco.
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </body>
-        </html>
-      `,
-    });
+    // Só processar emails de recovery (redefinição de senha)
+    if (email_action_type !== 'recovery') {
+      console.log("⏭️ Skipping non-recovery email");
+      return new Response(JSON.stringify({ skipped: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
 
-    console.log("✅ Beautiful password reset email sent successfully:", { 
-      id: emailResponse?.data?.id,
-      error: emailResponse?.error 
-    });
+    console.log("🎨 Rendering beautiful email template...");
 
-    return new Response(JSON.stringify({ 
-      success: true, 
-      emailResponse,
-      resetLink: resetLinkWithToken 
-    }), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-    });
-  } catch (error: any) {
-    console.error("💥 Error in send-password-reset function:", error);
+    const html = await renderAsync(
+      React.createElement(PasswordResetEmail, {
+        supabase_url: Deno.env.get('SUPABASE_URL') ?? '',
+        token,
+        token_hash,
+        redirect_to,
+        email_action_type,
+        user_email: user.email,
+      })
+    )
+
+    console.log("📮 Sending beautiful email via Resend...");
+
+    const { data, error } = await resend.emails.send({
+      from: 'TudoFaz Hub <noreply@tudofaz.com>',
+      to: [user.email],
+      subject: '🔑 Redefinir sua senha - TudoFaz Hub',
+      html,
+    })
+
+    if (error) {
+      console.error("❌ Error sending email:", error);
+      throw error
+    }
+
+    console.log("✅ Beautiful password reset email sent successfully:", data?.id);
+
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        success: true, 
+        emailId: data?.id,
+        actionType: email_action_type 
+      }),
+      {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+
+  } catch (error) {
+    console.error("💥 Error in password reset webhook:", error);
+    return new Response(
+      JSON.stringify({
+        error: {
+          message: error.message,
+        },
+      }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 'Content-Type': 'application/json' },
       }
-    );
+    )
   }
-};
-
-serve(handler);
+})
