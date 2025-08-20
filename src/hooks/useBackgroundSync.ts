@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from "@/integrations/supabase/client";
 
 interface BackgroundSyncTask {
   id: string;
@@ -130,56 +131,44 @@ export const useBackgroundSync = () => {
   };
 
   const syncListing = async (task: BackgroundSyncTask) => {
-    const response = await fetch('/rest/v1/listings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${task.token}`,
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc'
-      },
-      body: JSON.stringify(task.data)
-    });
+    // Use secure Supabase client instead of hardcoded credentials
+    const { data, error } = await supabase
+      .from('listings')
+      .insert([task.data])
+      .select();
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    if (error) {
+      throw new Error(`Supabase error: ${error.message}`);
     }
 
-    return response.json();
+    return data;
   };
 
   const syncMessage = async (task: BackgroundSyncTask) => {
-    const response = await fetch('/rest/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${task.token}`,
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc'
-      },
-      body: JSON.stringify(task.data)
-    });
+    // Use secure Supabase client instead of hardcoded credentials
+    const { data, error } = await supabase
+      .from('messages')
+      .insert([task.data])
+      .select();
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    if (error) {
+      throw new Error(`Supabase error: ${error.message}`);
     }
 
-    return response.json();
+    return data;
   };
 
   const syncAnalytics = async (task: BackgroundSyncTask) => {
-    const response = await fetch('https://jprmzutdujnufjyvxtss.supabase.co/functions/v1/telemetry-collector', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc'
-      },
-      body: JSON.stringify(task.data)
+    // Use secure Supabase client instead of hardcoded credentials
+    const { data, error } = await supabase.functions.invoke('telemetry-collector', {
+      body: task.data
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    if (error) {
+      throw new Error(`Supabase function error: ${error.message}`);
     }
 
-    return response.json();
+    return data;
   };
 
   const removeTask = async (taskId: string) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 type LogoProps = {
   className?: string;
@@ -13,32 +14,24 @@ const Logo: React.FC<LogoProps> = ({ className, title = "tudofaz" }) => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // Usar a função RPC sem cache bust na URL
-        const response = await fetch(
-          'https://jprmzutdujnufjyvxtss.supabase.co/rest/v1/rpc/get_site_settings_public',
-          {
-            method: 'POST',
-            headers: {
-              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impwcm16dXRkdWpudWZqeXZ4dHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5Mzc0MDMsImV4cCI6MjA3MDUxMzQwM30.oLRzf4v6IJvWuulfoZVwya6T8AUEWmN2pQNs6kZ4Qhc',
-              'Content-Type': 'application/json',
-              'Cache-Control': 'no-cache'
-            }
-          }
-        );
+        // Use the secure Supabase client instead of hardcoded credentials
+        const { data: userData, error } = await supabase.rpc('get_site_settings_public');
         
-        const userData = await response.json();
+        if (error) {
+          throw error;
+        }
         
         if (userData && userData.length > 0 && userData[0].logo_url) {
-          // Forçar novo logo com cache bust apenas na imagem
+          // Force new logo with cache bust only on the image
           const imageWithCacheBust = `${userData[0].logo_url}?v=${Date.now()}`;
           setLogoUrl(imageWithCacheBust);
         } else {
-          // Usar novo logo por padrão
+          // Use new logo by default
           setLogoUrl('/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png');
         }
       } catch (error) {
         console.log('Error fetching logo:', error);
-        // Usar novo logo em caso de erro
+        // Use new logo in case of error
         setLogoUrl('/lovable-uploads/6f5f4a0d-1623-414f-8740-4490d8c09adb.png');
       }
     };
