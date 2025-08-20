@@ -46,22 +46,28 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
       return;
     }
 
-    // Limpar carrinho e adicionar apenas este item para compra exclusiva
+    // Ir direto para checkout com apenas este item
     try {
       setIsLoading(true);
       
-      // Primeiro limpar o carrinho
-      await clearCart.mutateAsync();
-      
-      // Depois adicionar apenas este item
-      await addToCart.mutateAsync({
-        listingId: listing.id,
-        quantity: 1,
-        sizeId: selectedSize,
+      // Criar checkout direto com este item
+      const { data, error } = await supabase.functions.invoke('create-product-checkout', {
+        body: {
+          items: [{
+            listingId: listing.id,
+            quantity: 1,
+            sizeId: selectedSize,
+          }]
+        }
       });
-      
-      // Redirecionar para página de checkout
-      navigate('/checkout');
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('URL de checkout não recebida');
+      }
     } catch (error: any) {
       toast({
         title: "Erro na compra",
