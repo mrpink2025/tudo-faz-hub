@@ -233,21 +233,28 @@ export default function OrdersManagement() {
         <Card className="shadow-lg">
           <CardContent className="p-0">
             <Tabs defaultValue="all" className="w-full">
-              <div className="border-b bg-muted/30 px-6 py-4">
-                <TabsList className="grid w-full grid-cols-5 bg-background/50">
-                  <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                    Todos ({orders?.length || 0})
-                  </TabsTrigger>
-                  {statusOptions.map((status) => (
+              <div className="border-b bg-muted/30 px-4 md:px-6 py-4">
+                <div className="overflow-x-auto">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full min-w-max md:min-w-0 gap-1 bg-background/50">
                     <TabsTrigger 
-                      key={status.value} 
-                      value={status.value}
-                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                      value="all" 
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs md:text-sm whitespace-nowrap px-2 md:px-4"
                     >
-                      {status.label} ({getOrdersByStatus(status.value).length})
+                      <span className="hidden md:inline">Todos ({orders?.length || 0})</span>
+                      <span className="md:hidden">Todos</span>
                     </TabsTrigger>
-                  ))}
-                </TabsList>
+                    {statusOptions.map((status) => (
+                      <TabsTrigger 
+                        key={status.value} 
+                        value={status.value}
+                        className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs md:text-sm whitespace-nowrap px-2 md:px-4"
+                      >
+                        <span className="hidden md:inline">{status.label} ({getOrdersByStatus(status.value).length})</span>
+                        <span className="md:hidden">{status.label.split(' ')[0]}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
               </div>
 
               <div className="p-6">
