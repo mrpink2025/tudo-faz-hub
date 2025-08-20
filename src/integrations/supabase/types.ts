@@ -1009,6 +1009,8 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          birth_date: string | null
           cpf: string
           created_at: string
           email: string | null
@@ -1018,10 +1020,13 @@ export type Database = {
           id: string
           last_name: string
           last_sign_in_at: string | null
+          phone: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           cpf: string
           created_at?: string
           email?: string | null
@@ -1031,10 +1036,13 @@ export type Database = {
           id: string
           last_name: string
           last_sign_in_at?: string | null
+          phone?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           cpf?: string
           created_at?: string
           email?: string | null
@@ -1044,6 +1052,7 @@ export type Database = {
           id?: string
           last_name?: string
           last_sign_in_at?: string | null
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -1388,6 +1397,65 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      user_addresses: {
+        Row: {
+          city: string
+          complement: string | null
+          country: string | null
+          created_at: string
+          id: string
+          is_default: boolean | null
+          name: string
+          neighborhood: string | null
+          number: string | null
+          postal_code: string
+          state: string
+          street: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city: string
+          complement?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          name: string
+          neighborhood?: string | null
+          number?: string | null
+          postal_code: string
+          state: string
+          street: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city?: string
+          complement?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          neighborhood?: string | null
+          number?: string | null
+          postal_code?: string
+          state?: string
+          street?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_addresses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_message_reads: {
         Row: {

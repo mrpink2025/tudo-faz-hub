@@ -24,6 +24,7 @@
  */
 
 import { Link, NavLink, useSearchParams, useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
@@ -123,6 +124,12 @@ const Header = () => {
                 )}
                 <DropdownMenuItem asChild>
                   <Link to="/seller-dashboard">{t("nav.seller_dashboard")}</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/perfil">
+                    <User className="w-4 h-4 mr-2" />
+                    Meu Perfil
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/mensagens">{t("nav.messages")}</Link>

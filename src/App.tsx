@@ -41,6 +41,7 @@ import Explore from "./pages/Explore";
 import Checkout from "./pages/Checkout";
 import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
+import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
 import PasswordReset from "./pages/PasswordReset";
@@ -106,6 +107,7 @@ const App = () => (
             <Route path="/criar-anuncio" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
             <Route path="/editar-anuncio/:id" element={<ProtectedRoute><EditListing /></ProtectedRoute>} />
             <Route path="/anuncio/:id" element={<ListingDetail />} />
+            <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/seller-dashboard" element={<ProtectedRoute><SellerDashboard /></ProtectedRoute>} />
             <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
             <Route path="/creditos" element={<ProtectedRoute><Credits /></ProtectedRoute>} />
