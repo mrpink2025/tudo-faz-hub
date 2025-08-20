@@ -1555,6 +1555,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_order_field: {
+        Args: { p_field_name: string; p_order_id: string }
+        Returns: boolean
+      }
       can_user_sell: {
         Args: { user_uuid: string }
         Returns: boolean
@@ -1680,6 +1684,10 @@ export type Database = {
           total_sales: number
         }[]
       }
+      get_seller_delivery_info: {
+        Args: { order_id: string }
+        Returns: Json
+      }
       get_site_settings_public: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -1728,6 +1736,14 @@ export type Database = {
           p_success?: boolean
           p_user_agent?: string
           p_user_id: string
+        }
+        Returns: undefined
+      }
+      log_order_access: {
+        Args: {
+          p_accessed_fields?: string[]
+          p_action: string
+          p_order_id: string
         }
         Returns: undefined
       }
