@@ -136,9 +136,15 @@ export default function Profile() {
   // Update profile mutation
   const updateProfile = useMutation({
     mutationFn: async (data: Partial<ProfileData>) => {
+      // Handle empty birth_date - convert empty string to null
+      const updateData = { ...data };
+      if (updateData.birth_date === "") {
+        updateData.birth_date = null as any;
+      }
+      
       const { error } = await supabase
         .from("profiles")
-        .update(data)
+        .update(updateData)
         .eq("id", user?.id);
       
       if (error) throw error;
