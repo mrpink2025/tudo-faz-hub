@@ -24,7 +24,7 @@
  */
 
 import { Link, NavLink, useSearchParams, useNavigate } from "react-router-dom";
-import { User } from "lucide-react";
+import { User, Settings, Shield, MessageCircle, DollarSign, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
 import CategoryMenu from "./CategoryMenu";
@@ -114,31 +114,51 @@ const Header = () => {
                   <AvatarFallback>{user.email?.[0]?.toUpperCase() ?? "U"}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-popover text-foreground z-[100]">
-                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="bg-background/95 backdrop-blur-sm text-foreground z-[100] w-56 border border-border/50 shadow-lg">
+                <DropdownMenuLabel className="px-4 py-2 text-xs text-muted-foreground uppercase tracking-wider">{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {isAdmin && (
-                  <DropdownMenuItem onClick={handleAdminNavigation}>
-                    {t("nav.admin_panel")}
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem asChild>
-                  <Link to="/seller-dashboard">{t("nav.seller_dashboard")}</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/perfil">
-                    <User className="w-4 h-4 mr-2" />
-                    Meu Perfil
+                
+                {/* Meu Perfil como primeira opção */}
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link to="/perfil" className="flex items-center gap-3 px-4 py-2.5 hover:bg-accent/50 transition-colors">
+                    <User className="w-4 h-4 text-primary" />
+                    <span className="font-medium">Meu Perfil</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/mensagens">{t("nav.messages")}</Link>
+                
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link to="/mensagens" className="flex items-center gap-3 px-4 py-2.5 hover:bg-accent/50 transition-colors">
+                    <MessageCircle className="w-4 h-4 text-primary" />
+                    <span>{t("nav.messages")}</span>
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/creditos">{t("credits.nav")}</Link>
+                
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link to="/creditos" className="flex items-center gap-3 px-4 py-2.5 hover:bg-accent/50 transition-colors">
+                    <DollarSign className="w-4 h-4 text-primary" />
+                    <span>{t("credits.nav")}</span>
+                  </Link>
                 </DropdownMenuItem>
+                
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link to="/seller-dashboard" className="flex items-center gap-3 px-4 py-2.5 hover:bg-accent/50 transition-colors">
+                    <Settings className="w-4 h-4 text-primary" />
+                    <span>{t("nav.seller_dashboard")}</span>
+                  </Link>
+                </DropdownMenuItem>
+                
+                {isAdmin && (
+                  <DropdownMenuItem onClick={handleAdminNavigation} className="flex items-center gap-3 px-4 py-2.5 hover:bg-accent/50 transition-colors cursor-pointer">
+                    <Shield className="w-4 h-4 text-destructive" />
+                    <span className="text-destructive font-medium">{t("nav.admin_panel")}</span>
+                  </DropdownMenuItem>
+                )}
+                
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>{t("nav.logout")}</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-3 px-4 py-2.5 hover:bg-destructive/10 text-destructive hover:text-destructive transition-colors cursor-pointer">
+                  <LogOut className="w-4 h-4" />
+                  <span>{t("nav.logout")}</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
