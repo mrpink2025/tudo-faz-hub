@@ -50,7 +50,13 @@ export function useListingSizes(listingId: string) {
         .eq("listing_id", listingId);
 
       if (error) throw error;
-      return data as ListingSize[];
+      
+      // Ordenar os tamanhos retornados pela ordem correta (sort_order)
+      const sortedData = (data as ListingSize[]).sort((a, b) => {
+        return (a.size?.sort_order || 0) - (b.size?.sort_order || 0);
+      });
+      
+      return sortedData;
     },
     enabled: !!listingId,
   });

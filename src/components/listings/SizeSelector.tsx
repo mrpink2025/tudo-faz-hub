@@ -139,44 +139,51 @@ export function SizeSelector({
               </div>
               
               <div className="grid gap-3">
-                {selectedSizes.map((selectedSize) => (
-                  <div key={selectedSize.sizeId} className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
-                    <Badge variant="outline" className="font-medium">
-                      {getSizeName(selectedSize.sizeId)}
-                    </Badge>
-                    
-                    {!readonly && (
-                      <>
-                        <div className="flex items-center gap-2 flex-1">
-                          <Label className="text-sm font-medium min-w-[60px]">Estoque:</Label>
-                          <Input
-                            type="number"
-                            min="0"
-                            value={selectedSize.stockQuantity}
-                            onChange={(e) => updateStock(selectedSize.sizeId, parseInt(e.target.value) || 0)}
-                            className="w-24 h-9"
-                            placeholder="0"
-                          />
-                        </div>
-                        
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => removeSize(selectedSize.sizeId)}
-                          className="h-9 w-9 p-0 hover:bg-destructive/10 hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                    
-                    {readonly && (
-                      <span className="text-sm text-muted-foreground font-medium">
-                        Estoque: {selectedSize.stockQuantity}
-                      </span>
-                    )}
-                  </div>
-                ))}
+                {selectedSizes
+                  // Ordenar tamanhos selecionados pela ordem correta (sort_order)
+                  .sort((a, b) => {
+                    const sizeA = availableSizes.find(s => s.id === a.sizeId);
+                    const sizeB = availableSizes.find(s => s.id === b.sizeId);
+                    return (sizeA?.sort_order || 0) - (sizeB?.sort_order || 0);
+                  })
+                  .map((selectedSize) => (
+                    <div key={selectedSize.sizeId} className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
+                      <Badge variant="outline" className="font-medium">
+                        {getSizeName(selectedSize.sizeId)}
+                      </Badge>
+                      
+                      {!readonly && (
+                        <>
+                          <div className="flex items-center gap-2 flex-1">
+                            <Label className="text-sm font-medium min-w-[60px]">Estoque:</Label>
+                            <Input
+                              type="number"
+                              min="0"
+                              value={selectedSize.stockQuantity}
+                              onChange={(e) => updateStock(selectedSize.sizeId, parseInt(e.target.value) || 0)}
+                              className="w-24 h-9"
+                              placeholder="0"
+                            />
+                          </div>
+                          
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => removeSize(selectedSize.sizeId)}
+                            className="h-9 w-9 p-0 hover:bg-destructive/10 hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </>
+                      )}
+                      
+                      {readonly && (
+                        <span className="text-sm text-muted-foreground font-medium">
+                          Estoque: {selectedSize.stockQuantity}
+                        </span>
+                      )}
+                    </div>
+                  ))}
               </div>
             </div>
           )}
