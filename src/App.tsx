@@ -40,6 +40,7 @@ import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import Checkout from "./pages/Checkout";
 import CreateListing from "./pages/CreateListing";
+import EditListing from "./pages/EditListing";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth";
 import PasswordReset from "./pages/PasswordReset";
@@ -102,6 +103,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/explorar" element={<Explore />} />
             <Route path="/publicar" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
+            <Route path="/criar-anuncio" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
+            <Route path="/editar-anuncio/:id" element={<ProtectedRoute><EditListing /></ProtectedRoute>} />
             <Route path="/anuncio/:id" element={<ListingDetail />} />
             <Route path="/seller-dashboard" element={<ProtectedRoute><SellerDashboard /></ProtectedRoute>} />
             <Route path="/mensagens" element={<ProtectedRoute><Messages /></ProtectedRoute>} />

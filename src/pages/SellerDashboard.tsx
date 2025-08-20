@@ -2,9 +2,13 @@ import { useTranslation } from "react-i18next";
 import { SellerOrdersPanel } from "@/components/seller/SellerOrdersPanel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSellerOrders } from "@/hooks/useEcommerce";
-import { Package, DollarSign, TrendingUp, Clock } from "lucide-react";
+import { Package, DollarSign, TrendingUp, Clock, Plus, List } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { MyListings } from "@/components/MyListings";
+import { Link } from "react-router-dom";
 
 export default function SellerDashboard() {
   const { t } = useTranslation();
@@ -35,7 +39,15 @@ export default function SellerDashboard() {
       <div className="container mx-auto py-8 space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">{t("seller.dashboard")}</h1>
-          <Badge variant="outline">{t("seller.dashboard")}</Badge>
+          <div className="flex gap-2">
+            <Button asChild>
+              <Link to="/criar-anuncio">
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Anúncio
+              </Link>
+            </Button>
+            <Badge variant="outline">{t("seller.dashboard")}</Badge>
+          </div>
         </div>
 
         {/* Estatísticas */}
@@ -93,8 +105,27 @@ export default function SellerDashboard() {
           </Card>
         </div>
 
-        {/* Painel de Pedidos */}
-        <SellerOrdersPanel />
+        {/* Tabs para organizar conteúdo */}
+        <Tabs defaultValue="orders" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="orders" className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              Pedidos
+            </TabsTrigger>
+            <TabsTrigger value="listings" className="flex items-center gap-2">
+              <List className="w-4 h-4" />
+              Meus Anúncios
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="orders" className="mt-6">
+            <SellerOrdersPanel />
+          </TabsContent>
+          
+          <TabsContent value="listings" className="mt-6">
+            <MyListings />
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );

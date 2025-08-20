@@ -10,11 +10,14 @@ import { ProductReviews } from "@/components/ecommerce/ProductReviews";
 import ContactSellerButton from "@/components/chat/ContactSellerButton";
 import { ProductSizeDisplay } from "@/components/ecommerce/ProductSizeDisplay";
 import { ProductVoltageDisplay } from "@/components/ecommerce/ProductVoltageDisplay";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { Edit } from "lucide-react";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
+  const { user } = useSupabaseAuth();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Capturar código de rastreamento de afiliado da URL
@@ -151,8 +154,21 @@ const ListingDetail = () => {
 
       <article>
         <header className="mb-4">
-          <h1 className="font-display text-3xl">{listing.title}</h1>
-          {listing.location && <p className="text-muted-foreground">{listing.location}</p>}
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="font-display text-3xl">{listing.title}</h1>
+              {listing.location && <p className="text-muted-foreground">{listing.location}</p>}
+            </div>
+            
+            {user && user.id === listing.user_id && (
+              <Button asChild variant="outline">
+                <Link to={`/editar-anuncio/${listing.id}`}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Editar Anúncio
+                </Link>
+              </Button>
+            )}
+          </div>
         </header>
 
         <div className="grid gap-6 md:grid-cols-3">
