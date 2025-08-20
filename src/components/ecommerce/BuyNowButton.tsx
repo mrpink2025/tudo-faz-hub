@@ -54,10 +54,13 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
       const { data, error } = await supabase.functions.invoke('create-product-checkout', {
         body: {
           items: [{
-            listingId: listing.id,
+            listing_id: listing.id,
+            title: listing.title,
+            price: listing.price,
             quantity: 1,
-            sizeId: selectedSize,
-          }]
+            size_id: selectedSize,
+          }],
+          seller_id: listing.user_id
         }
       });
 
