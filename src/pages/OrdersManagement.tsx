@@ -167,7 +167,7 @@ export default function OrdersManagement() {
                 Acompanhe e gerencie o status dos pedidos dos seus produtos
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Filter className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
                 {orders?.length || 0} pedidos encontrados
