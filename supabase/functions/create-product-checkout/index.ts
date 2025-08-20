@@ -101,24 +101,53 @@ serve(async (req) => {
       sessionConfig.customer_email = user.email;
     }
 
-    // Pre-fill shipping address if provided
-    if (shipping_address) {
-      sessionConfig.shipping_address_collection = {
-        allowed_countries: ['BR'],
-      };
-      sessionConfig.shipping_options = [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 0, // Frete grátis
-              currency: 'brl',
+    // Always require shipping address and add shipping options
+    sessionConfig.shipping_address_collection = {
+      allowed_countries: ['BR'],
+    };
+    
+    sessionConfig.shipping_options = [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: 1500, // R$ 15,00 PAC
+            currency: 'brl',
+          },
+          display_name: 'PAC - Correios (5-8 dias úteis)',
+          delivery_estimate: {
+            minimum: {
+              unit: 'business_day',
+              value: 5,
             },
-            display_name: 'Frete Grátis',
+            maximum: {
+              unit: 'business_day', 
+              value: 8,
+            },
           },
         },
-      ];
-    }
+      },
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: 2500, // R$ 25,00 Sedex
+            currency: 'brl',
+          },
+          display_name: 'Sedex - Correios (1-3 dias úteis)',
+          delivery_estimate: {
+            minimum: {
+              unit: 'business_day',
+              value: 1,
+            },
+            maximum: {
+              unit: 'business_day',
+              value: 3,
+            },
+          },
+        },
+      },
+    ];
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
