@@ -101,11 +101,21 @@ const CreateListing = () => {
            name.includes("som") ||
            name.includes("eletroportátil") ||
            name.includes("ar condicionado") ||
-           name.includes("ventilador");
+           name.includes("ventilador") ||
+           name.includes("computador") ||
+           name.includes("notebook") ||
+           name.includes("celular") ||
+           name.includes("smartphone") ||
+           name.includes("tablet") ||
+           name.includes("microondas") ||
+           name.includes("geladeira") ||
+           name.includes("fogão") ||
+           name.includes("máquina");
   };
 
   const selectedCategory = categories?.find(c => c.id === subId);
   const categoryType = selectedCategory ? getCategoryType(selectedCategory.name_pt || "") : null;
+  const shouldShowVoltageSelector = selectedCategory ? requiresVoltage(selectedCategory.name_pt || "") : false;
 
   useEffect(() => {
     document.title = `${editId ? t("edit.pageTitle") : t("create.pageTitle")} - tudofaz.com`;
@@ -141,6 +151,7 @@ const CreateListing = () => {
           setInventoryCount(listing.inventory_count?.toString() || "0");
           setMaxQuantityPerPurchase(listing.max_quantity_per_purchase?.toString() || "");
           setSizeRequired(listing.size_required || false);
+          setVoltageRequired(listing.voltage_required || false);
           
           // Load location data
           const { data: location } = await supabase
