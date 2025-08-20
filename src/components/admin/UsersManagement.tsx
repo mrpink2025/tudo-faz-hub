@@ -11,7 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { AdminTableSkeleton } from "@/components/ui/loading-skeletons";
-import { Search, Shield, ShieldCheck, User, Mail, Calendar, UserX } from "lucide-react";
+import { Search, Shield, ShieldCheck, User, Mail, Calendar, UserX, CheckCircle, X } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface UserWithRoles {
   id: string;
@@ -22,6 +23,7 @@ interface UserWithRoles {
   updated_at: string;
   last_sign_in_at: string | null;
   email_confirmed_at: string | null;
+  trusted_seller: boolean;
   user_roles: Array<{ role: string }>;
 }
 
@@ -49,7 +51,8 @@ export default function UsersManagement() {
           created_at,
           updated_at,
           last_sign_in_at,
-          email_confirmed_at
+          email_confirmed_at,
+          trusted_seller
         `)
         .order("created_at", { ascending: false });
 
@@ -147,6 +150,29 @@ export default function UsersManagement() {
     onError: (error: any) => {
       toast({ 
         title: t("admin.users.role_remove_error"), 
+        description: error.message,
+        variant: "destructive"
+      });
+    },
+  });
+
+  // Toggle trusted seller mutation
+  const toggleTrustedSeller = useMutation({
+    mutationFn: async ({ userId, trusted }: { userId: string; trusted: boolean }) => {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ trusted_seller: trusted })
+        .eq("id", userId);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({ title: "Status de vendedor confiável atualizado com sucesso!" });
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Erro ao atualizar status", 
         description: error.message,
         variant: "destructive"
       });
@@ -332,6 +358,15 @@ export default function UsersManagement() {
                     </div>
                     
                     <div className="flex items-center gap-2">
+                      {/* Trusted Seller Badge */}
+                      {user.trusted_seller && (
+                        <Badge variant="default" className="bg-green-600 hover:bg-green-700 text-xs">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          Vendedor Confiável
+                        </Badge>
+                      )}
+                      
+                      {/* Role Badges */}
                       {userRoles.length > 0 ? (
                         userRoles.map((role, index) => (
                           <span key={`${user.id}-${role}-${index}`}>
@@ -348,89 +383,112 @@ export default function UsersManagement() {
                 </CardHeader>
                 
                 <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {/* Make Admin */}
-                    {!userRoles.includes("admin") && (
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => assignRole.mutate({ userId: user.id, role: "admin" })}
-                        disabled={assignRole.isPending}
-                      >
-                        <Shield className="w-4 h-4 mr-1" />
-                        {t("admin.users.make_admin")}
-                      </Button>
-                    )}
+                  <div className="space-y-4">
+                    {/* Trusted Seller Toggle */}
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="font-medium">Vendedor Confiável</p>
+                          <p className="text-sm text-muted-foreground">
+                            Anúncios não precisarão de aprovação manual
+                          </p>
+                        </div>
+                      </div>
+                      <Switch
+                        checked={user.trusted_seller}
+                        onCheckedChange={(checked) => 
+                          toggleTrustedSeller.mutate({ userId: user.id, trusted: checked })
+                        }
+                        disabled={toggleTrustedSeller.isPending}
+                      />
+                    </div>
 
-                    {/* Make Moderator */}
-                    {!userRoles.includes("moderator") && !userRoles.includes("admin") && (
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => assignRole.mutate({ userId: user.id, role: "moderator" })}
-                        disabled={assignRole.isPending}
-                      >
-                        <ShieldCheck className="w-4 h-4 mr-1" />
-                        {t("admin.users.make_moderator")}
-                      </Button>
-                    )}
+                    {/* Role Management */}
+                    <div className="flex flex-wrap gap-2">
+                      {/* Make Admin */}
+                      {!userRoles.includes("admin") && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => assignRole.mutate({ userId: user.id, role: "admin" })}
+                          disabled={assignRole.isPending}
+                        >
+                          <Shield className="w-4 h-4 mr-1" />
+                          {t("admin.users.make_admin")}
+                        </Button>
+                      )}
 
-                    {/* Remove Admin */}
-                    {userRoles.includes("admin") && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="destructive">
-                            <UserX className="w-4 h-4 mr-1" />
-                            {t("admin.users.remove_admin")}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>{t("admin.users.remove_admin_title")}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              {t("admin.users.remove_admin_desc")} {user.full_name || user.email}?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
-                            <AlertDialogAction 
-                              onClick={() => removeRole.mutate({ userId: user.id, role: "admin" })}
-                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                            >
+                      {/* Make Moderator */}
+                      {!userRoles.includes("moderator") && !userRoles.includes("admin") && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => assignRole.mutate({ userId: user.id, role: "moderator" })}
+                          disabled={assignRole.isPending}
+                        >
+                          <ShieldCheck className="w-4 h-4 mr-1" />
+                          {t("admin.users.make_moderator")}
+                        </Button>
+                      )}
+
+                      {/* Remove Admin */}
+                      {userRoles.includes("admin") && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button size="sm" variant="destructive">
+                              <UserX className="w-4 h-4 mr-1" />
                               {t("admin.users.remove_admin")}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>{t("admin.users.remove_admin_title")}</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                {t("admin.users.remove_admin_desc")} {user.full_name || user.email}?
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => removeRole.mutate({ userId: user.id, role: "admin" })}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                {t("admin.users.remove_admin")}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
 
-                    {/* Remove Moderator */}
-                    {userRoles.includes("moderator") && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button size="sm" variant="secondary">
-                            <UserX className="w-4 h-4 mr-1" />
-                            {t("admin.users.remove_moderator")}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>{t("admin.users.remove_moderator_title")}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              {t("admin.users.remove_moderator_desc")} {user.full_name || user.email}?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
-                            <AlertDialogAction 
-                              onClick={() => removeRole.mutate({ userId: user.id, role: "moderator" })}
-                            >
+                      {/* Remove Moderator */}
+                      {userRoles.includes("moderator") && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button size="sm" variant="secondary">
+                              <UserX className="w-4 h-4 mr-1" />
                               {t("admin.users.remove_moderator")}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>{t("admin.users.remove_moderator_title")}</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                {t("admin.users.remove_moderator_desc")} {user.full_name || user.email}?
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>{t("admin.users.cancel")}</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => removeRole.mutate({ userId: user.id, role: "moderator" })}
+                              >
+                                {t("admin.users.remove_moderator")}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>

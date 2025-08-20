@@ -1021,6 +1021,7 @@ export type Database = {
           last_name: string
           last_sign_in_at: string | null
           phone: string | null
+          trusted_seller: boolean
           updated_at: string
         }
         Insert: {
@@ -1037,6 +1038,7 @@ export type Database = {
           last_name: string
           last_sign_in_at?: string | null
           phone?: string | null
+          trusted_seller?: boolean
           updated_at?: string
         }
         Update: {
@@ -1053,6 +1055,7 @@ export type Database = {
           last_name?: string
           last_sign_in_at?: string | null
           phone?: string | null
+          trusted_seller?: boolean
           updated_at?: string
         }
         Relationships: []
