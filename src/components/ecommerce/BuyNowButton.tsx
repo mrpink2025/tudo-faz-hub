@@ -22,7 +22,7 @@ interface BuyNowButtonProps {
 
 export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart } = useShoppingCart();
+  const { addToCart, clearCart } = useShoppingCart();
   const { toast } = useToast();
   const { user } = useSupabaseAuth();
   const navigate = useNavigate();
@@ -46,8 +46,14 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
       return;
     }
 
-    // Primeiro adicionar ao carrinho e depois ir para checkout
+    // Limpar carrinho e adicionar apenas este item para compra exclusiva
     try {
+      setIsLoading(true);
+      
+      // Primeiro limpar o carrinho
+      await clearCart.mutateAsync();
+      
+      // Depois adicionar apenas este item
       await addToCart.mutateAsync({
         listingId: listing.id,
         quantity: 1,
@@ -62,6 +68,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
         description: error.message,
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
