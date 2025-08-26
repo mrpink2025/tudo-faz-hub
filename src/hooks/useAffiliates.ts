@@ -175,7 +175,7 @@ export function useAffiliateRequests() {
       const { data: affiliate } = await supabase
         .from("affiliates")
         .select("id")
-        .single();
+        .maybeSingle();
       
       if (!affiliate) throw new Error("Você precisa criar um perfil de afiliado primeiro");
 
@@ -237,7 +237,7 @@ export function useAffiliateLinks() {
       const { data: affiliate } = await supabase
         .from("affiliates")
         .select("id")
-        .single();
+        .maybeSingle();
       
       if (!affiliate) throw new Error("Perfil de afiliado não encontrado");
 
