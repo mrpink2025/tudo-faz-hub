@@ -231,10 +231,41 @@ mkdir -p android/app/src/main/res/values
 
 echo "🖼️ Configurando ícones para Android..."
 
-echo "🧹 Removendo todos os ícones PNG problemáticos..."
-# Limpar completamente todos os ícones existentes
-rm -rf android/app/src/main/res/mipmap-*/ 2>/dev/null || true
-rm -f android/app/src/main/res/drawable/ic_launcher*.png 2>/dev/null || true
+echo "📱 Copiando ícones do PWA se existirem..."
+# Tentar copiar ícones do projeto para Android
+if [ -f "public/icon-192.png" ]; then
+    echo "✅ Encontrado icon-192.png, copiando para Android..."
+    cp public/icon-192.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+fi
+
+if [ -f "public/icon-512.png" ]; then
+    echo "✅ Encontrado icon-512.png, copiando para Android..."
+    cp public/icon-512.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+fi
+
+if [ -f "public/icon-1024.png" ]; then
+    echo "✅ Encontrado icon-1024.png, usando como base..."
+    # Usar imagemagick para redimensionar se disponível
+    if command -v convert &> /dev/null; then
+        echo "🔄 Redimensionando ícones com ImageMagick..."
+        convert public/icon-1024.png -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+    else
+        echo "⚠️ ImageMagick não encontrado, instalando..."
+        apt-get install -y imagemagick
+        convert public/icon-1024.png -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+        convert public/icon-1024.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+    fi
+fi
+
+echo "🧹 Removendo ícones XML conflitantes..."
+# Limpar completamente todos os ícones XML existentes que podem conflitar
 rm -f android/app/src/main/res/drawable/ic_launcher*.xml 2>/dev/null || true
 
 echo "📁 Criando estrutura de diretórios limpa..."
@@ -363,14 +394,152 @@ rm -f android/app/src/main/res/mipmap-*/ic_launcher.png 2>/dev/null || true
 find android/app/src/main/res -name "*.xml~" -delete 2>/dev/null || true
 find android/app/src/main/res -name "*.png~" -delete 2>/dev/null || true
 
-echo "🔧 Configurando AndroidManifest.xml para evitar conflitos..."
-# Garantir que o AndroidManifest.xml usa apenas referências válidas
-if [ -f "android/app/src/main/AndroidManifest.xml" ]; then
-    # Fazer backup e garantir que só usa ic_launcher válido
-    cp android/app/src/main/AndroidManifest.xml android/app/src/main/AndroidManifest.xml.backup 2>/dev/null || true
-    sed -i 's/android:icon="[^"]*"/android:icon="@mipmap\/ic_launcher"/g' android/app/src/main/AndroidManifest.xml 2>/dev/null || true
-    sed -i 's/android:roundIcon="[^"]*"/android:roundIcon="@mipmap\/ic_launcher_round"/g' android/app/src/main/AndroidManifest.xml 2>/dev/null || true
-fi
+echo "🔧 Configurando AndroidManifest.xml com permissões necessárias..."
+# Configurar AndroidManifest.xml completo com permissões
+cat > android/app/src/main/AndroidManifest.xml << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissões necessárias para PWA e funcionalidades -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+                     android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
+    <!-- Push Notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    
+    <!-- PWA Features -->
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme.NoActionBarLaunch"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:hardwareAccelerated="true"
+        tools:replace="android:allowBackup">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- PWA Intent Filters -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" 
+                      android:host="tudofaz.com" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" 
+                      android:host="tudofaz.com" />
+            </intent-filter>
+
+            <!-- Custom URL Scheme -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/custom_url_scheme" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- Provider para arquivos -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Service para PWA -->
+        <service
+            android:name="com.getcapacitor.plugin.WebViewService"
+            android:exported="false" />
+
+        <!-- Firebase Messaging Service (se usar push notifications) -->
+        <service
+            android:name=".NotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+    <!-- Features necessárias -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+
+</manifest>
+EOF
+
+echo "📁 Criando arquivo de configuração file_paths.xml..."
+mkdir -p android/app/src/main/res/xml
+cat > android/app/src/main/res/xml/file_paths.xml << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-files-path name="files" path="." />
+    <external-cache-path name="cache" path="." />
+    <cache-path name="cache" path="." />
+    <files-path name="files" path="." />
+    <external-path name="external_files" path="." />
+</paths>
+EOF
+
+echo "📄 Configurando network_security_config.xml para HTTPS..."
+cat > android/app/src/main/res/xml/network_security_config.xml << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">192.168.1.1</domain>
+        <domain includeSubdomains="true">tudofaz.com</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+EOF
 
 echo "🌈 Configurando colors.xml..."
 cat > android/app/src/main/res/values/colors.xml << 'EOF'
