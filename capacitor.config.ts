@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'com.tudofaz.hub',
   appName: 'TudoFaz Hub',
   webDir: 'dist',
+  server: {
+    androidScheme: 'https'
+  },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert']
@@ -23,12 +26,23 @@ const config: CapacitorConfig = {
       resize: 'body',
       style: 'dark',
       resizeOnFullScreen: true
+    },
+    App: {
+      launchUrl: 'tudofaz://app'
     }
   },
   android: {
     allowMixedContent: true,
     captureInput: true,
-    webContentsDebuggingEnabled: false
+    webContentsDebuggingEnabled: false,
+    includePlugins: [
+      '@capacitor/app',
+      '@capacitor/haptics',
+      '@capacitor/keyboard',
+      '@capacitor/status-bar',
+      '@capacitor/splash-screen',
+      '@capacitor/push-notifications'
+    ]
   },
   ios: {
     contentInset: 'automatic',

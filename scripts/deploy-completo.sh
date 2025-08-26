@@ -206,8 +206,12 @@ echo -e "✅ Servidor web configurado!\n"
 
 echo -e "${GREEN}📱 FASE 6: CONFIGURAÇÃO CAPACITOR${NC}"
 echo -e "${GREEN}=================================${NC}"
-echo "⚙️ Instalando Capacitor..."
-npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios
+echo "⚙️ Instalando Capacitor e assets..."
+npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/ios @capacitor/assets
+
+echo "🖼️ Preparando ícones para Android..."
+mkdir -p resources
+cp public/icon-1024.png resources/icon.png
 
 echo "🔄 Sincronizando Capacitor..."
 npx cap sync
@@ -217,6 +221,9 @@ rm -rf android 2>/dev/null || true
 
 echo "📱 Adicionando plataforma Android..."
 npx cap add android
+
+echo "🖼️ Gerando ícones Android automaticamente..."
+npx @capacitor/assets generate --assetPath resources --android
 
 echo "🔄 Sincronizando novamente após adicionar Android..."
 npx cap sync
@@ -541,14 +548,15 @@ cat > android/app/src/main/res/xml/network_security_config.xml << 'EOF'
 </network-security-config>
 EOF
 
-echo "🌈 Configurando colors.xml..."
+echo "🌈 Configurando colors.xml com as cores do TudoFaz..."
 cat > android/app/src/main/res/values/colors.xml << 'EOF'
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0EA5E9</color>
-    <color name="colorPrimaryDark">#0284C7</color>
-    <color name="colorAccent">#38BDF8</color>
-    <color name="ic_launcher_background">#0EA5E9</color>
+    <color name="colorPrimary">#1e40af</color>
+    <color name="colorPrimaryDark">#1e3a8a</color>
+    <color name="colorAccent">#3b82f6</color>
+    <color name="ic_launcher_background">#1e40af</color>
+    <color name="splash_background">#1e40af</color>
 </resources>
 EOF
 
