@@ -1,17 +1,39 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.d9c0215e88d846a69a5c576b251630eb',
-  appName: 'tudo-faz-hub',
+  appId: 'com.tudofaz.hub',
+  appName: 'TudoFaz Hub',
   webDir: 'dist',
-  server: {
-    url: 'https://d9c0215e-88d8-46a6-9a5c-576b251630eb.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert']
+    },
+    SplashScreen: {
+      launchShowDuration: 2000,
+      backgroundColor: '#1e40af',
+      showSpinner: false,
+      androidSpinnerStyle: 'small',
+      iosSpinnerStyle: 'small'
+    },
+    StatusBar: {
+      style: 'default',
+      backgroundColor: '#1e40af'
+    },
+    Keyboard: {
+      resize: 'body',
+      style: 'dark',
+      resizeOnFullScreen: true
     }
+  },
+  android: {
+    allowMixedContent: true,
+    captureInput: true,
+    webContentsDebuggingEnabled: false
+  },
+  ios: {
+    contentInset: 'automatic',
+    scrollEnabled: true,
+    backgroundColor: '#1e40af'
   }
 };
 

@@ -1,28 +1,34 @@
 {
-  "name": "TudoFaz - Marketplace Completo",
+  "name": "TudoFaz Hub",
   "short_name": "TudoFaz",
-  "description": "Plataforma completa para compra, venda e prestação de serviços",
-  "version": "2.2.0",
+  "description": "Marketplace completo para compra e venda de produtos",
+  "version": "1.0.0",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4f46e5",
+  "background_color": "#1e40af",
+  "theme_color": "#1e40af",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/lovable-uploads/fb24b622-a939-4a3e-b352-ffd2c32395e5.png",
+      "src": "/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-1024.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-1024.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/lovable-uploads/fb24b622-a939-4a3e-b352-ffd2c32395e5.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/lovable-uploads/fb24b622-a939-4a3e-b352-ffd2c32395e5.png",
+      "src": "/icon-1024.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"

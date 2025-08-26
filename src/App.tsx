@@ -78,12 +78,14 @@ import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { SearchProvider } from "./contexts/SearchContext";
 import { useNativePushNotifications } from "./hooks/useNativePushNotifications";
 import { useAppUpdater } from "./hooks/useAppUpdater";
+import { useNativeApp } from "./hooks/useNativeApp";
 import "./i18n";
 
 // Componente para inicializar capacidades nativas
 const NativeCapabilities = () => {
   useNativePushNotifications();
   useAppUpdater(); // Adicionar verificação de atualizações automáticas
+  useNativeApp(); // Inicializar funcionalidades nativas
   return null;
 };
 
