@@ -7,6 +7,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -143,7 +144,7 @@ const CreateListing = () => {
         if (listing) {
           setTitle(listing.title || "");
           setDescription(listing.description || "");
-          setPrice(listing.price?.toString() || "");
+          setPrice(listing.price ? (listing.price / 100).toString() : "");
           setRootId(listing.category_id || "");
           setAffiliateEnabled(listing.affiliate_enabled || false);
           setCommissionRate((listing.affiliate_commission_rate / 100)?.toString() || "5");
@@ -526,20 +527,13 @@ const CreateListing = () => {
                 <Label htmlFor="price" className="text-sm font-medium">
                   {t("create.fields.priceBRL")}
                 </Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
-                    R$
-                  </span>
-                  <Input 
-                    id="price" 
-                    type="number" 
-                    min="0" 
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)} 
-                    placeholder="0,00"
-                    className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-green-200"
-                  />
-                </div>
+                <CurrencyInput 
+                  id="price" 
+                  value={price} 
+                  onChange={setPrice}
+                  placeholder="0,00"
+                  className="transition-all duration-200 focus:ring-2 focus:ring-green-200"
+                />
                 <p className="text-xs text-muted-foreground">
                   {t("create.fields.optional")} - Deixe em branco se preferir negociar
                 </p>
