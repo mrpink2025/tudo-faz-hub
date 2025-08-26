@@ -172,12 +172,21 @@ export function useAffiliateRequests() {
   // Hook para solicitar afiliação
   const requestAffiliation = useMutation({
     mutationFn: async ({ listingId, message }: { listingId: string; message?: string }) => {
-      const { data: affiliate } = await supabase
+      // Buscar perfil de afiliado usando a query que já existe
+      const { data: affiliate, error: affiliateError } = await supabase
         .from("affiliates")
         .select("id")
+        .limit(1)
         .maybeSingle();
       
-      if (!affiliate) throw new Error("Você precisa criar um perfil de afiliado primeiro");
+      if (affiliateError) {
+        console.error("Error fetching affiliate:", affiliateError);
+        throw new Error("Erro ao verificar perfil de afiliado");
+      }
+      
+      if (!affiliate) {
+        throw new Error("Você precisa criar um perfil de afiliado primeiro");
+      }
 
       const { data, error } = await supabase
         .from("affiliate_requests")
@@ -234,12 +243,21 @@ export function useAffiliateLinks() {
   // Hook para criar link de afiliado
   const createAffiliateLink = useMutation({
     mutationFn: async (listingId: string) => {
-      const { data: affiliate } = await supabase
+      // Buscar perfil de afiliado usando a query que já existe
+      const { data: affiliate, error: affiliateError } = await supabase
         .from("affiliates")
         .select("id")
+        .limit(1)
         .maybeSingle();
       
-      if (!affiliate) throw new Error("Perfil de afiliado não encontrado");
+      if (affiliateError) {
+        console.error("Error fetching affiliate:", affiliateError);
+        throw new Error("Erro ao verificar perfil de afiliado");
+      }
+      
+      if (!affiliate) {
+        throw new Error("Perfil de afiliado não encontrado");
+      }
 
       // Gerar código de tracking único
       const { data: trackingCode, error: trackingError } = await supabase.rpc('generate_tracking_code');
@@ -305,6 +323,7 @@ export function useAffiliateCommissions() {
       const { data: affiliate, error: affiliateError } = await supabase
         .from("affiliates")
         .select("id, total_earnings, available_balance, withdrawn_balance")
+        .limit(1)
         .maybeSingle();
       
       if (affiliateError) {
