@@ -17,6 +17,8 @@ import {
 import { useProductReviews } from "@/hooks/useEcommerce";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 interface ProductReviewsProps {
   listingId: string;
@@ -33,6 +35,7 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
   const { user } = useSupabaseAuth();
   const { reviews, rating: listingRating, addReview, updateReview } = useProductReviews(listingId);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleSubmitReview = async () => {
     if (!orderId && !editingReview) {
@@ -93,7 +96,9 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-            <CardTitle className="text-lg sm:text-xl">Avaliações</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">
+              <TranslatedText text="Avaliações" domain="ui" />
+            </CardTitle>
             <div className="flex items-center gap-2">
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
@@ -108,7 +113,7 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
                 ))}
               </div>
               <span className="text-sm text-muted-foreground whitespace-nowrap">
-                ({reviewCount} avaliações)
+                (<TranslatedText text={`${reviewCount} avaliações`} domain="ui" />)
               </span>
             </div>
           </div>
@@ -118,22 +123,24 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
               <DialogTrigger asChild>
                 <Button onClick={resetDialog}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Avaliar Produto
+                  <TranslatedText text="Avaliar Produto" domain="ui" />
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>
-                    {editingReview ? "Editar Avaliação" : "Avaliar Produto"}
+                    <TranslatedText text={editingReview ? "Editar Avaliação" : "Avaliar Produto"} domain="ui" />
                   </DialogTitle>
                   <DialogDescription>
-                    Compartilhe sua experiência com este produto
+                    <TranslatedText text="Compartilhe sua experiência com este produto" domain="ui" />
                   </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium">Nota</label>
+                    <label className="text-sm font-medium">
+                      <TranslatedText text="Nota" domain="ui" />
+                    </label>
                     <div className="flex items-center gap-1 mt-2">
                       {[...Array(5)].map((_, i) => (
                         <button
@@ -155,12 +162,12 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
 
                   <div>
                     <label className="text-sm font-medium">
-                      Comentário (opcional)
+                      <TranslatedText text="Comentário (opcional)" domain="ui" />
                     </label>
                     <Textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      placeholder="Conte sobre sua experiência com o produto..."
+                      placeholder={t("reviews.placeholder") || "Conte sobre sua experiência com o produto..."}
                       className="mt-2"
                       rows={4}
                     />
@@ -169,13 +176,13 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
 
                 <DialogFooter>
                   <Button variant="outline" onClick={resetDialog}>
-                    Cancelar
+                    <TranslatedText text="Cancelar" domain="ui" />
                   </Button>
                   <Button
                     onClick={handleSubmitReview}
                     disabled={addReview.isPending || updateReview.isPending}
                   >
-                    {editingReview ? "Atualizar" : "Enviar"} Avaliação
+                    <TranslatedText text={`${editingReview ? "Atualizar" : "Enviar"} Avaliação`} domain="ui" />
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -199,7 +206,7 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <span className="font-medium">
-                        Usuário Verificado
+                        <TranslatedText text="Usuário Verificado" domain="ui" />
                       </span>
                       <div className="flex items-center gap-2">
                         <div className="flex items-center">
@@ -216,7 +223,7 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
                         </div>
                         {review.user_id === user?.id && (
                           <Badge variant="outline" className="text-xs">
-                            Sua avaliação
+                            <TranslatedText text="Sua avaliação" domain="ui" />
                           </Badge>
                         )}
                       </div>
@@ -245,9 +252,11 @@ export function ProductReviews({ listingId, canReview = false, orderId }: Produc
         ) : (
           <div className="text-center text-muted-foreground py-8">
             <Star className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Este produto ainda não possui avaliações</p>
+            <p><TranslatedText text="Este produto ainda não possui avaliações" domain="ui" /></p>
             {canReview && (
-              <p className="text-sm mt-1">Seja o primeiro a avaliar!</p>
+              <p className="text-sm mt-1">
+                <TranslatedText text="Seja o primeiro a avaliar!" domain="ui" />
+              </p>
             )}
           </div>
         )}
