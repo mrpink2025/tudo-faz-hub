@@ -1,5 +1,4 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.54.0'
-import translate from 'https://esm.sh/@vitalets/google-translate-api@9.2.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,26 +12,49 @@ interface TranslateRequest {
   domain?: string
 }
 
+async function translateViaMyMemory(text: string, sourceLang: string, targetLang: string) {
+  // MyMemory supports 'auto' detection with 'auto' or ''
+  const sl = sourceLang || 'auto'
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(targetLang)}`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`)
+  const json = await res.json()
+  const translated = json?.responseData?.translatedText as string | undefined
+  const detected = (json?.responseData?.detectedLanguage as string | undefined) || sl || 'auto'
+  if (!translated) throw new Error('MyMemory returned empty translation')
+  return { translatedText: translated, detectedSource: detected }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
+  let payload: TranslateRequest | null = null
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    payload = await req.json()
+  } catch {
+    return new Response(
+      JSON.stringify({ error: 'Invalid JSON body' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
+  }
 
-    const { text, targetLang, sourceLang = 'auto', domain = 'general' }: TranslateRequest = await req.json()
+  const { text, targetLang, sourceLang = 'auto', domain = 'general' } = payload || ({} as TranslateRequest)
 
-    if (!text || !targetLang) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields: text, targetLang' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+  if (!text || !targetLang) {
+    return new Response(
+      JSON.stringify({ error: 'Missing required fields: text, targetLang' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
 
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+  )
+
+  try {
     // Generate cache key
     const cacheKey = `${text}|${sourceLang}|${targetLang}|${domain}`
     const contentHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(cacheKey))
@@ -52,10 +74,20 @@ Deno.serve(async (req) => {
       await supabase
         .from('translations_cache')
         .update({ 
-          hits: cached.hits + 1,
+          hits: (cached.hits ?? 0) + 1,
           last_used_at: new Date().toISOString()
         })
         .eq('content_hash', hashHex)
+
+      // Update metrics via RPC (safe, no direct SQL)
+      await supabase.rpc('update_translation_metrics', {
+        p_language: targetLang,
+        p_domain: domain,
+        p_was_cache_hit: true,
+        p_char_count: text.length,
+        p_response_time: 0,
+        p_cost: 0
+      })
 
       return new Response(
         JSON.stringify({ 
@@ -68,12 +100,11 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Translate using Google Translate
-    const result = await translate(text, { from: sourceLang, to: targetLang })
-    
-    // Apply glossary terms if any
-    let translatedText = result.text
-    
+    // Translate using MyMemory (stable, no import issues)
+    const t0 = performance.now()
+    const { translatedText: rawTranslated, detectedSource } = await translateViaMyMemory(text, sourceLang, targetLang)
+    let translatedText = rawTranslated
+
     // Apply domain-specific glossary
     const { data: glossaryTerms } = await supabase
       .from('translation_glossary')
@@ -81,12 +112,17 @@ Deno.serve(async (req) => {
       .or(`domain.is.null,domain.eq.${domain}`)
 
     if (glossaryTerms) {
-      for (const glossaryTerm of glossaryTerms) {
-        const termTranslation = glossaryTerm.translations[targetLang]
+      for (const glossaryTerm of glossaryTerms as Array<any>) {
+        const termTranslation = glossaryTerm?.translations?.[targetLang]
         if (termTranslation) {
           const flags = glossaryTerm.case_sensitive ? 'g' : 'gi'
-          const regex = new RegExp(glossaryTerm.term, flags)
-          translatedText = translatedText.replace(regex, termTranslation)
+          try {
+            const regex = new RegExp(glossaryTerm.term, flags)
+            translatedText = translatedText.replace(regex, termTranslation)
+          } catch {
+            // If term is an invalid regex, fallback to simple replace (case-sensitive)
+            translatedText = translatedText.split(glossaryTerm.term).join(termTranslation)
+          }
         }
       }
     }
@@ -97,53 +133,45 @@ Deno.serve(async (req) => {
       .insert({
         content_hash: hashHex,
         source_text: text,
-        source_lang: result?.from?.language?.iso ?? sourceLang ?? 'auto',
+        source_lang: detectedSource || sourceLang || 'auto',
         target_lang: targetLang,
         translated_text: translatedText,
-        provider: 'google-free',
+        provider: 'mymemory',
         domain,
         hits: 1
       })
 
-    // Update metrics
-    await supabase
-      .from('translation_metrics')
-      .upsert({
-        date: new Date().toISOString().split('T')[0],
-        language: targetLang,
-        domain,
-        requests_count: 1,
-        cache_hits: 0,
-        cache_misses: 1,
-        total_chars: text.length,
-        provider_cost: 0
-      }, {
-        onConflict: 'date,language,domain',
-        count: 'exact'
-      })
+    const t1 = performance.now()
+
+    // Update metrics via RPC
+    await supabase.rpc('update_translation_metrics', {
+      p_language: targetLang,
+      p_domain: domain,
+      p_was_cache_hit: false,
+      p_char_count: text.length,
+      p_response_time: Math.round(t1 - t0),
+      p_cost: 0
+    })
 
     return new Response(
       JSON.stringify({
         translatedText,
         fromCache: false,
-        sourceLang: result?.from?.language?.iso ?? sourceLang ?? 'auto',
+        sourceLang: detectedSource || sourceLang || 'auto',
         targetLang
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
-
   } catch (error) {
     console.error('Translation error:', error)
-    
-    // Return original text instead of failing
-    const fallbackResponse = await req.json().catch(() => ({ text: '', targetLang: 'en', sourceLang: 'auto' }))
-    
+
+    // On any failure, return original text to avoid breaking the UI
     return new Response(
       JSON.stringify({ 
-        translatedText: fallbackResponse.text || '',
+        translatedText: text,
         fromCache: false,
-        sourceLang: fallbackResponse.sourceLang || 'auto',
-        targetLang: fallbackResponse.targetLang || 'en'
+        sourceLang: sourceLang || 'auto',
+        targetLang: targetLang || 'en'
       }),
       { 
         status: 200,
