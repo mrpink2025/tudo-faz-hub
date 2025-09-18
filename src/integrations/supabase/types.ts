@@ -578,6 +578,48 @@ export type Database = {
           },
         ]
       }
+      listing_translations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          language: string
+          last_source_updated: string | null
+          listing_id: string
+          location: string | null
+          slug: string | null
+          title: string | null
+          translation_quality: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          language: string
+          last_source_updated?: string | null
+          listing_id: string
+          location?: string | null
+          slug?: string | null
+          title?: string | null
+          translation_quality?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          language?: string
+          last_source_updated?: string | null
+          listing_id?: string
+          location?: string | null
+          slug?: string | null
+          title?: string | null
+          translation_quality?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       listing_voltages: {
         Row: {
           created_at: string
@@ -1335,6 +1377,39 @@ export type Database = {
         }
         Relationships: []
       }
+      static_content_translations: {
+        Row: {
+          content: string
+          content_key: string
+          content_type: string | null
+          created_at: string
+          id: string
+          language: string
+          last_source_updated: string | null
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          content_key: string
+          content_type?: string | null
+          created_at?: string
+          id?: string
+          language: string
+          last_source_updated?: string | null
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          content_key?: string
+          content_type?: string | null
+          created_at?: string
+          id?: string
+          language?: string
+          last_source_updated?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       system_health: {
         Row: {
           checks: Json
@@ -1398,6 +1473,183 @@ export type Database = {
           url?: string
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      translation_glossary: {
+        Row: {
+          case_sensitive: boolean | null
+          created_at: string
+          domain: string | null
+          id: string
+          term: string
+          translations: Json
+          updated_at: string
+        }
+        Insert: {
+          case_sensitive?: boolean | null
+          created_at?: string
+          domain?: string | null
+          id?: string
+          term: string
+          translations?: Json
+          updated_at?: string
+        }
+        Update: {
+          case_sensitive?: boolean | null
+          created_at?: string
+          domain?: string | null
+          id?: string
+          term?: string
+          translations?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      translation_jobs: {
+        Row: {
+          attempts: number | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          job_type: string
+          max_attempts: number | null
+          payload: Json
+          priority: number | null
+          result: Json | null
+          scheduled_for: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_type: string
+          max_attempts?: number | null
+          payload?: Json
+          priority?: number | null
+          result?: Json | null
+          scheduled_for?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_type?: string
+          max_attempts?: number | null
+          payload?: Json
+          priority?: number | null
+          result?: Json | null
+          scheduled_for?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      translation_metrics: {
+        Row: {
+          avg_response_time: number | null
+          cache_hits: number | null
+          cache_misses: number | null
+          created_at: string
+          date: string
+          domain: string
+          id: string
+          language: string
+          provider_cost: number | null
+          requests_count: number | null
+          total_chars: number | null
+          updated_at: string
+        }
+        Insert: {
+          avg_response_time?: number | null
+          cache_hits?: number | null
+          cache_misses?: number | null
+          created_at?: string
+          date?: string
+          domain: string
+          id?: string
+          language: string
+          provider_cost?: number | null
+          requests_count?: number | null
+          total_chars?: number | null
+          updated_at?: string
+        }
+        Update: {
+          avg_response_time?: number | null
+          cache_hits?: number | null
+          cache_misses?: number | null
+          created_at?: string
+          date?: string
+          domain?: string
+          id?: string
+          language?: string
+          provider_cost?: number | null
+          requests_count?: number | null
+          total_chars?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      translations_cache: {
+        Row: {
+          content_hash: string
+          created_at: string
+          domain: string
+          entity_id: string | null
+          hits: number | null
+          id: string
+          last_used_at: string | null
+          provider: string
+          quality_score: number | null
+          source_lang: string
+          source_text: string
+          target_lang: string
+          translated_text: string
+          updated_at: string
+        }
+        Insert: {
+          content_hash: string
+          created_at?: string
+          domain: string
+          entity_id?: string | null
+          hits?: number | null
+          id?: string
+          last_used_at?: string | null
+          provider?: string
+          quality_score?: number | null
+          source_lang?: string
+          source_text: string
+          target_lang: string
+          translated_text: string
+          updated_at?: string
+        }
+        Update: {
+          content_hash?: string
+          created_at?: string
+          domain?: string
+          entity_id?: string | null
+          hits?: number | null
+          id?: string
+          last_used_at?: string | null
+          provider?: string
+          quality_score?: number | null
+          source_lang?: string
+          source_text?: string
+          target_lang?: string
+          translated_text?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1558,6 +1810,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_glossary_to_text: {
+        Args: { p_domain?: string; p_target_lang: string; p_text: string }
+        Returns: string
+      }
       can_access_order_field: {
         Args: { p_field_name: string; p_order_id: string }
         Returns: boolean
@@ -1584,6 +1840,15 @@ export type Database = {
       }
       generate_affiliate_code: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_content_hash: {
+        Args: {
+          p_domain: string
+          p_source_lang: string
+          p_source_text: string
+          p_target_lang: string
+        }
         Returns: string
       }
       generate_tracking_code: {
@@ -1764,6 +2029,17 @@ export type Database = {
       }
       send_notification_email: {
         Args: { message: string; subject: string; user_email: string }
+        Returns: undefined
+      }
+      update_translation_metrics: {
+        Args: {
+          p_char_count: number
+          p_cost?: number
+          p_domain: string
+          p_language: string
+          p_response_time?: number
+          p_was_cache_hit: boolean
+        }
         Returns: undefined
       }
       validate_cart_seller: {
