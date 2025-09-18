@@ -9,10 +9,14 @@ import { Edit, Eye, Pause, Play, Trash2 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
+import { TranslatedText } from "@/components/ui/translated-text";
+import { useTranslation } from "react-i18next";
 
 export function MyListings() {
   const { user } = useSupabaseAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const { data: listings = [], isLoading } = useQuery({
@@ -145,7 +149,15 @@ export function MyListings() {
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-lg truncate">{listing.title}</h3>
+                    <h3 className="font-semibold text-lg truncate">
+                      <ChunkedTranslatedText 
+                        text={listing.title} 
+                        domain="marketplace" 
+                        as="span"
+                        loadingSkeleton={false}
+                        maxChunkSize={200}
+                      />
+                    </h3>
                     {getStatusBadge(listing.status, listing.approved)}
                   </div>
                   
@@ -168,14 +180,14 @@ export function MyListings() {
                   <Button asChild size="sm" variant="outline">
                     <Link to={`/anuncio/${listing.id}`}>
                       <Eye className="w-4 h-4 mr-2" />
-                      Ver
+                      <TranslatedText text="Ver" domain="ui" />
                     </Link>
                   </Button>
                   
                   <Button asChild size="sm" variant="outline">
                     <Link to={`/editar-anuncio/${listing.id}`}>
                       <Edit className="w-4 h-4 mr-2" />
-                      Editar
+                      <TranslatedText text="Editar" domain="ui" />
                     </Link>
                   </Button>
                   
@@ -190,7 +202,7 @@ export function MyListings() {
                       disabled={updateListingStatus.isPending}
                     >
                       <Pause className="w-4 h-4 mr-2" />
-                      Pausar
+                      <TranslatedText text="Pausar" domain="ui" />
                     </Button>
                   ) : (
                     <Button
@@ -203,7 +215,7 @@ export function MyListings() {
                       disabled={updateListingStatus.isPending}
                     >
                       <Play className="w-4 h-4 mr-2" />
-                      Ativar
+                      <TranslatedText text="Ativar" domain="ui" />
                     </Button>
                   )}
                   
@@ -211,23 +223,27 @@ export function MyListings() {
                     <AlertDialogTrigger asChild>
                       <Button size="sm" variant="destructive">
                         <Trash2 className="w-4 h-4 mr-2" />
-                        Excluir
+                        <TranslatedText text="Excluir" domain="ui" />
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
+                        <AlertDialogTitle>
+                          <TranslatedText text="Confirmar Exclusão" domain="ui" />
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                          Tem certeza que deseja excluir este anúncio? Esta ação não pode ser desfeita.
+                          <TranslatedText text="Tem certeza que deseja excluir este anúncio? Esta ação não pode ser desfeita." domain="ui" />
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel>
+                          <TranslatedText text="Cancelar" domain="ui" />
+                        </AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => deleteListing.mutate(listing.id)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Excluir
+                          <TranslatedText text="Excluir" domain="ui" />
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

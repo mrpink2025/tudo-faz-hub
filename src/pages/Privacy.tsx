@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { TranslatedText } from "@/components/ui/translated-text";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 
 const Privacy = () => {
   useEffect(() => {
@@ -31,7 +32,7 @@ const Privacy = () => {
             <TranslatedText text="1. Controlador" domain="legal" />
           </h2>
           <p>
-            <TranslatedText text="O controlador de dados é o tudofaz.com ('Controlador'). Contato do Encarregado (DPO):" domain="legal" />
+            <ChunkedTranslatedText text="O controlador de dados é o tudofaz.com ('Controlador'). Contato do Encarregado (DPO):" domain="legal" as="span" />
             <a className="underline ml-1" href="mailto:dpo@tudofaz.com">dpo@tudofaz.com</a>.
           </p>
         </section>
@@ -77,7 +78,7 @@ const Privacy = () => {
             <TranslatedText text="5. Compartilhamento de Dados" domain="legal" />
           </h2>
           <p>
-            <TranslatedText text="Podemos compartilhar dados com provedores essenciais para operar a Plataforma, por exemplo:" domain="legal" />
+            <ChunkedTranslatedText text="Podemos compartilhar dados com provedores essenciais para operar a Plataforma, por exemplo:" domain="legal" as="span" />
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li><TranslatedText text="Infraestrutura e banco de dados (ex.: Supabase)." domain="legal" /></li>
@@ -92,7 +93,7 @@ const Privacy = () => {
             <TranslatedText text="6. Transferências Internacionais" domain="legal" />
           </h2>
           <p>
-            <TranslatedText text="Alguns prestadores podem estar localizados fora do Brasil. Nesses casos, adotamos salvaguardas adequadas, como cláusulas contratuais padrão ou mecanismos equivalentes." domain="legal" />
+            <ChunkedTranslatedText text="Alguns prestadores podem estar localizados fora do Brasil. Nesses casos, adotamos salvaguardas adequadas, como cláusulas contratuais padrão ou mecanismos equivalentes." domain="legal" as="span" />
           </p>
         </section>
 

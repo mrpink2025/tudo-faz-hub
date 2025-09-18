@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { TranslatedText } from "@/components/ui/translated-text";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 
 const Terms = () => {
   useEffect(() => {
@@ -31,7 +32,7 @@ const Terms = () => {
             <TranslatedText text="1. Aceitação dos Termos" domain="legal" />
           </h2>
           <p>
-            <TranslatedText text="Ao acessar ou utilizar o tudofaz.com (&quot;Plataforma&quot;), você concorda com estes Termos de Uso e com a nossa" domain="legal" />
+            <ChunkedTranslatedText text="Ao acessar ou utilizar o tudofaz.com (&quot;Plataforma&quot;), você concorda com estes Termos de Uso e com a nossa" domain="legal" as="span" />
             {" "}
             <a className="underline" href="/privacidade">
               <TranslatedText text="Política de Privacidade" domain="legal" />
@@ -120,7 +121,7 @@ const Terms = () => {
             <TranslatedText text="9. Limitação de Responsabilidade" domain="legal" />
           </h2>
           <p>
-            <TranslatedText text="A Plataforma é fornecida &quot;no estado em que se encontra&quot;. Na medida permitida em lei, não nos responsabilizamos por danos indiretos, lucros cessantes ou perdas decorrentes de uso indevido da Plataforma ou de negócios entre usuários." domain="legal" />
+            <ChunkedTranslatedText text="A Plataforma é fornecida &quot;no estado em que se encontra&quot;. Na medida permitida em lei, não nos responsabilizamos por danos indiretos, lucros cessantes ou perdas decorrentes de uso indevido da Plataforma ou de negócios entre usuários." domain="legal" as="span" />
           </p>
         </section>
 

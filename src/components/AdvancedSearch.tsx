@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 export const AdvancedSearch = () => {
   const [searchParams] = useSearchParams();
@@ -68,9 +69,9 @@ export const AdvancedSearch = () => {
               <SelectContent>
                 <SelectItem value="all">{t("search.all_categories")}</SelectItem>
                 {parentCategories.map((category) => (
-                  <SelectItem key={category.id} value={category.slug}>
-                    {category.name_pt}
-                  </SelectItem>
+                   <SelectItem key={category.id} value={category.slug}>
+                     <TranslatedText text={category.name_pt} domain="categories" />
+                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -142,7 +143,7 @@ export const AdvancedSearch = () => {
             variant="outline" 
             size="lg"
           >
-            Limpar
+            <TranslatedText text="Limpar" domain="ui" />
           </Button>
         </div>
       </CardContent>

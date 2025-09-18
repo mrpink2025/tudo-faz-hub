@@ -10,6 +10,7 @@ import { useShoppingCart, useProductReviews } from "@/hooks/useEcommerce";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 import { TranslatedText } from "@/components/ui/translated-text";
 
 type Listing = {
