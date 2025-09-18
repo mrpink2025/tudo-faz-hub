@@ -33,8 +33,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const handleBuyNow = async () => {
     if (!user) {
       toast({
-        title: t("auth.login_required"),
-        description: t("auth.login_required_desc"),
+        title: "Faça login",
+        description: "Você precisa estar logado para comprar",
         variant: "destructive",
       });
       return;
@@ -42,8 +42,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: t("product.select_size"),
-        description: t("product.select_size_buy_desc"),
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de comprar.",
         variant: "destructive",
       });
       return;
@@ -76,7 +76,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
       }
     } catch (error: any) {
       toast({
-        title: t("errors.purchase_error"),
+        title: "Erro na compra",
         description: error.message,
         variant: "destructive",
       });
@@ -88,8 +88,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const handleAddToCart = () => {
     if (!user) {
       toast({
-        title: t("auth.login_required"),
-        description: t("auth.login_required_cart"),
+        title: "Faça login",
+        description: "Você precisa estar logado para adicionar ao carrinho",
         variant: "destructive",
       });
       return;
@@ -97,8 +97,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: t("product.select_size"),
-        description: t("product.select_size_desc"),
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
         variant: "destructive",
       });
       return;
@@ -120,7 +120,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
         size="lg"
       >
         <CreditCard className="mr-2 h-4 w-4" />
-        <TranslatedText text={isLoading ? t("ui.processing") : t("product.buy_now")} domain="ui" />
+        <TranslatedText text={isLoading ? "Processando..." : "Comprar Agora"} domain="ui" />
       </Button>
       
       <ContactSellerButton 
@@ -140,7 +140,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
         size="lg"
       >
         <ShoppingCart className="mr-2 h-4 w-4" />
-        <TranslatedText text={addToCart.isPending ? t("ui.adding") : t("product.add_to_cart")} domain="ui" />
+        <TranslatedText text={addToCart.isPending ? "Adicionando..." : "Adicionar ao Carrinho"} domain="ui" />
       </Button>
     </div>
   );

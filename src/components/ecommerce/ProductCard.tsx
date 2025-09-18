@@ -51,8 +51,8 @@ export function ProductCard({ listing }: ProductCardProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: t("product.select_size"),
-        description: t("product.select_size_desc"),
+        title: "Selecione um tamanho",
+        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
         variant: "destructive",
       });
       return;
