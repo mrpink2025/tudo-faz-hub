@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 export function MyListings() {
   const { user } = useSupabaseAuth();
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
 
   const { data: listings = [], isLoading } = useQuery({
@@ -151,6 +151,7 @@ export function MyListings() {
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="font-semibold text-lg truncate">
                       <ChunkedTranslatedText 
+                        key={`${listing.id}-${i18n.language}`}
                         text={listing.title} 
                         domain="marketplace" 
                         as="span"

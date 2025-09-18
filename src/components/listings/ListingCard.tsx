@@ -109,7 +109,14 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
         </div>
         <CardHeader>
           <CardTitle className="line-clamp-1 text-xl">
-            <TranslatedText text={listing.title} domain="listings" />
+            <ChunkedTranslatedText 
+              key={`${listing.id}-${i18n.language}`}
+              text={listing.title} 
+              domain="marketplace" 
+              as="span"
+              loadingSkeleton={false}
+              maxChunkSize={200}
+            />
           </CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">

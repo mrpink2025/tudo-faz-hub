@@ -165,6 +165,7 @@ const FeaturedListingsBar = () => {
                       isMobile ? 'text-lg' : 'text-base'
                     }`}>
                       <ChunkedTranslatedText 
+                        key={`${listing.id}-${locale}`}
                         text={listing.title} 
                         domain="marketplace" 
                         as="span"
