@@ -219,6 +219,7 @@ const ListingDetail = () => {
                 </CardHeader>
                 <CardContent className="prose prose-neutral max-w-none">
                   <ChunkedTranslatedText 
+                    key={`${listing.id}-description-${i18n.language}`}
                     text={listing.description || t("listing.noDescription")} 
                     domain="listings" 
                     className="prose prose-neutral max-w-none whitespace-pre-wrap"
