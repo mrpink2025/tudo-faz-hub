@@ -10,6 +10,7 @@ import { useShoppingCart, useProductReviews } from "@/hooks/useEcommerce";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 type Listing = {
   id: string;
@@ -106,7 +107,9 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
           </Button>
         </div>
         <CardHeader>
-          <CardTitle className="line-clamp-1 text-xl">{listing.title}</CardTitle>
+          <CardTitle className="line-clamp-1 text-xl">
+            <TranslatedText text={listing.title} domain="listings" />
+          </CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
           <div className="font-medium text-foreground text-lg">
@@ -134,7 +137,11 @@ export const ListingCard = ({ listing }: { listing: Listing }) => {
             </div>
           )}
 
-          {listing.location && <div>{listing.location}</div>}
+          {listing.location && (
+            <div>
+              <TranslatedText text={listing.location} domain="locations" />
+            </div>
+          )}
           <time dateTime={listing.created_at}>{new Date(listing.created_at).toLocaleDateString(locale)}</time>
           
           {listing.sellable && (
