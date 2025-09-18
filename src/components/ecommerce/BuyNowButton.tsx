@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 import ContactSellerButton from "@/components/chat/ContactSellerButton";
 
 interface BuyNowButtonProps {
@@ -25,13 +27,14 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const { addToCart, clearCart } = useShoppingCart();
   const { toast } = useToast();
   const { user } = useSupabaseAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleBuyNow = async () => {
     if (!user) {
       toast({
-        title: "Faça login",
-        description: "Você precisa estar logado para comprar",
+        title: t("auth.login_required"),
+        description: t("auth.login_required_desc"),
         variant: "destructive",
       });
       return;
@@ -39,8 +42,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: "Selecione um tamanho",
-        description: "Este produto requer que você selecione um tamanho antes de comprar.",
+        title: t("product.select_size"),
+        description: t("product.select_size_buy_desc"),
         variant: "destructive",
       });
       return;
@@ -73,7 +76,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
       }
     } catch (error: any) {
       toast({
-        title: "Erro na compra",
+        title: t("errors.purchase_error"),
         description: error.message,
         variant: "destructive",
       });
@@ -85,8 +88,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
   const handleAddToCart = () => {
     if (!user) {
       toast({
-        title: "Faça login",
-        description: "Você precisa estar logado para adicionar ao carrinho",
+        title: t("auth.login_required"),
+        description: t("auth.login_required_cart"),
         variant: "destructive",
       });
       return;
@@ -94,8 +97,8 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: "Selecione um tamanho",
-        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
+        title: t("product.select_size"),
+        description: t("product.select_size_desc"),
         variant: "destructive",
       });
       return;
@@ -117,7 +120,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
         size="lg"
       >
         <CreditCard className="mr-2 h-4 w-4" />
-        {isLoading ? "Processando..." : "Comprar Agora"}
+        <TranslatedText text={isLoading ? t("ui.processing") : t("product.buy_now")} domain="ui" />
       </Button>
       
       <ContactSellerButton 
@@ -137,7 +140,7 @@ export function BuyNowButton({ listing, selectedSize }: BuyNowButtonProps) {
         size="lg"
       >
         <ShoppingCart className="mr-2 h-4 w-4" />
-        {addToCart.isPending ? "Adicionando..." : "Adicionar ao Carrinho"}
+        <TranslatedText text={addToCart.isPending ? t("ui.adding") : t("product.add_to_cart")} domain="ui" />
       </Button>
     </div>
   );

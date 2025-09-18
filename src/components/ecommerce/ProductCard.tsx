@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { BuyNowButton } from "./BuyNowButton";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 import { ProductSizeSelector } from "./ProductSizeSelector";
 import ContactSellerButton from "@/components/chat/ContactSellerButton";
 
@@ -35,7 +37,7 @@ export function ProductCard({ listing }: ProductCardProps) {
   const { addToCart } = useShoppingCart();
   const { rating } = useProductReviews(listing.id);
   const { toast } = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -49,8 +51,8 @@ export function ProductCard({ listing }: ProductCardProps) {
 
     if (listing.size_required && !selectedSize) {
       toast({
-        title: "Selecione um tamanho",
-        description: "Este produto requer que você selecione um tamanho antes de adicionar ao carrinho.",
+        title: t("product.select_size"),
+        description: t("product.select_size_desc"),
         variant: "destructive",
       });
       return;
@@ -108,7 +110,14 @@ export function ProductCard({ listing }: ProductCardProps) {
       <CardContent className="p-4">
         <Link to={`/anuncio/${listing.id}`} className="block group">
           <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
-            {listing.title}
+            <ChunkedTranslatedText 
+              key={`${listing.id}-${i18n.language}`}
+              text={listing.title} 
+              domain="marketplace" 
+              as="span"
+              loadingSkeleton={false}
+              maxChunkSize={200}
+            />
           </h3>
         </Link>
 
@@ -126,7 +135,7 @@ export function ProductCard({ listing }: ProductCardProps) {
             ))}
           </div>
           <span className="text-sm text-muted-foreground">
-            ({reviewCount} {t("product.reviews")})
+            (<TranslatedText text={`${reviewCount} ${t("product.reviews")}`} domain="ui" />)
           </span>
         </div>
 
@@ -143,8 +152,8 @@ export function ProductCard({ listing }: ProductCardProps) {
 
         {listing.sellable && (
           <div className="mt-2 text-sm text-muted-foreground">
-            <div>{t("product.stock")}: {listing.inventory_count}</div>
-            <div>{t("product.sold")}: {listing.sold_count}</div>
+            <div><TranslatedText text={`${t("product.stock")}: ${listing.inventory_count}`} domain="ui" /></div>
+            <div><TranslatedText text={`${t("product.sold")}: ${listing.sold_count}`} domain="ui" /></div>
           </div>
         )}
 
