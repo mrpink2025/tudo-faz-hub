@@ -1,5 +1,8 @@
 project_id = "jprmzutdujnufjyvxtss"
 
+[functions.translate-content]
+verify_jwt = false
+
 [functions.create-payment-credits]
 verify_jwt = true
 
