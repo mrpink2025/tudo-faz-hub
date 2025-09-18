@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useFeaturedListings } from "@/hooks/useFeaturedListings";
 import { useTranslation } from "react-i18next";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -163,7 +164,13 @@ const FeaturedListingsBar = () => {
                     <h3 className={`font-semibold leading-tight text-foreground group-hover:text-primary transition-colors line-clamp-2 ${
                       isMobile ? 'text-lg' : 'text-base'
                     }`}>
-                      {listing.title}
+                      <ChunkedTranslatedText 
+                        text={listing.title} 
+                        domain="marketplace" 
+                        as="span"
+                        loadingSkeleton={false}
+                        maxChunkSize={200}
+                      />
                     </h3>
                     <p className={`font-bold text-primary ${
                       isMobile ? 'text-xl' : 'text-lg'

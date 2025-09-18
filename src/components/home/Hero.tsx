@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 const Hero = () => {
   const { t } = useTranslation();
   
@@ -30,7 +31,7 @@ const Hero = () => {
       <div className="container py-16 lg:py-24 grid gap-10 lg:grid-cols-2 items-center">
         <div className="space-y-6 relative z-10">
           <span className="inline-flex items-center rounded-full border px-3 py-1 text-xs text-muted-foreground">
-            {t("home.tagline_small")}
+            <TranslatedText text={t("home.tagline_small")} domain="ui" />
           </span>
           <h1
             className="container max-w-4xl rounded-2xl border shadow"
@@ -40,13 +41,13 @@ const Hero = () => {
               <div className="space-y-3">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
-                  <span>{t("promo.badge")}</span>
+                  <span><TranslatedText text={t("promo.badge")} domain="ui" /></span>
                 </div>
                 <div className="font-display text-lg md:text-xl leading-snug">
-                  {t("promo.title")}
+                  <TranslatedText text={t("promo.title")} domain="ui" />
                 </div>
                 <p className="text-sm/6 md:text-base opacity-90">
-                  {t("promo.desc")}
+                  <TranslatedText text={t("promo.desc")} domain="ui" />
                 </p>
               </div>
 
@@ -55,20 +56,20 @@ const Hero = () => {
                   to="/publicar"
                   className="inline-flex items-center gap-2 rounded-md bg-[hsl(var(--primary-foreground))] px-4 py-2 text-[hsl(var(--primary))] hover:opacity-90 transition"
                 >
-                  {t("buttons.publish")}<ArrowRight className="h-4 w-4" />
+                  <TranslatedText text={t("buttons.publish")} domain="ui" /><ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/creditos"
                   className="inline-flex items-center gap-2 rounded-md border border-white/40 px-4 py-2 hover:bg-white/10 transition"
                   title={t("home.credit_tooltip")}
                 >
-                  {t("buttons.deposit_feature")}
+                  <TranslatedText text={t("buttons.deposit_feature")} domain="ui" />
                 </Link>
               </div>
             </div>
           </h1>
           <p className="text-muted-foreground text-base lg:text-lg max-w-prose">
-            {t("home.hero_description")}
+            <TranslatedText text={t("home.hero_description")} domain="ui" />
           </p>
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4">
             <div className="flex-1">
@@ -76,7 +77,7 @@ const Hero = () => {
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               <Link to="/explorar">
-                <Button variant="soft" size="xl">{t("nav.explore")}</Button>
+                <Button variant="soft" size="xl"><TranslatedText text={t("nav.explore")} domain="ui" /></Button>
               </Link>
             </div>
           </div>

@@ -93,14 +93,14 @@ export default function Footer() {
               className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
               aria-label="Termos de Uso"
             >
-              Termos de Uso
+              <TranslatedText text="Termos de Uso" domain="legal" />
             </Link>
             <Link 
               to="/privacidade" 
               className="hover:text-foreground focus:text-foreground transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-0.5"
               aria-label="Política de Privacidade"
             >
-              Política de Privacidade
+              <TranslatedText text="Política de Privacidade" domain="legal" />
             </Link>
           </nav>
         </div>

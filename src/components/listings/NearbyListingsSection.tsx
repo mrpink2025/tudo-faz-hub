@@ -3,6 +3,7 @@ import { useNearbyListings } from "@/hooks/useNearbyListings";
 import { ListingCard } from "@/components/listings/ListingCard";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 const NearbyListingsSection = () => {
   const { toast } = useToast();
@@ -36,13 +37,15 @@ const NearbyListingsSection = () => {
     return (
       <section aria-label={t("nearby.title")} className="container py-8">
         <header className="mb-3">
-          <h2 className="font-display text-xl">{t("nearby.title")}</h2>
+          <h2 className="font-display text-xl">
+            <TranslatedText text={t("nearby.title")} domain="marketplace" />
+          </h2>
         </header>
         <button
           onClick={requestLocation}
           className="inline-flex items-center rounded-md border px-3 py-1.5 hover:bg-accent transition"
         >
-          {t("nearby.enable")}
+          <TranslatedText text={t("nearby.enable")} domain="ui" />
         </button>
       </section>
     );
@@ -53,7 +56,9 @@ const NearbyListingsSection = () => {
   return (
     <section aria-label={t("nearby.title")} className="container py-8 animate-fade-in">
       <header className="mb-4">
-        <h2 className="font-display text-2xl">{t("nearby.title")}</h2>
+        <h2 className="font-display text-2xl">
+          <TranslatedText text={t("nearby.title")} domain="marketplace" />
+        </h2>
       </header>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {listings.map((l) => (

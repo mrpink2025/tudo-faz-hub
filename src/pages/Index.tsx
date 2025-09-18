@@ -5,6 +5,7 @@ import SignatureGlow from "@/components/home/SignatureGlow";
 import FeaturedListingsSection from "@/components/listings/FeaturedListingsSection";
 import NearbyListingsSection from "@/components/listings/NearbyListingsSection";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 const Index = () => {
   const { t } = useTranslation();
@@ -23,8 +24,12 @@ const Index = () => {
       <Categories />
       <section className="py-16" style={{ backgroundImage: "var(--gradient-subtle)" }}>
         <div className="container text-center space-y-3">
-          <h2 className="font-display text-2xl">{t("index.ctaTitle")}</h2>
-          <p className="text-muted-foreground">{t("index.ctaSubtitle")}</p>
+          <h2 className="font-display text-2xl">
+            <TranslatedText text={t("index.ctaTitle")} domain="ui" />
+          </h2>
+          <p className="text-muted-foreground">
+            <TranslatedText text={t("index.ctaSubtitle")} domain="ui" />
+          </p>
         </div>
       </section>
     </main>
