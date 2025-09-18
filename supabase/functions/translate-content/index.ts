@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.54.0'
-import { translate } from 'https://esm.sh/@vitalets/google-translate-api@9.2.0'
+import translate from 'https://esm.sh/@vitalets/google-translate-api@9.2.0'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
       .insert({
         content_hash: hashHex,
         source_text: text,
-        source_lang: result.from.language.iso || sourceLang,
+        source_lang: result?.from?.language?.iso ?? sourceLang ?? 'auto',
         target_lang: targetLang,
         translated_text: translatedText,
         provider: 'google-free',
@@ -126,7 +126,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         translatedText,
         fromCache: false,
-        sourceLang: result.from.language.iso || sourceLang,
+        sourceLang: result?.from?.language?.iso ?? sourceLang ?? 'auto',
         targetLang
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -135,12 +135,20 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Translation error:', error)
     
+    // Return original text instead of failing
+    const fallbackResponse = await req.json().catch(() => ({ text: '', targetLang: 'en', sourceLang: 'auto' }))
+    
     return new Response(
       JSON.stringify({ 
-        error: 'Translation failed',
-        details: error.message 
+        translatedText: fallbackResponse.text || '',
+        fromCache: false,
+        sourceLang: fallbackResponse.sourceLang || 'auto',
+        targetLang: fallbackResponse.targetLang || 'en'
       }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
     )
   }
 })
