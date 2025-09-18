@@ -41,6 +41,44 @@ function normalizeForProvider(code: string, forSource = false): string {
   return toRFC3066(c)
 }
 
+// Split text into chunks to respect provider limits
+function splitTextIntoChunks(text: string, maxLength: number = 450): string[] {
+  if (text.length <= maxLength) return [text]
+  
+  const chunks: string[] = []
+  let currentChunk = ''
+  
+  // Split by sentences first
+  const sentences = text.split(/(?<=[.!?])\s+/)
+  
+  for (const sentence of sentences) {
+    if ((currentChunk + sentence).length <= maxLength) {
+      currentChunk += (currentChunk ? ' ' : '') + sentence
+    } else {
+      if (currentChunk) {
+        chunks.push(currentChunk.trim())
+        currentChunk = sentence
+      } else {
+        // Handle very long sentences by splitting by words
+        const words = sentence.split(' ')
+        let wordChunk = ''
+        for (const word of words) {
+          if ((wordChunk + word).length <= maxLength) {
+            wordChunk += (wordChunk ? ' ' : '') + word
+          } else {
+            if (wordChunk) chunks.push(wordChunk.trim())
+            wordChunk = word
+          }
+        }
+        if (wordChunk) currentChunk = wordChunk
+      }
+    }
+  }
+  
+  if (currentChunk) chunks.push(currentChunk.trim())
+  return chunks.filter(chunk => chunk.length > 0)
+}
+
 async function translateViaMyMemory(text: string, sourceLang: string, targetLang: string) {
   // Ensure provider-compatible language codes (MyMemory rejects 'auto')
   const sl = normalizeForProvider(sourceLang, true)
@@ -50,10 +88,46 @@ async function translateViaMyMemory(text: string, sourceLang: string, targetLang
   const res = await fetch(url)
   if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`)
   const json = await res.json()
+  
+  // Handle MyMemory error responses
+  if (json?.responseDetails && json.responseDetails.includes('LIMIT EXCEEDED')) {
+    throw new Error('MyMemory character limit exceeded')
+  }
+  
   const translated = json?.responseData?.translatedText as string | undefined
   const detected = (json?.responseData?.detectedLanguage as string | undefined) || sl
   if (!translated) throw new Error('MyMemory returned empty translation')
   return { translatedText: translated, detectedSource: detected }
+}
+
+async function translateTextWithChunks(text: string, sourceLang: string, targetLang: string) {
+  const chunks = splitTextIntoChunks(text, 450) // Leave buffer for encoding
+  
+  if (chunks.length === 1) {
+    return await translateViaMyMemory(text, sourceLang, targetLang)
+  }
+  
+  // Translate chunks with small delays to avoid rate limits
+  const translatedChunks: string[] = []
+  let detectedSource = sourceLang
+  
+  for (let i = 0; i < chunks.length; i++) {
+    if (i > 0) {
+      await new Promise(resolve => setTimeout(resolve, 100)) // 100ms delay between chunks
+    }
+    
+    const result = await translateViaMyMemory(chunks[i], sourceLang, targetLang)
+    translatedChunks.push(result.translatedText)
+    
+    if (i === 0) {
+      detectedSource = result.detectedSource
+    }
+  }
+  
+  return {
+    translatedText: translatedChunks.join(' '),
+    detectedSource
+  }
 }
 
 Deno.serve(async (req) => {
@@ -134,9 +208,9 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Translate using MyMemory (stable, no import issues)
+    // Translate using chunked approach for long texts
     const t0 = performance.now()
-    const { translatedText: rawTranslated, detectedSource } = await translateViaMyMemory(text, providerSourceLang, providerTargetLang)
+    const { translatedText: rawTranslated, detectedSource } = await translateTextWithChunks(text, providerSourceLang, providerTargetLang)
     let translatedText = rawTranslated
 
     // Apply domain-specific glossary
