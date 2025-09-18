@@ -20,7 +20,7 @@ export function useAutoTranslate(text: string, options: TranslateOptions = {}) {
   const { i18n } = useTranslation()
   const {
     domain = 'general',
-    sourceLang = 'auto',
+    sourceLang = 'pt', // default to Portuguese to avoid 'auto' issues in providers
     enabled = true,
     cacheTime = 1000 * 60 * 60 // 1 hour
   } = options

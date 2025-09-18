@@ -12,15 +12,46 @@ interface TranslateRequest {
   domain?: string
 }
 
+// Language normalization helpers for provider compatibility
+function toRFC3066(code: string): string {
+  const c = code.trim()
+  if (!c.includes('-')) return c
+  const [lang, region] = c.split('-')
+  return `${lang.toLowerCase()}${region ? '-' + region.toUpperCase() : ''}`
+}
+
+function normalizeForProvider(code: string, forSource = false): string {
+  if (!code) return forSource ? 'pt' : 'en'
+  let c = code.trim().toLowerCase()
+
+  // Map legacy/short forms
+  if (c === 'auto') return forSource ? 'pt' : 'en'
+  if (c === 'jp') c = 'ja'
+  if (c === 'iw') c = 'he'
+
+  // Region handling
+  if (c.startsWith('pt')) c = c.includes('-br') ? 'pt-BR' : 'pt'
+  else if (c.startsWith('zh')) c = 'zh-CN'
+  else if (c.startsWith('en')) c = 'en'
+  else if (c.startsWith('es')) c = 'es'
+  else if (c.startsWith('fr')) c = 'fr'
+  else if (c.startsWith('de')) c = 'de'
+  else if (c.startsWith('it')) c = 'it'
+
+  return toRFC3066(c)
+}
+
 async function translateViaMyMemory(text: string, sourceLang: string, targetLang: string) {
-  // MyMemory supports 'auto' detection with 'auto' or ''
-  const sl = sourceLang || 'auto'
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(targetLang)}`
+  // Ensure provider-compatible language codes (MyMemory rejects 'auto')
+  const sl = normalizeForProvider(sourceLang, true)
+  const tl = normalizeForProvider(targetLang, false)
+
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(tl)}`
   const res = await fetch(url)
   if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`)
   const json = await res.json()
   const translated = json?.responseData?.translatedText as string | undefined
-  const detected = (json?.responseData?.detectedLanguage as string | undefined) || sl || 'auto'
+  const detected = (json?.responseData?.detectedLanguage as string | undefined) || sl
   if (!translated) throw new Error('MyMemory returned empty translation')
   return { translatedText: translated, detectedSource: detected }
 }
@@ -55,8 +86,11 @@ Deno.serve(async (req) => {
   )
 
   try {
-    // Generate cache key
-    const cacheKey = `${text}|${sourceLang}|${targetLang}|${domain}`
+    // Normalize languages and generate cache key
+    const providerSourceLang = normalizeForProvider(sourceLang || 'pt', true)
+    const providerTargetLang = normalizeForProvider(targetLang, false)
+    const cacheSource = sourceLang && sourceLang !== 'auto' ? sourceLang : 'pt'
+    const cacheKey = `${text}|${cacheSource}|${targetLang}|${domain}`
     const contentHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(cacheKey))
     const hashHex = Array.from(new Uint8Array(contentHash))
       .map(b => b.toString(16).padStart(2, '0'))
@@ -102,7 +136,7 @@ Deno.serve(async (req) => {
 
     // Translate using MyMemory (stable, no import issues)
     const t0 = performance.now()
-    const { translatedText: rawTranslated, detectedSource } = await translateViaMyMemory(text, sourceLang, targetLang)
+    const { translatedText: rawTranslated, detectedSource } = await translateViaMyMemory(text, providerSourceLang, providerTargetLang)
     let translatedText = rawTranslated
 
     // Apply domain-specific glossary
@@ -133,7 +167,7 @@ Deno.serve(async (req) => {
       .insert({
         content_hash: hashHex,
         source_text: text,
-        source_lang: detectedSource || sourceLang || 'auto',
+        source_lang: detectedSource || cacheSource,
         target_lang: targetLang,
         translated_text: translatedText,
         provider: 'mymemory',
