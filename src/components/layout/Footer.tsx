@@ -23,6 +23,7 @@
 
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -33,7 +34,7 @@ export default function Footer() {
         <div className="space-y-2">
           <h2 className="font-semibold">tudofaz.com</h2>
           <p className="text-sm text-muted-foreground">
-            {t("footer.description")}
+            <TranslatedText text={t("footer.description")} />
           </p>
         </div>
         <nav className="flex items-center gap-4 md:justify-end text-sm text-muted-foreground" role="navigation" aria-label="Footer navigation">

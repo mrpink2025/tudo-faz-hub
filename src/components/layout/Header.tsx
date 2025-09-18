@@ -50,6 +50,7 @@ import { MobileMenuDropdown } from "./MobileMenuDropdown";
 import { ShoppingCartButton } from "@/components/ecommerce/ShoppingCartButton";
 import { useSearch } from "@/contexts/SearchContext";
 import { useLocation } from "react-router-dom";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 const Header = () => {
   const { user } = useSupabaseAuth();
@@ -99,11 +100,21 @@ const Header = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm">
-          <Link to={exploreLink} className="text-white hover:opacity-80">{t("nav.explore")}</Link>
-          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.messages")}</NavLink>
-          <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.affiliates")}</NavLink>
-          <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.advertiser")}</NavLink>
-          <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>{t("nav.orders")}</NavLink>
+          <Link to={exploreLink} className="text-white hover:opacity-80">
+            <TranslatedText text={t("nav.explore")} className="text-white" as="span" />
+          </Link>
+          <NavLink to="/mensagens" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>
+            <TranslatedText text={t("nav.messages")} className="text-white" as="span" />
+          </NavLink>
+          <NavLink to="/afiliados" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>
+            <TranslatedText text={t("nav.affiliates")} className="text-white" as="span" />
+          </NavLink>
+          <NavLink to="/anunciante" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>
+            <TranslatedText text={t("nav.advertiser")} className="text-white" as="span" />
+          </NavLink>
+          <NavLink to="/pedidos" className={({isActive}) => isActive ? "font-medium text-white" : "text-white hover:opacity-80"}>
+            <TranslatedText text={t("nav.orders")} className="text-white" as="span" />
+          </NavLink>
            {user && <UnifiedNotifications />}
           {!user ? (
             <NavLink to="/entrar" className={({isActive}) => isActive ? "font-medium text-[hsl(var(--foreground))]" : "text-[hsl(var(--foreground))] hover:opacity-80"}>{t("nav.login")}</NavLink>

@@ -6,6 +6,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslation } from "react-i18next";
 import { logger } from "@/utils/logger";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 // Mapeamento de ícones para as categorias
 const iconMap: Record<string, any> = {
@@ -146,11 +147,14 @@ const Categories = () => {
                       <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] group-hover:bg-[hsl(var(--muted))] transition-colors">
                         <Icon className="" />
                       </span>
-                      {categoryName}
+                      <TranslatedText text={categoryName} domain="categories" />
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="text-muted-foreground">
-                    {t("categories.view_ads", { category: categoryName.toLowerCase() })}
+                    <TranslatedText 
+                      text={t("categories.view_ads", { category: categoryName.toLowerCase() })} 
+                      domain="categories" 
+                    />
                   </CardContent>
                 </Card>
               </Link>

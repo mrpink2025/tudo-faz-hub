@@ -41,9 +41,12 @@ function normalizeForProvider(code: string, forSource = false): string {
   return toRFC3066(c)
 }
 
-// Split text into chunks to respect provider limits
-function splitTextIntoChunks(text: string, maxLength: number = 450): string[] {
-  if (text.length <= maxLength) return [text]
+// Split text into chunks based on URL-encoded length to respect MyMemory's 500-char limit
+function splitTextIntoChunks(text: string, maxEncodedLength: number = 480): string[] {
+  // Helper function to get URL-encoded length
+  const getEncodedLength = (str: string) => encodeURIComponent(str).length
+  
+  if (getEncodedLength(text) <= maxEncodedLength) return [text]
   
   const chunks: string[] = []
   let currentChunk = ''
@@ -52,8 +55,9 @@ function splitTextIntoChunks(text: string, maxLength: number = 450): string[] {
   const sentences = text.split(/(?<=[.!?])\s+/)
   
   for (const sentence of sentences) {
-    if ((currentChunk + sentence).length <= maxLength) {
-      currentChunk += (currentChunk ? ' ' : '') + sentence
+    const testChunk = currentChunk + (currentChunk ? ' ' : '') + sentence
+    if (getEncodedLength(testChunk) <= maxEncodedLength) {
+      currentChunk = testChunk
     } else {
       if (currentChunk) {
         chunks.push(currentChunk.trim())
@@ -63,11 +67,16 @@ function splitTextIntoChunks(text: string, maxLength: number = 450): string[] {
         const words = sentence.split(' ')
         let wordChunk = ''
         for (const word of words) {
-          if ((wordChunk + word).length <= maxLength) {
-            wordChunk += (wordChunk ? ' ' : '') + word
+          const testWordChunk = wordChunk + (wordChunk ? ' ' : '') + word
+          if (getEncodedLength(testWordChunk) <= maxEncodedLength) {
+            wordChunk = testWordChunk
           } else {
             if (wordChunk) chunks.push(wordChunk.trim())
             wordChunk = word
+            // If even a single word exceeds limit, truncate it
+            if (getEncodedLength(wordChunk) > maxEncodedLength) {
+              wordChunk = wordChunk.substring(0, Math.floor(maxEncodedLength / 3)) // Conservative truncation
+            }
           }
         }
         if (wordChunk) currentChunk = wordChunk
@@ -101,22 +110,42 @@ async function translateViaMyMemory(text: string, sourceLang: string, targetLang
 }
 
 async function translateTextWithChunks(text: string, sourceLang: string, targetLang: string) {
-  const chunks = splitTextIntoChunks(text, 450) // Leave buffer for encoding
+  const chunks = splitTextIntoChunks(text, 480) // URL-encoded limit with buffer
+  
+  console.log(`Splitting text into ${chunks.length} chunks for translation`)
   
   if (chunks.length === 1) {
     return await translateViaMyMemory(text, sourceLang, targetLang)
   }
   
-  // Translate chunks with small delays to avoid rate limits
+  // Translate chunks with delays and retry logic
   const translatedChunks: string[] = []
   let detectedSource = sourceLang
   
   for (let i = 0; i < chunks.length; i++) {
     if (i > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100)) // 100ms delay between chunks
+      await new Promise(resolve => setTimeout(resolve, 250)) // Increased delay between chunks
     }
     
-    const result = await translateViaMyMemory(chunks[i], sourceLang, targetLang)
+    let retries = 0
+    let result
+    
+    while (retries < 3) {
+      try {
+        result = await translateViaMyMemory(chunks[i], sourceLang, targetLang)
+        break
+      } catch (error) {
+        retries++
+        console.warn(`Chunk ${i} translation attempt ${retries} failed:`, error.message)
+        if (retries < 3) {
+          await new Promise(resolve => setTimeout(resolve, 500 * retries)) // Exponential backoff
+        } else {
+          // Return original chunk on final failure
+          result = { translatedText: chunks[i], detectedSource: sourceLang }
+        }
+      }
+    }
+    
     translatedChunks.push(result.translatedText)
     
     if (i === 0) {
