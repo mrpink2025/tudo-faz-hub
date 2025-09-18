@@ -13,6 +13,7 @@ import { ProductVoltageDisplay } from "@/components/ecommerce/ProductVoltageDisp
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { Edit } from "lucide-react";
 import { TranslatedText } from "@/components/ui/translated-text";
+import { ChunkedTranslatedText } from "@/components/ui/chunked-translated-text";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -217,11 +218,12 @@ const ListingDetail = () => {
                   <CardTitle>{t("listing.description")}</CardTitle>
                 </CardHeader>
                 <CardContent className="prose prose-neutral max-w-none">
-                  <TranslatedText 
+                  <ChunkedTranslatedText 
                     text={listing.description || t("listing.noDescription")} 
                     domain="listings" 
-                    className="prose prose-neutral max-w-none"
+                    className="prose prose-neutral max-w-none whitespace-pre-wrap"
                     as="div"
+                    maxChunkSize={450}
                   />
                 </CardContent>
               </Card>
