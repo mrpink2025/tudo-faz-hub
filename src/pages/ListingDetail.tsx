@@ -12,6 +12,7 @@ import { ProductSizeDisplay } from "@/components/ecommerce/ProductSizeDisplay";
 import { ProductVoltageDisplay } from "@/components/ecommerce/ProductVoltageDisplay";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { Edit } from "lucide-react";
+import { TranslatedText } from "@/components/ui/translated-text";
 
 const ListingDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -156,8 +157,14 @@ const ListingDetail = () => {
         <header className="mb-4">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="font-display text-3xl">{listing.title}</h1>
-              {listing.location && <p className="text-muted-foreground">{listing.location}</p>}
+              <h1 className="font-display text-3xl">
+                <TranslatedText text={listing.title} domain="listings" />
+              </h1>
+              {listing.location && (
+                <p className="text-muted-foreground">
+                  <TranslatedText text={listing.location} domain="locations" />
+                </p>
+              )}
             </div>
             
             {user && user.id === listing.user_id && (
@@ -210,7 +217,12 @@ const ListingDetail = () => {
                   <CardTitle>{t("listing.description")}</CardTitle>
                 </CardHeader>
                 <CardContent className="prose prose-neutral max-w-none">
-                  {listing.description || t("listing.noDescription")}
+                  <TranslatedText 
+                    text={listing.description || t("listing.noDescription")} 
+                    domain="listings" 
+                    className="prose prose-neutral max-w-none"
+                    as="div"
+                  />
                 </CardContent>
               </Card>
           </div>
