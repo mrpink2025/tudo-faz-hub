@@ -4,6 +4,8 @@ import { MessageCircle } from 'lucide-react';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { TranslatedText } from '@/components/ui/translated-text';
 
 interface ContactSellerButtonProps {
   sellerId: string;
@@ -25,6 +27,7 @@ const ContactSellerButton: React.FC<ContactSellerButtonProps> = ({
   className
 }) => {
   const { user } = useSupabaseAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleContactSeller = () => {
@@ -58,7 +61,7 @@ const ContactSellerButton: React.FC<ContactSellerButtonProps> = ({
       className={className}
     >
       <MessageCircle className="h-4 w-4 mr-2" />
-      Contatar Vendedor
+      <TranslatedText text="Contatar Vendedor" domain="ui" />
     </Button>
   );
 };
