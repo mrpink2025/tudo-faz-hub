@@ -58,7 +58,7 @@ export function ChunkedTranslatedText({
       textChunks.map((chunk, i) => `Chunk ${i + 1}: ${chunk.length} chars`).join(', '))
   }, [text, targetLang, maxChunkSize])
 
-  // Translate chunks sequentially with delays
+  // Translate chunks with optimized timing
   useEffect(() => {
     if (targetLang === 'pt' || chunks.length === 0) return
 
@@ -66,57 +66,79 @@ export function ChunkedTranslatedText({
       const updatedChunks = [...chunks]
       let hasErrors = false
 
-      for (let i = 0; i < updatedChunks.length; i++) {
-        if (updatedChunks[i].translated) continue // Skip already translated
+      // Process chunks in small batches for faster response
+      const batchSize = Math.min(3, chunks.length)
+      
+      for (let batchStart = 0; batchStart < updatedChunks.length; batchStart += batchSize) {
+        const batchEnd = Math.min(batchStart + batchSize, updatedChunks.length)
+        const batchPromises = []
 
-        try {
-          console.log(`[ChunkedTranslatedText] Translating chunk ${i + 1}/${updatedChunks.length}`)
+        // Process batch with staggered timing
+        for (let i = batchStart; i < batchEnd; i++) {
+          if (updatedChunks[i].translated) continue
+
+          const delay = (i - batchStart) * 200 // Stagger by 200ms within batch
           
-          const { data, error } = await supabase.functions.invoke('translate-content', {
-            body: {
-              text: updatedChunks[i].original,
-              targetLang,
-              sourceLang,
-              domain
+          const promise = new Promise<void>(async (resolve) => {
+            await new Promise(r => setTimeout(r, delay))
+            
+            try {
+              console.log(`[ChunkedTranslatedText] Translating chunk ${i + 1}/${updatedChunks.length}`)
+              
+              const { data, error } = await supabase.functions.invoke('translate-content', {
+                body: {
+                  text: updatedChunks[i].original,
+                  targetLang,
+                  sourceLang,
+                  domain
+                }
+              })
+
+              if (error) {
+                console.warn(`[ChunkedTranslatedText] Translation failed for chunk ${i + 1}:`, error)
+                updatedChunks[i] = {
+                  ...updatedChunks[i],
+                  translated: updatedChunks[i].original,
+                  loading: false,
+                  error: true
+                }
+                hasErrors = true
+              } else {
+                updatedChunks[i] = {
+                  ...updatedChunks[i],
+                  translated: data.translatedText,
+                  loading: false,
+                  error: false
+                }
+                console.log(`[ChunkedTranslatedText] Chunk ${i + 1} translated successfully`)
+              }
+
+              // Update state immediately after each chunk
+              setChunks([...updatedChunks])
+              resolve()
+            } catch (error) {
+              console.error(`[ChunkedTranslatedText] Error translating chunk ${i + 1}:`, error)
+              updatedChunks[i] = {
+                ...updatedChunks[i],
+                translated: updatedChunks[i].original,
+                loading: false,
+                error: true
+              }
+              hasErrors = true
+              setChunks([...updatedChunks])
+              resolve()
             }
           })
 
-          if (error) {
-            console.warn(`[ChunkedTranslatedText] Translation failed for chunk ${i + 1}:`, error)
-            updatedChunks[i] = {
-              ...updatedChunks[i],
-              translated: updatedChunks[i].original, // Fallback to original
-              loading: false,
-              error: true
-            }
-            hasErrors = true
-          } else {
-            updatedChunks[i] = {
-              ...updatedChunks[i],
-              translated: data.translatedText,
-              loading: false,
-              error: false
-            }
-            console.log(`[ChunkedTranslatedText] Chunk ${i + 1} translated successfully`)
-          }
+          batchPromises.push(promise)
+        }
 
-          // Update state after each chunk
-          setChunks([...updatedChunks])
-
-          // Add delay between requests to avoid rate limiting
-          if (i < updatedChunks.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 800))
-          }
-        } catch (error) {
-          console.error(`[ChunkedTranslatedText] Error translating chunk ${i + 1}:`, error)
-          updatedChunks[i] = {
-            ...updatedChunks[i],
-            translated: updatedChunks[i].original, // Fallback to original
-            loading: false,
-            error: true
-          }
-          hasErrors = true
-          setChunks([...updatedChunks])
+        // Wait for current batch to complete before starting next
+        await Promise.all(batchPromises)
+        
+        // Short delay between batches (reduced from 800ms to 400ms)
+        if (batchEnd < updatedChunks.length) {
+          await new Promise(resolve => setTimeout(resolve, 400))
         }
       }
 
@@ -129,13 +151,33 @@ export function ChunkedTranslatedText({
     translateChunks()
   }, [chunks.length, targetLang, sourceLang, domain])
 
-  // Show loading skeleton while translating
-  if (chunks.some(chunk => chunk.loading) && loadingSkeleton) {
+  // Show progressive loading with translated content
+  const loadingChunks = chunks.filter(chunk => chunk.loading).length
+  const totalChunks = chunks.length
+  
+  if (loadingChunks > 0 && loadingSkeleton) {
+    // Show partial content with loading indicator
+    const translatedText = chunks
+      .map(chunk => chunk.translated || chunk.original)
+      .join('\n\n')
+    
     return (
       <div className={className}>
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-3/4 mb-2" />
-        <Skeleton className="h-4 w-1/2" />
+        <Component className="opacity-90">
+          {translatedText}
+        </Component>
+        <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
+          <div className="flex space-x-1">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="w-1 h-1 bg-primary rounded-full animate-pulse"
+                style={{ animationDelay: `${i * 0.2}s` }}
+              />
+            ))}
+          </div>
+          <span>Traduzindo... ({totalChunks - loadingChunks}/{totalChunks})</span>
+        </div>
       </div>
     )
   }
