@@ -66,7 +66,7 @@ fi
 print_success "Executando como root"
 
 # Variáveis principais
-REPO_URL="https://github.com/mrpink2025/tudo-faz-hub.git"
+REPO_URL="https://github.com/devruso/tudo-faz-hub.git"
 PROJECT_DIR="/opt/tudofaz-hub"
 BUILDS_DIR="/opt/builds-producao-final"
 BACKUP_DIR="/root/keystore-backup"
