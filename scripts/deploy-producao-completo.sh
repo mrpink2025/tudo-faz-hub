@@ -319,59 +319,33 @@ print_header "FASE 6: PREPARAÇÃO ANDROID"
 cd "$PROJECT_DIR"
 
 print_step "Instalando Capacitor..."
-npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets --silent
+npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/app @capacitor/haptics @capacitor/keyboard @capacitor/status-bar @capacitor/splash-screen @capacitor/push-notifications @capacitor/assets --silent
 
-print_step "Gerando ícones com Capacitor Assets..."
-npx @capacitor/assets generate --android || print_warning "Falha ao gerar ícones automaticamente"
+print_step "Removendo plataforma Android anterior (se existir)..."
+if [ -d "android" ]; then
+  rm -rf android/
+  print_success "Plataforma Android anterior removida"
+fi
 
-print_step "Adicionando plataforma Android..."
-npx cap add android || print_warning "Plataforma Android já existe"
+print_step "Adicionando plataforma Android limpa..."
+npx cap add android
+if [ ! -d "android/app/src/main" ]; then
+  print_error "Falha ao criar estrutura Android"
+  exit 1
+fi
 
-print_step "Sincronizando Capacitor..."
-npx cap sync android
+print_step "Criando diretórios necessários..."
+mkdir -p android/app/src/main/res/values/
+mkdir -p android/app/src/main/res/drawable/
+mkdir -p android/app/src/main/res/mipmap-hdpi/
+mkdir -p android/app/src/main/res/mipmap-mdpi/
+mkdir -p android/app/src/main/res/mipmap-xhdpi/
+mkdir -p android/app/src/main/res/mipmap-xxhdpi/
+mkdir -p android/app/src/main/res/mipmap-xxxhdpi/
+mkdir -p android/app/src/main/res/xml/
+print_success "Diretórios criados"
 
-print_step "Configurando recursos Android..."
-
-# AndroidManifest.xml
-mkdir -p android/app/src/main/res
-cat > android/app/src/main/AndroidManifest.xml << 'EOF'
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBarLaunch">
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-</manifest>
-EOF
-
-# strings.xml
+print_step "Criando strings.xml..."
 cat > android/app/src/main/res/values/strings.xml << 'EOF'
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -381,6 +355,111 @@ cat > android/app/src/main/res/values/strings.xml << 'EOF'
     <string name="custom_url_scheme">tudofaz</string>
 </resources>
 EOF
+
+if [ -f "android/app/src/main/res/values/strings.xml" ]; then
+  print_success "strings.xml criado"
+else
+  print_error "Falha ao criar strings.xml"
+  exit 1
+fi
+
+print_step "Criando file_paths.xml para FileProvider..."
+cat > android/app/src/main/res/xml/file_paths.xml << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-files-path name="files" path="." />
+    <external-path name="external_files" path="." />
+</paths>
+EOF
+
+print_step "Configurando AndroidManifest.xml..."
+cat > android/app/src/main/AndroidManifest.xml << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tudofaz.hub">
+
+    <!-- Permissões -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Features opcionais -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tudofaz" />
+                <data android:scheme="https" android:host="tudofaz.com" />
+            </intent-filter>
+
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>
+EOF
+
+if [ -f "android/app/src/main/AndroidManifest.xml" ]; then
+  print_success "AndroidManifest.xml criado"
+else
+  print_error "Falha ao criar AndroidManifest.xml"
+  exit 1
+fi
+
+print_step "Copiando ícones para diretórios Android..."
+if [ -f "public/icon-1024.png" ]; then
+  cp public/icon-1024.png android/app/src/main/res/drawable/icon.png 2>/dev/null || true
+  print_success "Ícone principal copiado"
+fi
+
+print_step "Sincronizando Capacitor..."
+npx cap sync android
+
+print_step "Gerando ícones otimizados (opcional)..."
+npx @capacitor/assets generate --android 2>/dev/null || print_warning "Geração automática de ícones falhou (não crítico)"
 
 print_success "Configuração Android concluída"
 
