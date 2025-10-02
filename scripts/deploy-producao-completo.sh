@@ -351,7 +351,7 @@ cat > android/app/src/main/res/values/strings.xml << 'EOF'
 <resources>
     <string name="app_name">TudoFaz Hub</string>
     <string name="title_activity_main">TudoFaz Hub</string>
-    <string name="package_name">com.tudofaz.hub</string>
+    <string name="package_name">com.tudofaz.app</string>
     <string name="custom_url_scheme">tudofaz</string>
 </resources>
 EOF
@@ -602,11 +602,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.tudofaz.hub"
+    namespace "com.tudofaz.app"
     compileSdkVersion 35
     
     defaultConfig {
-        applicationId "com.tudofaz.hub"
+        applicationId "com.tudofaz.app"
         minSdkVersion 24
         targetSdkVersion 35
         versionCode 1
