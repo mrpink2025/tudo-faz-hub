@@ -160,5 +160,8 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    /* Safe area insets para dispositivos nativos - 0.5cm ≈ 14px */
+    padding-top: max(env(safe-area-inset-top), 14px);
+    padding-bottom: max(env(safe-area-inset-bottom), 14px);
   }
 }

@@ -409,7 +409,9 @@ cat > android/app/src/main/AndroidManifest.xml << 'EOF'
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-            android:exported="true">
+            android:exported="true"
+            android:fitsSystemWindows="true"
+            android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -446,6 +448,19 @@ if [ -f "android/app/src/main/AndroidManifest.xml" ]; then
 else
   print_error "Falha ao criar AndroidManifest.xml"
   exit 1
+fi
+
+print_step "Configurando ícone do PWA..."
+# Verificar se existe ícone PWA no manifest
+PWA_ICON=$(grep -o '"src": "[^"]*icon[^"]*"' public/manifest.json | head -1 | cut -d'"' -f4 || echo "")
+
+if [ -n "$PWA_ICON" ] && [ -f "public/$PWA_ICON" ]; then
+  print_step "Usando ícone do PWA: $PWA_ICON"
+  # Copiar ícone do PWA para usar como base
+  cp "public/$PWA_ICON" public/icon-1024.png
+  print_success "Ícone do PWA configurado como ícone principal"
+elif [ ! -f "public/icon-1024.png" ]; then
+  print_warning "Nenhum ícone encontrado - usando ícone padrão"
 fi
 
 print_step "Gerando ícones otimizados para Android..."

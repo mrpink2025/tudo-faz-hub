@@ -35,6 +35,7 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
     captureInput: true,
     webContentsDebuggingEnabled: false,
+    contentInset: 'automatic',
     includePlugins: [
       '@capacitor/app',
       '@capacitor/haptics',
