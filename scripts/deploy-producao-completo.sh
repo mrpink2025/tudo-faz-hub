@@ -460,9 +460,14 @@ if [ -n "$PWA_ICON" ]; then
   
   if [ -f "public/$PWA_ICON_CLEAN" ]; then
     print_step "Usando ícone do PWA: $PWA_ICON_CLEAN"
-    # Copiar ícone do PWA para usar como base
-    cp "public/$PWA_ICON_CLEAN" public/icon-1024.png
-    print_success "Ícone do PWA configurado como ícone principal"
+    
+    # Só copiar se for um arquivo diferente
+    if [ "public/$PWA_ICON_CLEAN" != "public/icon-1024.png" ]; then
+      cp "public/$PWA_ICON_CLEAN" public/icon-1024.png
+      print_success "Ícone do PWA configurado como ícone principal"
+    else
+      print_success "Ícone do PWA já está configurado corretamente"
+    fi
   fi
 elif [ ! -f "public/icon-1024.png" ]; then
   print_warning "Nenhum ícone encontrado - usando ícone padrão"
