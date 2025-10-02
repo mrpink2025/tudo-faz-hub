@@ -375,8 +375,7 @@ EOF
 print_step "Configurando AndroidManifest.xml..."
 cat > android/app/src/main/AndroidManifest.xml << 'EOF'
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tudofaz.hub">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Permissões -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -449,10 +448,40 @@ else
   exit 1
 fi
 
-print_step "Copiando ícones para diretórios Android..."
+print_step "Gerando ícones otimizados para Android..."
 if [ -f "public/icon-1024.png" ]; then
-  cp public/icon-1024.png android/app/src/main/res/drawable/icon.png 2>/dev/null || true
-  print_success "Ícone principal copiado"
+  # Instalar imagemagick se não estiver instalado
+  if ! command -v convert &> /dev/null; then
+    print_step "Instalando ImageMagick..."
+    apt-get install -y imagemagick > /dev/null 2>&1
+  fi
+  
+  # Gerar ícones para cada densidade
+  print_step "Criando ícones em múltiplas densidades..."
+  
+  # mdpi (48x48)
+  convert public/icon-1024.png -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+  convert public/icon-1024.png -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+  
+  # hdpi (72x72)
+  convert public/icon-1024.png -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+  convert public/icon-1024.png -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+  
+  # xhdpi (96x96)
+  convert public/icon-1024.png -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+  convert public/icon-1024.png -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+  
+  # xxhdpi (144x144)
+  convert public/icon-1024.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+  convert public/icon-1024.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+  
+  # xxxhdpi (192x192)
+  convert public/icon-1024.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+  convert public/icon-1024.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+  
+  print_success "Ícones gerados para todas as densidades (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi)"
+else
+  print_warning "Ícone original não encontrado em public/icon-1024.png"
 fi
 
 print_step "Sincronizando Capacitor..."
