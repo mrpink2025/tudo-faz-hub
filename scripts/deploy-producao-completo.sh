@@ -454,11 +454,16 @@ print_step "Configurando ícone do PWA..."
 # Verificar se existe ícone PWA no manifest
 PWA_ICON=$(grep -o '"src": "[^"]*icon[^"]*"' public/manifest.json | head -1 | cut -d'"' -f4 || echo "")
 
-if [ -n "$PWA_ICON" ] && [ -f "public/$PWA_ICON" ]; then
-  print_step "Usando ícone do PWA: $PWA_ICON"
-  # Copiar ícone do PWA para usar como base
-  cp "public/$PWA_ICON" public/icon-1024.png
-  print_success "Ícone do PWA configurado como ícone principal"
+if [ -n "$PWA_ICON" ]; then
+  # Remove leading slash if present
+  PWA_ICON_CLEAN="${PWA_ICON#/}"
+  
+  if [ -f "public/$PWA_ICON_CLEAN" ]; then
+    print_step "Usando ícone do PWA: $PWA_ICON_CLEAN"
+    # Copiar ícone do PWA para usar como base
+    cp "public/$PWA_ICON_CLEAN" public/icon-1024.png
+    print_success "Ícone do PWA configurado como ícone principal"
+  fi
 elif [ ! -f "public/icon-1024.png" ]; then
   print_warning "Nenhum ícone encontrado - usando ícone padrão"
 fi
