@@ -50,7 +50,7 @@ export type Database = {
           order_id: string | null
           referrer: string | null
           user_agent: string | null
-          visitor_ip: unknown | null
+          visitor_ip: unknown
         }
         Insert: {
           affiliate_link_id: string
@@ -60,7 +60,7 @@ export type Database = {
           order_id?: string | null
           referrer?: string | null
           user_agent?: string | null
-          visitor_ip?: unknown | null
+          visitor_ip?: unknown
         }
         Update: {
           affiliate_link_id?: string
@@ -70,7 +70,7 @@ export type Database = {
           order_id?: string | null
           referrer?: string | null
           user_agent?: string | null
-          visitor_ip?: unknown | null
+          visitor_ip?: unknown
         }
         Relationships: [
           {
@@ -362,7 +362,7 @@ export type Database = {
           error_message: string | null
           event_type: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           success: boolean
           user_agent: string | null
           user_id: string | null
@@ -372,7 +372,7 @@ export type Database = {
           error_message?: string | null
           event_type: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           success?: boolean
           user_agent?: string | null
           user_id?: string | null
@@ -382,7 +382,7 @@ export type Database = {
           error_message?: string | null
           event_type?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           success?: boolean
           user_agent?: string | null
           user_id?: string | null
@@ -1210,7 +1210,7 @@ export type Database = {
           created_at: string | null
           details: Json | null
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           user_agent: string | null
           user_id: string | null
         }
@@ -1220,7 +1220,7 @@ export type Database = {
           created_at?: string | null
           details?: Json | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
           user_id?: string | null
         }
@@ -1230,7 +1230,7 @@ export type Database = {
           created_at?: string | null
           details?: Json | null
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
           user_id?: string | null
         }
@@ -1818,14 +1818,8 @@ export type Database = {
         Args: { p_field_name: string; p_order_id: string }
         Returns: boolean
       }
-      can_user_sell: {
-        Args: { user_uuid: string }
-        Returns: boolean
-      }
-      cleanup_telemetry_data: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      can_user_sell: { Args: { user_uuid: string }; Returns: boolean }
+      cleanup_telemetry_data: { Args: never; Returns: undefined }
       detect_affiliate_fraud: {
         Args: {
           p_affiliate_link_id: string
@@ -1838,10 +1832,7 @@ export type Database = {
         Args: { p_action: string; p_ip_address?: unknown; p_user_id: string }
         Returns: boolean
       }
-      generate_affiliate_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      generate_affiliate_code: { Args: never; Returns: string }
       generate_content_hash: {
         Args: {
           p_domain: string
@@ -1851,10 +1842,7 @@ export type Database = {
         }
         Returns: string
       }
-      generate_tracking_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
+      generate_tracking_code: { Args: never; Returns: string }
       get_affiliate_analytics: {
         Args: {
           p_affiliate_id: string
@@ -1899,10 +1887,7 @@ export type Database = {
           state: string
         }[]
       }
-      get_listing_rating: {
-        Args: { listing_uuid: string }
-        Returns: Json
-      }
+      get_listing_rating: { Args: { listing_uuid: string }; Returns: Json }
       get_public_product_reviews: {
         Args: { p_listing_id: string }
         Returns: {
@@ -1952,12 +1937,9 @@ export type Database = {
           total_sales: number
         }[]
       }
-      get_seller_delivery_info: {
-        Args: { order_id: string }
-        Returns: Json
-      }
+      get_seller_delivery_info: { Args: { order_id: string }; Returns: Json }
       get_site_settings_public: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           brand_accent: string
           brand_primary: string
